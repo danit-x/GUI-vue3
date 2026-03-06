@@ -1,26 +1,17 @@
-<script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+import Navbar from './components/layout/Navbar.vue'
 </script>
 
 <template>
   <div class="min-h-screen bg-black text-white">
-    <h1 class="text-4xl font-bold text-center mt-20">
-      VYBE
-    </h1>
+    
+    <Navbar />
+
+    <main class="p-6">
+      <RouterView />
+    </main>
+
   </div>
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+
