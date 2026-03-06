@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import type { Product } from "../../types/product"
-
 import { useRouter } from "vue-router"
 
 const router = useRouter()
 
-function openProduct() {
-  router.push(`/product/${product.id}`)
-}
-
-defineProps<{
+const props = defineProps<{
   product: Product
 }>()
+
+function openProduct() {
+  router.push(`/product/${props.product.id}`)
+}
 </script>
 
 <template>
