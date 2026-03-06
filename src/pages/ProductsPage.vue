@@ -13,7 +13,7 @@ onMounted(async () => {
 
 <template>
   <div class="p-10">
-    <h1 class="text-3xl font-bold mb-6">Products</h1>
+    <h1 class="text-3xl font-bold mb-6">Explore Your VYBE</h1>
 
     <ul class="space-y-2">
       <li
