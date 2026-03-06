@@ -1,14 +1,24 @@
 <script setup lang="ts">
 import type { Product } from "../../types/product"
 
+import { useRouter } from "vue-router"
+
+const router = useRouter()
+
+function openProduct() {
+  router.push(`/product/${product.id}`)
+}
+
 defineProps<{
   product: Product
 }>()
 </script>
 
 <template>
-  <div class="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:scale-105 hover:shadow-xl transition duration-300">
-
+<div
+  @click="openProduct"
+  class="cursor-pointer bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:scale-105 transition"
+>
     <div class="overflow-hidden">
   <img
     :src="product.thumbnail"
@@ -22,7 +32,9 @@ defineProps<{
       </h2>
 
       <p class="text-xs text-zinc-500 mt-1">
+<span class="bg-zinc-800 px-3 py-1 rounded text-sm">
   {{ product.category }}
+</span>
     </p>
 
     <p class="text-yellow-400 text-sm mt-2">
