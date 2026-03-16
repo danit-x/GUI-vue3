@@ -12,3 +12,7 @@ export function getProducts() {
 export function getProductById(id: number) {
   return apiFetch<Product>(`/products/${id}`)
 }
+
+export function getCategories() {
+  return apiFetch<string[]>("/products/categories")
+}
