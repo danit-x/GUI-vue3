@@ -17,6 +17,10 @@ const auth = useAuthStore()
 <nav class="bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 px-8 py-4 flex justify-between items-center">
 <div class="flex gap-6 items-center">
 
+  <RouterLink to="/wishlist">
+Wishlist
+</RouterLink>
+
   <RouterLink to="/products">Products</RouterLink>
   <RouterLink to="/cart">
   Cart ({{ cart.itemCount }})
@@ -25,6 +29,8 @@ const auth = useAuthStore()
   <RouterLink v-if="!auth.isLoggedIn" to="/login">
     Login
   </RouterLink>
+
+  
 
   <button
     v-else

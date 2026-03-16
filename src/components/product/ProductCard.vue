@@ -2,6 +2,9 @@
 import type { Product } from "../../types/product"
 import { useRouter } from "vue-router"
 import { useCartStore } from "../../stores/cartStore"
+import { useBookmarkStore } from "../../stores/bookmarkStore"
+
+const bookmarks = useBookmarkStore()
 
 const cart = useCartStore()
 
@@ -58,6 +61,12 @@ function openProduct() {
   class="bg-purple-600 px-3 py-1 rounded hover:bg-purple-500"
 >
   Add
+</button>
+<button
+ @click.stop="bookmarks.toggleBookmark(props.product)"
+ class="text-yellow-400"
+>
+ ⭐
 </button>
 
       </div>
