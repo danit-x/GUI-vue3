@@ -2,9 +2,13 @@
 import { ref, onMounted } from "vue"
 import { useRoute } from "vue-router"
 import { getProductById } from "../services/productService"
+import { useCartStore } from "../stores/cartStore"
+import { useBookmarkStore } from "../stores/bookmarkStore"
 import type { Product } from "../types/product"
 
 const route = useRoute()
+const cart = useCartStore()
+const bookmarks = useBookmarkStore()
 
 const product = ref<Product | null>(null)
 
@@ -42,11 +46,21 @@ onMounted(async () => {
           ${{ product.price }}
         </p>
 
-        <button
-          class="bg-purple-600 px-6 py-3 rounded-lg hover:bg-purple-500 transition"
-        >
-          Add to Cart
-        </button>
+        <div class="flex gap-2">
+          <button
+            @click="cart.addToCart(product!)"
+            class="bg-purple-600 px-6 py-3 rounded-lg hover:bg-purple-500 transition"
+          >
+            Add to Cart
+          </button>
+
+          <button
+            @click="bookmarks.toggleBookmark(product!)"
+            class="text-yellow-400 px-6 py-3 rounded-lg border border-yellow-400 hover:bg-yellow-400 hover:text-zinc-950 transition"
+          >
+            ⭐ Wishlist
+          </button>
+        </div>
 
       </div>
 

@@ -1,31 +1,38 @@
 <template>
-  <input
-  v-model="search"
-  placeholder="Search products..."
-  class="w-full mb-6 p-3 bg-zinc-900 border border-zinc-700 rounded"
-/>
+  <div class="max-w-6xl mx-auto py-10">
+    <input
+      v-model="search"
+      placeholder="Search products..."
+      class="w-full mb-6 p-3 bg-zinc-900 border border-zinc-700 rounded"
+    />
 
-<div class="flex gap-4 mb-8 flex-wrap">
+    <div class="flex gap-4 mb-8 flex-wrap">
+      <button
+        @click="selectedCategory = ''"
+        class="px-4 py-2 bg-zinc-800 rounded hover:bg-zinc-700"
+      >
+        All
+      </button>
 
-  <button
-    @click="selectedCategory = ''"
-    class="px-4 py-2 bg-zinc-800 rounded"
-  >
-    All
-  </button>
+      <button
+        v-for="cat in categories"
+        :key="cat"
+        @click="selectedCategory = cat"
+        class="px-4 py-2 bg-zinc-800 rounded hover:bg-zinc-700"
+      >
+        {{ cat }}
+      </button>
+    </div>
 
-  <button
-    v-for="cat in categories"
-    :key="cat"
-    @click="selectedCategory = cat"
-    class="px-4 py-2 bg-zinc-800 rounded hover:bg-zinc-700"
-  >
-    {{ cat }}
-  </button>
+    <ProductGrid :products="filteredProducts" />
 
-</div>
-
-
+    <div
+      v-if="filteredProducts.length === 0"
+      class="mt-8 text-zinc-400"
+    >
+      No products found.
+    </div>
+  </div>
 </template>
 
 
