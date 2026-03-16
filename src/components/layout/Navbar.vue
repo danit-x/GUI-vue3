@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../stores/authStore"
+import { useCartStore } from "../../stores/cartStore"
+
+const cart = useCartStore()
 
 
 
@@ -13,7 +16,9 @@ const auth = useAuthStore()
 <div class="flex gap-6 items-center">
 
   <RouterLink to="/products">Products</RouterLink>
-  <RouterLink to="/cart">Cart</RouterLink>
+  <RouterLink to="/cart">
+  Cart ({{ cart.itemCount }})
+</RouterLink>
 
   <RouterLink v-if="!auth.isLoggedIn" to="/login">
     Login

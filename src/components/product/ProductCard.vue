@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import type { Product } from "../../types/product"
 import { useRouter } from "vue-router"
+import { useCartStore } from "../../stores/cartStore"
+
+const cart = useCartStore()
 
 const router = useRouter()
 
@@ -51,10 +54,11 @@ function openProduct() {
         </span>
 
         <button
-          class="bg-purple-600 px-3 py-1 rounded hover:bg-purple-500"
-        >
-          Add
-        </button>
+  @click.stop="cart.addToCart(props.product)"
+  class="bg-purple-600 px-3 py-1 rounded hover:bg-purple-500"
+>
+  Add
+</button>
 
       </div>
 
