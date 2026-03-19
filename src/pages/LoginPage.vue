@@ -35,7 +35,7 @@ async function handleLogin() {
     })
 
     router.push("/products")
-  } catch (err) {
+  } catch {
     error.value = "Login failed. Please try again."
   } finally {
     loading.value = false
@@ -44,21 +44,21 @@ async function handleLogin() {
 </script>
 
 <template>
-  <section class="mx-auto grid max-w-5xl gap-6 py-12 lg:grid-cols-[0.95fr_1.05fr]">
-    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-8" style="--delay: 80ms;">
-      <p class="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
+  <section class="vybe-page grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+    <div class="vybe-reveal vybe-hero rounded-[2.4rem] p-6 sm:p-8" style="--delay: 80ms;">
+      <p class="vybe-kicker">
         Returning collector
       </p>
-      <h1 class="vybe-display mt-4 text-5xl leading-none">
+      <h1 class="vybe-display mt-4 text-4xl leading-none sm:text-5xl lg:text-6xl">
         Step back into the archive.
       </h1>
-      <p class="mt-6 text-sm leading-7 text-[color:var(--muted)]">
+      <p class="mt-6 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
         Sign in to keep your saved pieces, cart, and browsing ritual intact across sessions.
       </p>
     </div>
 
-    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-6 sm:p-8" style="--delay: 180ms;">
-      <h2 class="vybe-display text-4xl">
+    <div class="vybe-reveal vybe-panel rounded-[2.4rem] p-6 sm:p-8" style="--delay: 180ms;">
+      <h2 class="vybe-display text-3xl sm:text-4xl">
         Log In
       </h2>
 
@@ -71,20 +71,26 @@ async function handleLogin() {
       </div>
 
       <div class="mt-6 space-y-4">
-        <input
-          v-model="username"
-          placeholder="Username"
-          class="vybe-input w-full rounded-[1.25rem] px-4 py-4"
-          :disabled="loading"
-        />
+        <label class="vybe-field">
+          <span class="vybe-label">Username</span>
+          <input
+            v-model="username"
+            placeholder="Enter your username"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-4"
+            :disabled="loading"
+          />
+        </label>
 
-        <input
-          v-model="password"
-          type="password"
-          placeholder="Password"
-          class="vybe-input w-full rounded-[1.25rem] px-4 py-4"
-          :disabled="loading"
-        />
+        <label class="vybe-field">
+          <span class="vybe-label">Password</span>
+          <input
+            v-model="password"
+            type="password"
+            placeholder="Enter your password"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-4"
+            :disabled="loading"
+          />
+        </label>
 
         <button
           @click="handleLogin"

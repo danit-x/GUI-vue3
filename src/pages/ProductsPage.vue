@@ -1,56 +1,50 @@
 <template>
-  <section class="space-y-8 py-6">
-    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-5 sm:p-8" style="--delay: 80ms;">
+  <section class="vybe-page space-y-8">
+    <div class="vybe-reveal vybe-hero rounded-[2.4rem] p-6 sm:p-8" style="--delay: 80ms;">
       <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div class="space-y-3">
-          <p class="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
+          <p class="vybe-kicker">
             The collection
           </p>
           <h1 class="vybe-display text-4xl leading-none sm:text-5xl lg:text-6xl">
             Shop the living catalog.
           </h1>
           <p class="max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-            Browse by instinct: search by title, drift through every live DummyJSON category, and open any object through the product detail route.
+            Browse by instinct, search by title, move through categories, and open any object in a polished detail view.
           </p>
         </div>
 
         <div class="grid gap-3 sm:grid-cols-3">
-          <div class="rounded-[1.4rem] border border-[color:var(--line)] bg-[color:var(--bg-strong)]/70 p-4">
-            <p class="text-xs uppercase tracking-[0.3em] text-[color:var(--muted)]">
-              Loaded
-            </p>
-            <p class="mt-2 text-2xl">{{ products.length }}</p>
+          <div class="vybe-stat">
+            <p class="vybe-kicker">Loaded</p>
+            <p class="mt-3 text-2xl text-[color:var(--text)]">{{ products.length }}</p>
           </div>
-          <div class="rounded-[1.4rem] border border-[color:var(--line)] bg-[color:var(--bg-strong)]/70 p-4">
-            <p class="text-xs uppercase tracking-[0.3em] text-[color:var(--muted)]">
-              Showing
-            </p>
-            <p class="mt-2 text-2xl">{{ filteredProducts.length }}</p>
+          <div class="vybe-stat">
+            <p class="vybe-kicker">Showing</p>
+            <p class="mt-3 text-2xl text-[color:var(--text)]">{{ filteredProducts.length }}</p>
           </div>
-          <div class="rounded-[1.4rem] border border-[color:var(--line)] bg-[color:var(--bg-strong)]/70 p-4">
-            <p class="text-xs uppercase tracking-[0.3em] text-[color:var(--muted)]">
-              Mode
-            </p>
-            <p class="mt-2 text-2xl">{{ activeCategoryLabel }}</p>
+          <div class="vybe-stat">
+            <p class="vybe-kicker">Mode</p>
+            <p class="mt-3 text-2xl text-[color:var(--text)]">{{ activeCategoryLabel }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div class="vybe-reveal grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start" style="--delay: 180ms;">
+    <div class="vybe-reveal grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,auto)]" style="--delay: 180ms;">
       <div class="vybe-panel rounded-[2rem] p-4 sm:p-5">
-        <label class="mb-3 block text-xs uppercase tracking-[0.3em] text-[color:var(--muted)]">
+        <label class="vybe-label mb-3 block">
           Search products
         </label>
         <input
           v-model="search"
           placeholder="Search by product title"
-          class="vybe-input w-full rounded-[1.75rem] px-5 py-4 text-base"
+          class="vybe-input w-full rounded-[1.5rem] px-5 py-4 text-base"
         />
       </div>
 
       <div class="vybe-panel rounded-[2rem] p-4 sm:p-5">
-        <p class="mb-3 text-xs uppercase tracking-[0.3em] text-[color:var(--muted)]">
+        <p class="vybe-label mb-3">
           Filter by category
         </p>
         <div class="flex flex-wrap gap-3">
@@ -77,14 +71,17 @@
 
     <div
       v-if="loading"
-      class="vybe-panel rounded-[2rem] px-6 py-10 text-center text-[color:var(--muted)]"
+      class="vybe-panel rounded-[2rem] px-6 py-16 text-center text-[color:var(--muted)]"
     >
-      Loading products...
+      <div class="flex flex-col items-center justify-center gap-4">
+        <div class="vybe-spinner h-10 w-10" aria-hidden="true" />
+        <p class="text-sm uppercase tracking-[0.28em]">Loading products...</p>
+      </div>
     </div>
 
     <div
       v-else-if="error"
-      class="vybe-panel rounded-[2rem] px-6 py-10 text-center text-[color:var(--muted)]"
+      class="vybe-empty px-6 py-12 text-[color:var(--muted)]"
     >
       {{ error }}
     </div>
@@ -94,7 +91,7 @@
 
       <div
         v-if="filteredProducts.length === 0"
-        class="vybe-panel rounded-[2rem] px-6 py-10 text-center text-[color:var(--muted)]"
+        class="vybe-empty px-6 py-12 text-[color:var(--muted)]"
       >
         No products matched this mood.
       </div>

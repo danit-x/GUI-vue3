@@ -45,25 +45,34 @@ function handleLogout() {
 
 <template>
   <header class="sticky top-0 z-40 px-4 pt-4 sm:px-6 lg:px-8">
-    <nav class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 rounded-[28px] border border-white/10 bg-black/55 px-5 py-4 text-white shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl supports-[backdrop-filter]:bg-black/45 sm:px-6">
-      <div class="flex min-w-0 items-center gap-4">
+    <nav class="mx-auto flex max-w-7xl flex-wrap items-center gap-3 rounded-[2rem] border border-white/10 bg-black/55 px-4 py-4 text-white shadow-[0_20px_80px_rgba(0,0,0,0.45)] backdrop-blur-2xl supports-[backdrop-filter]:bg-black/45 sm:px-5 lg:flex-nowrap lg:gap-4 lg:px-6">
+      <div class="flex min-w-0 flex-1 items-center justify-between gap-3 lg:flex-none lg:justify-start">
         <RouterLink
           to="/"
           class="group relative inline-flex items-center rounded-full px-3 py-2 transition duration-300 hover:text-white"
         >
           <span class="absolute inset-0 rounded-full bg-white/0 blur-xl transition duration-300 group-hover:bg-cyan-400/12" />
-          <span class="relative text-lg font-semibold tracking-[0.45em] text-white/95">
+          <span class="relative text-base font-semibold tracking-[0.42em] text-white/95 sm:text-lg">
             VYBE
           </span>
         </RouterLink>
+
+        <button
+          v-if="auth.isLoggedIn"
+          @click="handleLogout"
+          class="inline-flex rounded-full border border-white/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-white/64 transition duration-300 hover:border-cyan-300/25 hover:text-white lg:hidden"
+          type="button"
+        >
+          Log Out
+        </button>
       </div>
 
-      <div class="order-3 flex w-full items-center justify-center gap-2 overflow-x-auto pb-1 md:order-2 md:w-auto">
+      <div class="order-3 flex w-full items-center gap-2 overflow-x-auto pb-1 lg:order-2 lg:justify-center">
         <RouterLink
           v-for="item in navItems"
           :key="item.label"
           :to="item.to"
-          class="group relative overflow-hidden rounded-full px-5 py-2.5 text-sm font-medium tracking-[0.22em] text-white/68 transition duration-300 hover:-translate-y-px hover:text-white"
+          class="group relative shrink-0 overflow-hidden rounded-full px-4 py-2.5 text-xs font-medium tracking-[0.2em] text-white/68 transition duration-300 hover:-translate-y-px hover:text-white sm:px-5 sm:text-sm"
           :class="isNavItemActive(item.label) ? 'bg-white/10 text-white shadow-[0_0_22px_rgba(125,211,252,0.18)]' : 'hover:bg-white/6'"
         >
           <span class="absolute inset-0 rounded-full bg-cyan-300/0 blur-lg transition duration-300 group-hover:bg-cyan-300/10" />
@@ -71,7 +80,7 @@ function handleLogout() {
         </RouterLink>
       </div>
 
-      <div class="order-2 flex items-center gap-2 sm:gap-3 md:order-3">
+      <div class="order-2 ml-auto flex items-center gap-2 sm:gap-3 lg:order-3">
         <button
           @click="toggleDark"
           class="group relative inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition duration-300 hover:-translate-y-px hover:border-cyan-300/25 hover:text-white"
@@ -130,7 +139,7 @@ function handleLogout() {
         <button
           v-if="auth.isLoggedIn"
           @click="handleLogout"
-          class="hidden rounded-full border border-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.2em] text-white/58 transition duration-300 hover:border-cyan-300/25 hover:text-white lg:inline-flex"
+          class="hidden rounded-full border border-white/10 px-4 py-2 text-[11px] font-medium uppercase tracking-[0.22em] text-white/58 transition duration-300 hover:border-cyan-300/25 hover:text-white xl:inline-flex"
           type="button"
         >
           Log Out

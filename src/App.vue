@@ -1,5 +1,7 @@
 <script setup>
+import Footer from "./components/layout/Footer.vue"
 import Navbar from "./components/layout/Navbar.vue"
+import ToastStack from "./components/ui/ToastStack.vue"
 </script>
 
 <template>
@@ -22,7 +24,11 @@ import Navbar from "./components/layout/Navbar.vue"
           </transition>
         </RouterView>
       </main>
+
+      <Footer />
     </div>
+
+    <ToastStack />
   </div>
 </template>
 

@@ -50,6 +50,7 @@ body {
   margin: 0;
   color: var(--text);
   font-family: var(--font-body);
+  line-height: 1.5;
   background:
     linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
@@ -64,6 +65,10 @@ a {
 button,
 input {
   font: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 #app {
@@ -105,6 +110,22 @@ input {
   letter-spacing: 0.04em;
 }
 
+.vybe-page {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-block: 1rem 2rem;
+}
+
+.vybe-hero {
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--bg-elevated) 92%, transparent), color-mix(in srgb, var(--bg-strong) 82%, transparent)),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--glow) 48%, transparent), transparent 34%);
+  box-shadow: 0 24px 80px rgba(26, 17, 12, 0.08);
+  backdrop-filter: blur(18px);
+}
+
 .vybe-panel {
   border: 1px solid var(--line);
   background: var(--bg-elevated);
@@ -114,6 +135,15 @@ input {
 
 .dark .vybe-panel {
   box-shadow: 0 26px 80px rgba(0, 0, 0, 0.3);
+}
+
+.dark .vybe-hero {
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.3);
+}
+
+.vybe-card {
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-strong) 80%, transparent);
 }
 
 .vybe-pill {
@@ -163,6 +193,43 @@ input {
   box-shadow: 0 0 0 4px var(--accent-soft);
 }
 
+.vybe-field {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.vybe-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.26em;
+  color: var(--muted);
+}
+
+.vybe-kicker {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  color: var(--muted);
+}
+
+.vybe-stat {
+  border: 1px solid var(--line);
+  border-radius: 1.4rem;
+  background: color-mix(in srgb, var(--bg-strong) 82%, transparent);
+  padding: 1rem;
+}
+
+.vybe-empty {
+  border: 1px dashed var(--line);
+  border-radius: 1.75rem;
+  background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
+  text-align: center;
+}
+
+.vybe-divider {
+  border-top: 1px solid var(--line);
+}
+
 .vybe-reveal {
   opacity: 0;
   transform: translateY(24px);
@@ -170,9 +237,47 @@ input {
   animation-delay: var(--delay, 0ms);
 }
 
+.vybe-spinner {
+  border: 3px solid color-mix(in srgb, var(--line) 88%, transparent);
+  border-top-color: var(--accent);
+  border-radius: 9999px;
+  animation: vybe-spin 0.8s linear infinite;
+}
+
 @keyframes vybe-reveal {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes vybe-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+@media (max-width: 640px) {
+  body {
+    background-size: 24px 24px;
+  }
+
+  .vybe-shell::after {
+    width: 14rem;
+    height: 14rem;
+    inset: auto 6% 4% auto;
   }
 }
