@@ -8,9 +8,19 @@ import Navbar from "./components/layout/Navbar.vue"
       <Navbar />
 
       <main class="mx-auto w-full max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8">
-        <transition name="fade" mode="out-in">
-          <RouterView />
-        </transition>
+        <RouterView v-slot="{ Component }">
+          <transition name="fade" mode="out-in">
+            <Suspense>
+              <component :is="Component" />
+
+              <template #fallback>
+                <div class="vybe-panel rounded-[2rem] px-6 py-10 text-center text-[color:var(--muted)]">
+                  Loading page...
+                </div>
+              </template>
+            </Suspense>
+          </transition>
+        </RouterView>
       </main>
     </div>
   </div>

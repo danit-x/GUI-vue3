@@ -1,12 +1,12 @@
 <template>
   <section class="space-y-8 py-6">
-    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-6 sm:p-8" style="--delay: 80ms;">
+    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-5 sm:p-8" style="--delay: 80ms;">
       <div class="grid gap-6 lg:grid-cols-[1.1fr_0.9fr] lg:items-end">
         <div class="space-y-3">
           <p class="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
             The collection
           </p>
-          <h1 class="vybe-display text-5xl leading-none sm:text-6xl">
+          <h1 class="vybe-display text-4xl leading-none sm:text-5xl lg:text-6xl">
             Shop the living catalog.
           </h1>
           <p class="max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
@@ -37,42 +37,75 @@
       </div>
     </div>
 
-    <div class="vybe-reveal space-y-5" style="--delay: 180ms;">
-      <input
-        v-model="search"
-        placeholder="Search the catalog"
-        class="vybe-input w-full rounded-[1.75rem] px-5 py-4 text-base"
-      />
+    <div class="vybe-reveal grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-start" style="--delay: 180ms;">
+      <div class="vybe-panel rounded-[2rem] p-4 sm:p-5">
+        <label class="mb-3 block text-xs uppercase tracking-[0.3em] text-[color:var(--muted)]">
+          Search products
+        </label>
+        <input
+          v-model="search"
+          placeholder="Search by product title"
+          class="vybe-input w-full rounded-[1.75rem] px-5 py-4 text-base"
+        />
+      </div>
 
-      <div class="flex flex-wrap gap-3">
-        <RouterLink
-          to="/products"
-          class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
-          :class="!activeCategoryKey ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
-        >
-          All ({{ products.length }})
-        </RouterLink>
+      <div class="vybe-panel rounded-[2rem] p-4 sm:p-5">
+        <p class="mb-3 text-xs uppercase tracking-[0.3em] text-[color:var(--muted)]">
+          Filter by category
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <RouterLink
+            to="/products"
+            class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
+            :class="!activeCategoryKey ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
+          >
+            All ({{ products.length }})
+          </RouterLink>
 
-        <RouterLink
-          v-for="category in filterCategories"
-          :key="category.slug"
-          :to="`/category/${category.slug}`"
-          class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
-          :class="activeCategoryKey === category.slug ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
-        >
-          {{ category.label }} ({{ category.count }})
-        </RouterLink>
+          <RouterLink
+            v-for="category in filterCategories"
+            :key="category.slug"
+            :to="`/category/${category.slug}`"
+            class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
+            :class="activeCategoryKey === category.slug ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
+          >
+            {{ category.label }} ({{ category.count }})
+          </RouterLink>
+        </div>
       </div>
     </div>
 
-    <ProductGrid :products="filteredProducts" />
-
     <div
-      v-if="filteredProducts.length === 0"
+      v-if="loading"
       class="vybe-panel rounded-[2rem] px-6 py-10 text-center text-[color:var(--muted)]"
     >
-      No products matched this mood.
+      Loading products...
     </div>
+
+    <div
+      v-else-if="error"
+      class="vybe-panel rounded-[2rem] px-6 py-10 text-center text-[color:var(--muted)]"
+    >
+      {{ error }}
+    </div>
+
+    <template v-else>
+      <ProductGrid :products="filteredProducts" />
+
+      <div
+        v-if="filteredProducts.length === 0"
+        class="vybe-panel rounded-[2rem] px-6 py-10 text-center text-[color:var(--muted)]"
+      >
+        No products matched this mood.
+      </div>
+
+      <div
+        v-else
+        class="vybe-panel rounded-[2rem] px-6 py-6 text-center text-sm text-[color:var(--muted)]"
+      >
+        Tap or click any product card to open its detail view.
+      </div>
+    </template>
   </section>
 </template>
 
@@ -93,6 +126,8 @@ const route = useRoute()
 const products = ref<Product[]>([])
 const categories = ref<string[]>([])
 const search = ref("")
+const loading = ref(true)
+const error = ref("")
 
 const categoryRouteMap: Record<string, string[]> = {
   men: ["mens-shirts", "mens-shoes", "mens-watches"],
@@ -102,13 +137,22 @@ const categoryRouteMap: Record<string, string[]> = {
 }
 
 onMounted(async () => {
-  const [productData, categoryData] = await Promise.all([
-    getProducts(),
-    getCategories()
-  ])
+  loading.value = true
+  error.value = ""
 
-  products.value = productData.products
-  categories.value = categoryData
+  try {
+    const [productData, categoryData] = await Promise.all([
+      getProducts(),
+      getCategories()
+    ])
+
+    products.value = productData.products
+    categories.value = categoryData
+  } catch {
+    error.value = "Unable to load the catalog right now."
+  } finally {
+    loading.value = false
+  }
 })
 
 const activeCategoryKey = computed<string>(() => {
