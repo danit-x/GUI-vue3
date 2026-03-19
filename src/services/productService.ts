@@ -6,7 +6,7 @@ interface ProductsResponse {
 }
 
 export function getProducts() {
-  return apiFetch<ProductsResponse>("/products")
+  return apiFetch<ProductsResponse>("/products?limit=0")
 }
 
 export function getProductById(id: number) {

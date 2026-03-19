@@ -1,1 +1,178 @@
+@custom-variant dark (&:where(.dark, .dark *));
+
 @import "tailwindcss";
+
+:root {
+  --font-display: "Baskerville", "Palatino Linotype", "Book Antiqua", "Times New Roman", serif;
+  --font-body: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+  --bg: #f4ecdf;
+  --bg-elevated: rgba(255, 248, 239, 0.82);
+  --bg-strong: #f9f2e8;
+  --text: #231815;
+  --muted: #6d5b52;
+  --line: rgba(71, 44, 27, 0.15);
+  --accent: #af4d2e;
+  --accent-soft: rgba(175, 77, 46, 0.14);
+  --accent-strong: #d56f33;
+  --glow: rgba(213, 111, 51, 0.28);
+}
+
+.dark {
+  --bg: #101418;
+  --bg-elevated: rgba(18, 25, 31, 0.8);
+  --bg-strong: #151c22;
+  --text: #f4ead7;
+  --muted: #b6a796;
+  --line: rgba(244, 234, 215, 0.12);
+  --accent: #f08a4b;
+  --accent-soft: rgba(240, 138, 75, 0.16);
+  --accent-strong: #ffd08d;
+  --glow: rgba(240, 138, 75, 0.26);
+}
+
+html {
+  background:
+    radial-gradient(circle at top left, rgba(255, 210, 141, 0.24), transparent 30%),
+    radial-gradient(circle at 80% 10%, rgba(175, 77, 46, 0.12), transparent 24%),
+    linear-gradient(135deg, #f8f0e7 0%, #f1e6d6 45%, #eadac8 100%);
+  color: var(--text);
+}
+
+html.dark {
+  background:
+    radial-gradient(circle at top left, rgba(240, 138, 75, 0.18), transparent 28%),
+    radial-gradient(circle at 88% 12%, rgba(255, 208, 141, 0.1), transparent 22%),
+    linear-gradient(145deg, #0d1115 0%, #141a21 45%, #1a222a 100%);
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+  color: var(--text);
+  font-family: var(--font-body);
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 32px 32px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+.vybe-shell {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  color: var(--text);
+}
+
+.vybe-shell::before {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 20%, var(--glow), transparent 24%),
+    radial-gradient(circle at 85% 0%, rgba(255, 255, 255, 0.32), transparent 20%);
+  content: "";
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.vybe-shell::after {
+  position: absolute;
+  inset: auto 5% 8% auto;
+  width: 22rem;
+  height: 22rem;
+  border: 1px solid var(--line);
+  border-radius: 9999px;
+  content: "";
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.vybe-display {
+  font-family: var(--font-display);
+  letter-spacing: 0.04em;
+}
+
+.vybe-panel {
+  border: 1px solid var(--line);
+  background: var(--bg-elevated);
+  box-shadow: 0 24px 80px rgba(26, 17, 12, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.dark .vybe-panel {
+  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.3);
+}
+
+.vybe-pill {
+  border: 1px solid var(--line);
+  background: var(--bg-elevated);
+  color: var(--muted);
+}
+
+.vybe-button {
+  border: 1px solid transparent;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
+  color: #fff9f1;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    opacity 180ms ease;
+  box-shadow: 0 10px 30px var(--glow);
+}
+
+.vybe-button:hover {
+  transform: translateY(-1px);
+}
+
+.vybe-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.vybe-input {
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg-strong) 78%, transparent);
+  color: var(--text);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.vybe-input::placeholder {
+  color: var(--muted);
+}
+
+.vybe-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+.vybe-reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: vybe-reveal 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+@keyframes vybe-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

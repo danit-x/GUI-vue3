@@ -2,12 +2,16 @@
 import { useCartStore } from "../stores/cartStore"
 
 const cart = useCartStore()
+
+function handleQuantityChange(id: number, event: Event) {
+  const target = event.target as HTMLInputElement
+  cart.updateQuantity(id, Number(target.value))
+}
 </script>
 
 <template>
   <div class="max-w-5xl mx-auto py-10">
-
-    <h1 class="text-4xl font-bold mb-8">
+    <h1 class="mb-8 text-4xl font-bold">
       Your Cart
     </h1>
 
@@ -16,35 +20,50 @@ const cart = useCartStore()
     </div>
 
     <div v-else class="space-y-4">
-
       <div
         v-for="item in cart.items"
         :key="item.id"
-        class="flex justify-between items-center border-b border-zinc-700 pb-4"
+        class="flex items-center justify-between border-b border-zinc-700 pb-4"
       >
-
         <div>
           <h2 class="font-semibold">{{ item.title }}</h2>
-          <p class="text-zinc-400">${{ item.price }}</p>
+          <p class="text-zinc-400">${{ item.price }} each</p>
         </div>
 
-        <button
-          @click="cart.removeFromCart(item.id)"
-          class="text-red-400"
-        >
-          Remove
-        </button>
+        <div class="flex items-center gap-4">
+          <input
+            :value="item.quantity"
+            type="number"
+            min="1"
+            class="w-20 rounded border border-zinc-700 bg-zinc-900 p-2"
+            @input="handleQuantityChange(item.id, $event)"
+          />
 
+          <p class="w-24 text-right text-zinc-300">
+            ${{ item.price * item.quantity }}
+          </p>
+
+          <button
+            @click="cart.removeFromCart(item.id)"
+            class="text-red-400"
+          >
+            Remove
+          </button>
+        </div>
       </div>
 
-      <button
-        @click="cart.clearCart()"
-        class="mt-6 bg-red-600 px-6 py-2 rounded"
-      >
-        Clear Cart
-      </button>
+      <div class="flex items-center justify-between pt-4">
+        <p class="text-lg font-semibold">
+          Total: ${{ cart.totalPrice }}
+        </p>
 
+        <button
+          @click="cart.clearCart()"
+          class="mt-6 rounded bg-red-600 px-6 py-2"
+        >
+          Clear Cart
+        </button>
+      </div>
     </div>
-
   </div>
 </template>
