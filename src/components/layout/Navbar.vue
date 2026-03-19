@@ -5,12 +5,9 @@ import { useCartStore } from "../../stores/cartStore"
 import { useDarkMode } from "../../composables/useDarkMode"
 import { useRouter } from "vue-router"
 
-const { toggleDark } = useDarkMode()
-const { isDark } = useDarkMode()
-
+const { toggleDark, isDark } = useDarkMode()
 const cart = useCartStore()
 const bookmarks = useBookmarkStore()
-
 const auth = useAuthStore()
 const router = useRouter()
 
@@ -20,56 +17,56 @@ function handleLogout() {
 }
 </script>
 
-
 <template>
-  <nav class="bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800 px-8 py-4 flex justify-between items-center">
-    <div class="flex gap-6 items-center">
-      <RouterLink to="/" class="font-bold text-lg">
-        VYBE
-      </RouterLink>
-
-      <RouterLink to="/products">
-        Products
-      </RouterLink>
-
-      <RouterLink to="/wishlist">
-        Wishlist ({{ bookmarks.count }})
-      </RouterLink>
-
-      <RouterLink to="/cart">
-        Cart ({{ cart.itemCount }})
-      </RouterLink>
-    </div>
-
-    <div class="flex gap-4 items-center">
-      <span v-if="auth.user" class="text-sm text-zinc-500 dark:text-zinc-400">
-        {{ auth.user.firstName }} {{ auth.user.lastName }}
-      </span>
-
-      <button
-        @click="toggleDark"
-        class="rounded bg-zinc-200 px-3 py-1 text-zinc-900 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
-      >
-        {{ isDark ? "Light Mode" : "Dark Mode" }}
-      </button>
-
-      <div v-if="!auth.isLoggedIn" class="flex items-center gap-3">
-        <RouterLink to="/login">
-          Log In
+  <header class="relative z-20 px-4 pt-4 sm:px-6 lg:px-8">
+    <nav class="vybe-panel mx-auto flex max-w-7xl flex-col gap-4 rounded-[2rem] px-5 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+      <div class="flex flex-wrap items-center gap-4">
+        <RouterLink to="/" class="vybe-display text-2xl uppercase tracking-[0.35em]">
+          VYBE
         </RouterLink>
 
-        <RouterLink to="/signup">
-          Sign Up
-        </RouterLink>
+        <div class="flex flex-wrap items-center gap-2 text-sm uppercase tracking-[0.18em]">
+          <RouterLink to="/products" class="vybe-pill rounded-full px-4 py-2 transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]">
+            Shop
+          </RouterLink>
+          <RouterLink to="/wishlist" class="vybe-pill rounded-full px-4 py-2 transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]">
+            Archive {{ bookmarks.count }}
+          </RouterLink>
+          <RouterLink to="/cart" class="vybe-pill rounded-full px-4 py-2 transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]">
+            Cart {{ cart.itemCount }}
+          </RouterLink>
+        </div>
       </div>
 
-      <button
-        v-else
-        @click="handleLogout"
-        class="text-red-400 hover:text-red-300"
-      >
-        Log Out
-      </button>
-    </div>
-  </nav>
+      <div class="flex flex-wrap items-center gap-3">
+        <span v-if="auth.user" class="text-xs uppercase tracking-[0.25em] text-[color:var(--muted)]">
+          {{ auth.user.firstName }} {{ auth.user.lastName }}
+        </span>
+
+        <button
+          @click="toggleDark"
+          class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
+        >
+          {{ isDark ? "Light Room" : "Night Room" }}
+        </button>
+
+        <div v-if="!auth.isLoggedIn" class="flex flex-wrap items-center gap-2">
+          <RouterLink to="/login" class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]">
+            Log In
+          </RouterLink>
+          <RouterLink to="/signup" class="vybe-button rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em]">
+            Join In
+          </RouterLink>
+        </div>
+
+        <button
+          v-else
+          @click="handleLogout"
+          class="rounded-full border border-[color:var(--line)] px-4 py-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
+        >
+          Log Out
+        </button>
+      </div>
+    </nav>
+  </header>
 </template>

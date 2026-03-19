@@ -8,11 +8,13 @@ defineProps<{
 </script>
 
 <template>
-  <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+  <div class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
     <ProductCard
-      v-for="product in products"
+      v-for="(product, index) in products"
       :key="product.id"
       :product="product"
+      :style="{ '--delay': `${index * 70}ms` }"
+      class="vybe-reveal"
     />
   </div>
 </template>

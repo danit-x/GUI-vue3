@@ -32,67 +32,81 @@ async function handleSignup() {
 </script>
 
 <template>
-  <div class="max-w-md mx-auto py-20">
-    <h1 class="mb-6 text-center text-3xl font-bold">
-      Create Your VYBE Account
-    </h1>
-
-    <div v-if="error" class="mb-4 rounded bg-red-900 p-3 text-red-200">
-      {{ error }}
+  <section class="mx-auto grid max-w-5xl gap-6 py-12 lg:grid-cols-[1.02fr_0.98fr]">
+    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-8" style="--delay: 80ms;">
+      <p class="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
+        New arrival
+      </p>
+      <h1 class="vybe-display mt-4 text-5xl leading-none">
+        Create your member card.
+      </h1>
+      <p class="mt-6 text-sm leading-7 text-[color:var(--muted)]">
+        Join VYBE to bookmark finds, hold a cart between visits, and move through the storefront like it remembers your taste.
+      </p>
     </div>
 
-    <div class="space-y-4">
-      <input
-        v-model="form.firstName"
-        placeholder="First name"
-        class="w-full rounded border border-zinc-700 bg-zinc-900 p-3"
-        :disabled="loading"
-      />
+    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-6 sm:p-8" style="--delay: 180ms;">
+      <h2 class="vybe-display text-4xl">
+        Sign Up
+      </h2>
 
-      <input
-        v-model="form.lastName"
-        placeholder="Last name"
-        class="w-full rounded border border-zinc-700 bg-zinc-900 p-3"
-        :disabled="loading"
-      />
+      <div v-if="error" class="mt-6 rounded-[1.5rem] border border-red-600/30 bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300">
+        {{ error }}
+      </div>
 
-      <input
-        v-model="form.email"
-        type="email"
-        placeholder="Email"
-        class="w-full rounded border border-zinc-700 bg-zinc-900 p-3"
-        :disabled="loading"
-      />
+      <div class="mt-6 grid gap-4 sm:grid-cols-2">
+        <input
+          v-model="form.firstName"
+          placeholder="First name"
+          class="vybe-input rounded-[1.25rem] px-4 py-4"
+          :disabled="loading"
+        />
 
-      <input
-        v-model="form.username"
-        placeholder="Username"
-        class="w-full rounded border border-zinc-700 bg-zinc-900 p-3"
-        :disabled="loading"
-      />
+        <input
+          v-model="form.lastName"
+          placeholder="Last name"
+          class="vybe-input rounded-[1.25rem] px-4 py-4"
+          :disabled="loading"
+        />
 
-      <input
-        v-model="form.password"
-        type="password"
-        placeholder="Password"
-        class="w-full rounded border border-zinc-700 bg-zinc-900 p-3"
-        :disabled="loading"
-      />
+        <input
+          v-model="form.email"
+          type="email"
+          placeholder="Email"
+          class="vybe-input rounded-[1.25rem] px-4 py-4 sm:col-span-2"
+          :disabled="loading"
+        />
+
+        <input
+          v-model="form.username"
+          placeholder="Username"
+          class="vybe-input rounded-[1.25rem] px-4 py-4 sm:col-span-2"
+          :disabled="loading"
+        />
+
+        <input
+          v-model="form.password"
+          type="password"
+          placeholder="Password"
+          class="vybe-input rounded-[1.25rem] px-4 py-4 sm:col-span-2"
+          :disabled="loading"
+        />
+      </div>
 
       <button
         @click="handleSignup"
         :disabled="loading"
-        class="w-full rounded bg-purple-600 py-3 hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
+        class="vybe-button mt-6 w-full rounded-full px-5 py-4 text-xs uppercase tracking-[0.22em]"
       >
-        {{ loading ? "Creating account..." : "Sign Up" }}
+        {{ loading ? "Creating Account..." : "Create Account" }}
       </button>
-    </div>
 
-    <p class="mt-6 text-center text-sm text-zinc-400">
-      Already have an account?
-      <RouterLink to="/login" class="text-purple-400 hover:text-purple-300">
-        Log in
-      </RouterLink>
-    </p>
-  </div>
+      <p class="mt-6 text-sm text-[color:var(--muted)]">
+        Already have an account?
+        <RouterLink to="/login" class="text-[color:var(--accent)] transition hover:opacity-80">
+          Log in
+        </RouterLink>
+      </p>
+    </div>
+  </section>
 </template>
