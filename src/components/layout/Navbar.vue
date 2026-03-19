@@ -51,7 +51,6 @@ function handleLogout() {
           to="/"
           class="group inline-flex flex-col leading-none"
         >
-          <span class="text-[0.65rem] uppercase tracking-[0.42em] text-[color:var(--muted)]">Maison</span>
           <span class="vybe-display text-[1.85rem] tracking-[0.12em] text-[color:var(--text)]">VYBE</span>
         </RouterLink>
 
