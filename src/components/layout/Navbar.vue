@@ -15,10 +15,10 @@ const cart = useCartStore()
 const { toggleDark, isDark } = useDarkMode()
 
 const navItems = [
-  { label: "Men", to: { path: "/products", query: { collection: "men" } } },
-  { label: "Women", to: { path: "/products", query: { collection: "women" } } },
-  { label: "Lifestyle", to: { path: "/products", query: { collection: "lifestyle" } } },
-  { label: "Tech", to: { path: "/products", query: { collection: "tech" } } }
+  { label: "Men", to: "/category/men" },
+  { label: "Women", to: "/category/women" },
+  { label: "Lifestyle", to: "/category/lifestyle" },
+  { label: "Tech", to: "/category/tech" }
 ] as const
 
 const profileLabel = computed(() => {
@@ -30,7 +30,7 @@ const profileLabel = computed(() => {
 })
 
 function isNavItemActive(label: string) {
-  return route.path === "/products" && String(route.query.collection || "").toLowerCase() === label.toLowerCase()
+  return route.path === `/category/${label.toLowerCase()}`
 }
 
 function handleProfileClick() {

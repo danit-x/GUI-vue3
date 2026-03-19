@@ -10,7 +10,7 @@
             Shop the living catalog.
           </h1>
           <p class="max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-            Browse by instinct: search by title, drift through categories, and open any object through the product detail route.
+            Browse by instinct: search by title, drift through curated route categories, and open any object through the product detail route.
           </p>
         </div>
 
@@ -31,7 +31,7 @@
             <p class="text-xs uppercase tracking-[0.3em] text-[color:var(--muted)]">
               Mode
             </p>
-            <p class="mt-2 text-2xl">{{ selectedCategory || "All" }}</p>
+            <p class="mt-2 text-2xl">{{ activeCategoryLabel }}</p>
           </div>
         </div>
       </div>
@@ -45,23 +45,23 @@
       />
 
       <div class="flex flex-wrap gap-3">
-        <button
-          @click="selectedCategory = ''"
+        <RouterLink
+          to="/products"
           class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
-          :class="selectedCategory === '' ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
+          :class="!activeCategoryKey ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
         >
           All
-        </button>
+        </RouterLink>
 
-        <button
-          v-for="cat in categories"
-          :key="cat"
-          @click="selectedCategory = cat"
+        <RouterLink
+          v-for="category in routeCategories"
+          :key="category.slug"
+          :to="`/category/${category.slug}`"
           class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
-          :class="selectedCategory === cat ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
+          :class="activeCategoryKey === category.slug ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
         >
-          {{ cat }}
-        </button>
+          {{ category.label }}
+        </RouterLink>
       </div>
     </div>
 
@@ -77,31 +77,75 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from "vue"
-import { getProducts, getCategories } from "../services/productService"
+import { computed, onMounted, ref } from "vue"
+import { useRoute } from "vue-router"
+import { getProducts } from "../services/productService"
 import ProductGrid from "../components/product/ProductGrid.vue"
 import type { Product } from "../types/product"
 
+type CategoryRouteSlug = "men" | "women" | "tech" | "lifestyle"
+
+interface RouteCategory {
+  slug: CategoryRouteSlug
+  label: string
+  dummyCategories: string[]
+}
+
+const route = useRoute()
 const products = ref<Product[]>([])
-const categories = ref<string[]>([])
 const search = ref("")
-const selectedCategory = ref("")
+
+const routeCategories: RouteCategory[] = [
+  { slug: "men", label: "Men", dummyCategories: ["mens-shirts", "mens-shoes", "mens-watches"] },
+  { slug: "women", label: "Women", dummyCategories: ["tops", "womens-bags", "womens-dresses", "womens-jewellery", "womens-shoes", "womens-watches"] },
+  { slug: "tech", label: "Tech", dummyCategories: ["laptops", "mobile-accessories", "smartphones", "tablets"] },
+  { slug: "lifestyle", label: "Lifestyle", dummyCategories: ["beauty", "fragrances", "furniture", "groceries", "home-decoration", "kitchen-accessories", "skin-care", "sports-accessories", "sunglasses", "vehicle"] }
+]
+
+const routeCategoryMap: Record<CategoryRouteSlug, string[]> = {
+  men: ["mens-shirts", "mens-shoes", "mens-watches"],
+  women: ["tops", "womens-bags", "womens-dresses", "womens-jewellery", "womens-shoes", "womens-watches"],
+  tech: ["laptops", "mobile-accessories", "smartphones", "tablets"],
+  lifestyle: ["beauty", "fragrances", "furniture", "groceries", "home-decoration", "kitchen-accessories", "skin-care", "sports-accessories", "sunglasses", "vehicle"]
+}
 
 onMounted(async () => {
   const productData = await getProducts()
   products.value = productData.products
-
-  categories.value = await getCategories()
 })
 
-const filteredProducts = computed(() => {
-  return products.value.filter((p) => {
-    const matchesSearch =
-      p.title.toLowerCase().includes(search.value.toLowerCase())
+const activeCategoryKey = computed<CategoryRouteSlug | "">(() => {
+  const slug = route.params.slug
 
+  if (typeof slug !== "string") {
+    return ""
+  }
+
+  return slug in routeCategoryMap ? (slug as CategoryRouteSlug) : ""
+})
+
+const activeDummyCategories = computed<string[]>(() => {
+  if (!activeCategoryKey.value) {
+    return []
+  }
+
+  return routeCategoryMap[activeCategoryKey.value]
+})
+
+const activeCategoryLabel = computed(() => {
+  if (!activeCategoryKey.value) {
+    return "All"
+  }
+
+  return routeCategories.find((category) => category.slug === activeCategoryKey.value)?.label || "All"
+})
+
+const filteredProducts = computed<Product[]>(() => {
+  return products.value.filter((product) => {
+    const matchesSearch = product.title.toLowerCase().includes(search.value.toLowerCase())
     const matchesCategory =
-      selectedCategory.value === "" ||
-      p.category === selectedCategory.value
+      activeDummyCategories.value.length === 0 ||
+      activeDummyCategories.value.includes(product.category)
 
     return matchesSearch && matchesCategory
   })
