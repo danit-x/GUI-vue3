@@ -3,7 +3,7 @@ import { defineStore } from "pinia"
 const TOKEN_KEY = "auth_token"
 const USER_KEY = "auth_user"
 
-interface AuthUser {
+export interface AuthUser {
   id: number
   username: string
   email: string

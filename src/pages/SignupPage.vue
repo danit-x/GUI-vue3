@@ -23,7 +23,7 @@ async function handleSignup() {
   try {
     await signup({ ...form })
     router.push({ path: "/login", query: { signup: "success" } })
-  } catch (err) {
+  } catch {
     error.value = "Signup failed. Please try again."
   } finally {
     loading.value = false
@@ -32,21 +32,21 @@ async function handleSignup() {
 </script>
 
 <template>
-  <section class="mx-auto grid max-w-5xl gap-6 py-12 lg:grid-cols-[1.02fr_0.98fr]">
-    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-8" style="--delay: 80ms;">
-      <p class="text-xs uppercase tracking-[0.4em] text-[color:var(--muted)]">
+  <section class="vybe-page grid gap-6 lg:grid-cols-[1.02fr_0.98fr]">
+    <div class="vybe-reveal vybe-hero rounded-[2.4rem] p-6 sm:p-8" style="--delay: 80ms;">
+      <p class="vybe-kicker">
         New arrival
       </p>
-      <h1 class="vybe-display mt-4 text-5xl leading-none">
+      <h1 class="vybe-display mt-4 text-4xl leading-none sm:text-5xl lg:text-6xl">
         Create your member card.
       </h1>
-      <p class="mt-6 text-sm leading-7 text-[color:var(--muted)]">
+      <p class="mt-6 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
         Join VYBE to bookmark finds, hold a cart between visits, and move through the storefront like it remembers your taste.
       </p>
     </div>
 
-    <div class="vybe-reveal vybe-panel rounded-[2.25rem] p-6 sm:p-8" style="--delay: 180ms;">
-      <h2 class="vybe-display text-4xl">
+    <div class="vybe-reveal vybe-panel rounded-[2.4rem] p-6 sm:p-8" style="--delay: 180ms;">
+      <h2 class="vybe-display text-3xl sm:text-4xl">
         Sign Up
       </h2>
 
@@ -55,42 +55,57 @@ async function handleSignup() {
       </div>
 
       <div class="mt-6 grid gap-4 sm:grid-cols-2">
-        <input
-          v-model="form.firstName"
-          placeholder="First name"
-          class="vybe-input rounded-[1.25rem] px-4 py-4"
-          :disabled="loading"
-        />
+        <label class="vybe-field">
+          <span class="vybe-label">First name</span>
+          <input
+            v-model="form.firstName"
+            placeholder="First name"
+            class="vybe-input rounded-[1.25rem] px-4 py-4"
+            :disabled="loading"
+          />
+        </label>
 
-        <input
-          v-model="form.lastName"
-          placeholder="Last name"
-          class="vybe-input rounded-[1.25rem] px-4 py-4"
-          :disabled="loading"
-        />
+        <label class="vybe-field">
+          <span class="vybe-label">Last name</span>
+          <input
+            v-model="form.lastName"
+            placeholder="Last name"
+            class="vybe-input rounded-[1.25rem] px-4 py-4"
+            :disabled="loading"
+          />
+        </label>
 
-        <input
-          v-model="form.email"
-          type="email"
-          placeholder="Email"
-          class="vybe-input rounded-[1.25rem] px-4 py-4 sm:col-span-2"
-          :disabled="loading"
-        />
+        <label class="vybe-field sm:col-span-2">
+          <span class="vybe-label">Email</span>
+          <input
+            v-model="form.email"
+            type="email"
+            placeholder="Email"
+            class="vybe-input rounded-[1.25rem] px-4 py-4"
+            :disabled="loading"
+          />
+        </label>
 
-        <input
-          v-model="form.username"
-          placeholder="Username"
-          class="vybe-input rounded-[1.25rem] px-4 py-4 sm:col-span-2"
-          :disabled="loading"
-        />
+        <label class="vybe-field sm:col-span-2">
+          <span class="vybe-label">Username</span>
+          <input
+            v-model="form.username"
+            placeholder="Username"
+            class="vybe-input rounded-[1.25rem] px-4 py-4"
+            :disabled="loading"
+          />
+        </label>
 
-        <input
-          v-model="form.password"
-          type="password"
-          placeholder="Password"
-          class="vybe-input rounded-[1.25rem] px-4 py-4 sm:col-span-2"
-          :disabled="loading"
-        />
+        <label class="vybe-field sm:col-span-2">
+          <span class="vybe-label">Password</span>
+          <input
+            v-model="form.password"
+            type="password"
+            placeholder="Password"
+            class="vybe-input rounded-[1.25rem] px-4 py-4"
+            :disabled="loading"
+          />
+        </label>
       </div>
 
       <button
