@@ -15,49 +15,49 @@ const props = defineProps<{
 function openProduct() {
   router.push(`/product/${props.product.id}`)
 }
-
 </script>
 
 <template>
   <div
     @click="openProduct"
-    class="cursor-pointer bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden hover:scale-105 transition"
+    class="cursor-pointer overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900 transition hover:scale-105"
   >
     <div class="overflow-hidden">
       <img
         :src="props.product.thumbnail"
-        class="w-full h-48 object-cover transition duration-300 hover:scale-110"
+        :alt="props.product.title"
+        class="h-48 w-full object-cover transition duration-300 hover:scale-110"
       />
     </div>
 
     <div class="p-4">
-      <h2 class="font-semibold text-lg">
+      <h2 class="text-lg font-semibold">
         {{ props.product.title }}
       </h2>
 
-      <p class="text-xs text-zinc-500 mt-1">
-        <span class="bg-zinc-800 px-3 py-1 rounded text-sm">
+      <p class="mt-1 text-xs text-zinc-500">
+        <span class="rounded bg-zinc-800 px-3 py-1 text-sm">
           {{ props.product.category }}
         </span>
       </p>
 
-      <p class="text-yellow-400 text-sm mt-2">
-        ⭐ {{ props.product.rating }}
+      <p class="mt-2 text-sm text-yellow-400">
+        ★ {{ props.product.rating }}
       </p>
 
-      <p class="text-zinc-400 text-sm mt-1">
+      <p class="mt-1 text-sm text-zinc-400">
         {{ props.product.brand }}
       </p>
 
-      <div class="flex justify-between items-center mt-4 gap-2">
-        <span class="text-purple-400 font-bold">
+      <div class="mt-4 flex items-center justify-between gap-2">
+        <span class="font-bold text-purple-400">
           ${{ props.product.price }}
         </span>
 
         <div class="flex gap-2">
           <button
             @click.stop="cart.addToCart(props.product)"
-            class="bg-purple-600 px-3 py-1 rounded hover:bg-purple-500"
+            class="rounded bg-purple-600 px-3 py-1 hover:bg-purple-500"
           >
             Add
           </button>
@@ -66,7 +66,7 @@ function openProduct() {
             @click.stop="bookmarks.toggleBookmark(props.product)"
             class="text-yellow-400 hover:text-yellow-300"
           >
-            ⭐
+            {{ bookmarks.isBookmarked(props.product.id) ? "Saved" : "Save" }}
           </button>
         </div>
       </div>

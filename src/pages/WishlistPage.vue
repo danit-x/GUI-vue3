@@ -21,14 +21,21 @@ const bookmarks = useBookmarkStore()
         class="flex justify-between items-center border-b border-zinc-700 pb-4"
       >
         <div>
-          <h2 class="font-semibold">
+          <RouterLink :to="`/product/${item.id}`" class="font-semibold hover:text-purple-400">
             {{ item.title }}
-          </h2>
+          </RouterLink>
 
           <p class="text-zinc-400">
             ${{ item.price }}
           </p>
         </div>
+
+        <button
+          @click="bookmarks.removeBookmark(item.id)"
+          class="text-red-400"
+        >
+          Remove
+        </button>
       </div>
     </div>
   </div>

@@ -1,15 +1,23 @@
 <script setup lang="ts">
 import { useAuthStore } from "../../stores/authStore"
+import { useBookmarkStore } from "../../stores/bookmarkStore"
 import { useCartStore } from "../../stores/cartStore"
 import { useDarkMode } from "../../composables/useDarkMode"
+import { useRouter } from "vue-router"
 
 const { toggleDark } = useDarkMode()
+const { isDark } = useDarkMode()
 
 const cart = useCartStore()
-
-
+const bookmarks = useBookmarkStore()
 
 const auth = useAuthStore()
+const router = useRouter()
+
+function handleLogout() {
+  auth.logout()
+  router.push("/")
+}
 </script>
 
 
@@ -25,7 +33,7 @@ const auth = useAuthStore()
       </RouterLink>
 
       <RouterLink to="/wishlist">
-        Wishlist
+        Wishlist ({{ bookmarks.count }})
       </RouterLink>
 
       <RouterLink to="/cart">
@@ -34,23 +42,33 @@ const auth = useAuthStore()
     </div>
 
     <div class="flex gap-4 items-center">
+      <span v-if="auth.user" class="text-sm text-zinc-500 dark:text-zinc-400">
+        {{ auth.user.firstName }} {{ auth.user.lastName }}
+      </span>
+
       <button
         @click="toggleDark"
-        class="px-3 py-1 bg-zinc-800 rounded hover:bg-zinc-700"
+        class="rounded bg-zinc-200 px-3 py-1 text-zinc-900 hover:bg-zinc-300 dark:bg-zinc-800 dark:text-white dark:hover:bg-zinc-700"
       >
-        Theme
+        {{ isDark ? "Light Mode" : "Dark Mode" }}
       </button>
 
-      <RouterLink v-if="!auth.isLoggedIn" to="/login">
-        Login
-      </RouterLink>
+      <div v-if="!auth.isLoggedIn" class="flex items-center gap-3">
+        <RouterLink to="/login">
+          Log In
+        </RouterLink>
+
+        <RouterLink to="/signup">
+          Sign Up
+        </RouterLink>
+      </div>
 
       <button
         v-else
-        @click="auth.logout()"
+        @click="handleLogout"
         class="text-red-400 hover:text-red-300"
       >
-        Logout
+        Log Out
       </button>
     </div>
   </nav>

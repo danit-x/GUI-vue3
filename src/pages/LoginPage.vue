@@ -2,7 +2,7 @@
 import { ref } from "vue"
 import { login } from "../services/authService"
 import { useAuthStore } from "../stores/authStore"
-import { useRouter } from "vue-router"
+import { RouterLink, useRoute, useRouter } from "vue-router"
 
 const username = ref("")
 const password = ref("")
@@ -11,6 +11,9 @@ const loading = ref(false)
 
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
+
+const signupSuccess = route.query.signup === "success"
 
 async function handleLogin() {
   error.value = ""
@@ -19,7 +22,17 @@ async function handleLogin() {
   try {
     const data = await login(username.value, password.value)
 
-    auth.setToken(data.token)
+    auth.setAuth({
+      token: data.accessToken || data.token || "",
+      user: {
+        id: data.id,
+        username: data.username,
+        email: data.email,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        image: data.image
+      }
+    })
 
     router.push("/products")
   } catch (err) {
@@ -35,6 +48,10 @@ async function handleLogin() {
     <h1 class="text-3xl font-bold mb-6 text-center">
       Login to VYBE
     </h1>
+
+    <div v-if="signupSuccess" class="mb-4 rounded border border-emerald-700 bg-emerald-950/60 p-3 text-emerald-200">
+      Signup completed. Use your credentials to log in.
+    </div>
 
     <div v-if="error" class="mb-4 p-3 bg-red-900 text-red-200 rounded">
       {{ error }}
@@ -64,5 +81,12 @@ async function handleLogin() {
         {{ loading ? "Logging in..." : "Login" }}
       </button>
     </div>
+
+    <p class="mt-6 text-center text-sm text-zinc-400">
+      Need an account?
+      <RouterLink to="/signup" class="text-purple-400 hover:text-purple-300">
+        Sign up
+      </RouterLink>
+    </p>
   </div>
 </template>
