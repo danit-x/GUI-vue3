@@ -8,6 +8,7 @@ const CartPage = () => import("../pages/CartPage.vue")
 const SignupPage = () => import("../pages/SignupPage.vue")
 const ProductDetailPage = () => import("../pages/ProductDetailPage.vue")
 const WishlistPage = () => import("../pages/WishlistPage.vue")
+const ProfilePage = () => import("../pages/ProfilePage.vue")
 
 const routes: RouteRecordRaw[] = [
   { path: "/", component: HomePage },
@@ -17,7 +18,8 @@ const routes: RouteRecordRaw[] = [
   { path: "/login", component: LoginPage },
   { path: "/signup", component: SignupPage },
   { path: "/cart", component: CartPage },
-  { path: "/wishlist", component: WishlistPage }
+  { path: "/wishlist", component: WishlistPage },
+  { path: "/profile", component: ProfilePage }
 ]
 
 const router = createRouter({

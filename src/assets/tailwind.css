@@ -1,48 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap");
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @import "tailwindcss";
 
 :root {
-  --font-display: "Baskerville", "Palatino Linotype", "Book Antiqua", "Times New Roman", serif;
-  --font-body: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
-  --bg: #f4ecdf;
-  --bg-elevated: rgba(255, 248, 239, 0.82);
-  --bg-strong: #f9f2e8;
-  --text: #231815;
-  --muted: #6d5b52;
-  --line: rgba(71, 44, 27, 0.15);
-  --accent: #af4d2e;
-  --accent-soft: rgba(175, 77, 46, 0.14);
-  --accent-strong: #d56f33;
-  --glow: rgba(213, 111, 51, 0.28);
+  --font-display: "Cormorant Garamond", "Times New Roman", serif;
+  --font-body: "Manrope", "Gill Sans", sans-serif;
+  --bg: #f3ede3;
+  --bg-elevated: rgba(250, 244, 236, 0.9);
+  --bg-strong: #ece2d4;
+  --bg-muted: #e4d7c6;
+  --text: #16110d;
+  --muted: #736454;
+  --line: rgba(34, 26, 19, 0.12);
+  --line-strong: rgba(34, 26, 19, 0.2);
+  --accent: #9e7a43;
+  --accent-soft: rgba(158, 122, 67, 0.12);
+  --accent-strong: #c2a06a;
+  --glow: rgba(158, 122, 67, 0.14);
+  --shadow: 0 28px 70px rgba(28, 20, 13, 0.09);
 }
 
 .dark {
-  --bg: #101418;
-  --bg-elevated: rgba(18, 25, 31, 0.8);
-  --bg-strong: #151c22;
-  --text: #f4ead7;
-  --muted: #b6a796;
-  --line: rgba(244, 234, 215, 0.12);
-  --accent: #f08a4b;
-  --accent-soft: rgba(240, 138, 75, 0.16);
-  --accent-strong: #ffd08d;
-  --glow: rgba(240, 138, 75, 0.26);
+  --bg: #090909;
+  --bg-elevated: rgba(15, 15, 15, 0.82);
+  --bg-strong: #121212;
+  --bg-muted: #1b1b1b;
+  --text: #f3ede3;
+  --muted: #b5a793;
+  --line: rgba(243, 237, 227, 0.1);
+  --line-strong: rgba(243, 237, 227, 0.18);
+  --accent: #b08a57;
+  --accent-soft: rgba(176, 138, 87, 0.14);
+  --accent-strong: #d8be92;
+  --glow: rgba(216, 190, 146, 0.08);
+  --shadow: 0 32px 90px rgba(0, 0, 0, 0.42);
 }
 
 html {
   background:
-    radial-gradient(circle at top left, rgba(255, 210, 141, 0.24), transparent 30%),
-    radial-gradient(circle at 80% 10%, rgba(175, 77, 46, 0.12), transparent 24%),
-    linear-gradient(135deg, #f8f0e7 0%, #f1e6d6 45%, #eadac8 100%);
+    radial-gradient(circle at 14% 16%, rgba(194, 160, 106, 0.14), transparent 24%),
+    radial-gradient(circle at 82% 12%, rgba(255, 255, 255, 0.35), transparent 18%),
+    linear-gradient(180deg, #f7f1e8 0%, #f0e7da 48%, #e8dece 100%);
   color: var(--text);
+  scroll-behavior: smooth;
 }
 
 html.dark {
   background:
-    radial-gradient(circle at top left, rgba(240, 138, 75, 0.18), transparent 28%),
-    radial-gradient(circle at 88% 12%, rgba(255, 208, 141, 0.1), transparent 22%),
-    linear-gradient(145deg, #0d1115 0%, #141a21 45%, #1a222a 100%);
+    radial-gradient(circle at 14% 14%, rgba(216, 190, 146, 0.08), transparent 26%),
+    radial-gradient(circle at 86% 10%, rgba(255, 255, 255, 0.05), transparent 18%),
+    linear-gradient(180deg, #080808 0%, #0c0c0c 45%, #121212 100%);
 }
 
 body {
@@ -54,7 +63,8 @@ body {
   background:
     linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-size: 72px 72px;
+  letter-spacing: 0.01em;
 }
 
 a {
@@ -63,7 +73,9 @@ a {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
 }
 
@@ -86,85 +98,88 @@ button {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 15% 20%, var(--glow), transparent 24%),
-    radial-gradient(circle at 85% 0%, rgba(255, 255, 255, 0.32), transparent 20%);
+    radial-gradient(circle at 14% 12%, var(--glow), transparent 24%),
+    radial-gradient(circle at 78% 0%, rgba(255, 255, 255, 0.12), transparent 20%);
   content: "";
-  opacity: 0.8;
+  opacity: 1;
   pointer-events: none;
 }
 
 .vybe-shell::after {
   position: absolute;
-  inset: auto 5% 8% auto;
-  width: 22rem;
-  height: 22rem;
+  inset: 6rem 6% auto auto;
+  width: 20rem;
+  height: 20rem;
   border: 1px solid var(--line);
   border-radius: 9999px;
   content: "";
-  opacity: 0.5;
+  opacity: 0.48;
   pointer-events: none;
 }
 
 .vybe-display {
   font-family: var(--font-display);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
 }
 
 .vybe-page {
   width: 100%;
-  max-width: 80rem;
+  max-width: 84rem;
   margin-inline: auto;
-  padding-block: 1rem 2rem;
+  padding-block: 1.5rem 3rem;
 }
 
 .vybe-hero {
   border: 1px solid var(--line);
   background:
-    linear-gradient(145deg, color-mix(in srgb, var(--bg-elevated) 92%, transparent), color-mix(in srgb, var(--bg-strong) 82%, transparent)),
-    radial-gradient(circle at top right, color-mix(in srgb, var(--glow) 48%, transparent), transparent 34%);
-  box-shadow: 0 24px 80px rgba(26, 17, 12, 0.08);
+    linear-gradient(180deg, color-mix(in srgb, var(--bg-elevated) 94%, transparent), color-mix(in srgb, var(--bg-strong) 86%, transparent)),
+    radial-gradient(circle at top right, color-mix(in srgb, var(--glow) 80%, transparent), transparent 34%);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
 }
 
 .vybe-panel {
   border: 1px solid var(--line);
-  background: var(--bg-elevated);
-  box-shadow: 0 24px 80px rgba(26, 17, 12, 0.08);
+  background: color-mix(in srgb, var(--bg-elevated) 96%, transparent);
+  box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
-}
-
-.dark .vybe-panel {
-  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.3);
-}
-
-.dark .vybe-hero {
-  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.3);
 }
 
 .vybe-card {
   border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--bg-strong) 80%, transparent);
+  background: color-mix(in srgb, var(--bg-strong) 84%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .vybe-pill {
   border: 1px solid var(--line);
-  background: var(--bg-elevated);
+  background: color-mix(in srgb, var(--bg-elevated) 94%, transparent);
   color: var(--muted);
 }
 
 .vybe-button {
-  border: 1px solid transparent;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-strong) 100%);
-  color: #fff9f1;
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg-strong));
+  color: var(--text);
   transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    opacity 180ms ease;
-  box-shadow: 0 10px 30px var(--glow);
+    transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 320ms ease,
+    background-color 320ms ease,
+    box-shadow 320ms ease,
+    color 320ms ease;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.08);
+}
+
+.dark .vybe-button {
+  background: color-mix(in srgb, var(--accent) 22%, var(--bg-strong));
+  color: #f8f1e5;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.32);
 }
 
 .vybe-button:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 20px 46px color-mix(in srgb, var(--glow) 54%, transparent);
 }
 
 .vybe-button:disabled {
@@ -178,9 +193,9 @@ button {
   background: color-mix(in srgb, var(--bg-strong) 78%, transparent);
   color: var(--text);
   transition:
-    border-color 160ms ease,
-    box-shadow 160ms ease,
-    transform 160ms ease;
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    transform 220ms ease;
 }
 
 .vybe-input::placeholder {
@@ -198,17 +213,11 @@ button {
   gap: 0.65rem;
 }
 
-.vybe-label {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.26em;
-  color: var(--muted);
-}
-
+.vybe-label,
 .vybe-kicker {
   font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.34em;
   color: var(--muted);
 }
 
@@ -216,11 +225,11 @@ button {
   border: 1px solid var(--line);
   border-radius: 1.4rem;
   background: color-mix(in srgb, var(--bg-strong) 82%, transparent);
-  padding: 1rem;
+  padding: 1.1rem;
 }
 
 .vybe-empty {
-  border: 1px dashed var(--line);
+  border: 1px dashed var(--line-strong);
   border-radius: 1.75rem;
   background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
   text-align: center;
@@ -233,7 +242,7 @@ button {
 .vybe-reveal {
   opacity: 0;
   transform: translateY(24px);
-  animation: vybe-reveal 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: vybe-reveal 950ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
   animation-delay: var(--delay, 0ms);
 }
 
@@ -241,7 +250,21 @@ button {
   border: 3px solid color-mix(in srgb, var(--line) 88%, transparent);
   border-top-color: var(--accent);
   border-radius: 9999px;
-  animation: vybe-spin 0.8s linear infinite;
+  animation: vybe-spin 0.9s linear infinite;
+}
+
+.vybe-outline-link {
+  transition:
+    color 240ms ease,
+    border-color 240ms ease,
+    background-color 240ms ease,
+    transform 240ms ease;
+}
+
+.vybe-outline-link:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+  color: var(--text);
 }
 
 @keyframes vybe-reveal {
@@ -260,8 +283,8 @@ button {
 .toast-enter-active,
 .toast-leave-active {
   transition:
-    opacity 180ms ease,
-    transform 180ms ease;
+    opacity 220ms ease,
+    transform 220ms ease;
 }
 
 .toast-enter-from,
@@ -272,12 +295,12 @@ button {
 
 @media (max-width: 640px) {
   body {
-    background-size: 24px 24px;
+    background-size: 44px 44px;
   }
 
   .vybe-shell::after {
-    width: 14rem;
-    height: 14rem;
-    inset: auto 6% 4% auto;
+    width: 12rem;
+    height: 12rem;
+    inset: 8rem 4% auto auto;
   }
 }
