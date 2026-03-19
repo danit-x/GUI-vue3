@@ -10,7 +10,7 @@
             Shop the living catalog.
           </h1>
           <p class="max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
-            Browse by instinct: search by title, drift through curated route categories, and open any object through the product detail route.
+            Browse by instinct: search by title, drift through every live DummyJSON category, and open any object through the product detail route.
           </p>
         </div>
 
@@ -50,17 +50,17 @@
           class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
           :class="!activeCategoryKey ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
         >
-          All
+          All ({{ products.length }})
         </RouterLink>
 
         <RouterLink
-          v-for="category in routeCategories"
+          v-for="category in filterCategories"
           :key="category.slug"
           :to="`/category/${category.slug}`"
           class="vybe-pill rounded-full px-4 py-2 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)]"
           :class="activeCategoryKey === category.slug ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
         >
-          {{ category.label }}
+          {{ category.label }} ({{ category.count }})
         </RouterLink>
       </div>
     </div>
@@ -79,30 +79,22 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from "vue"
 import { useRoute } from "vue-router"
-import { getProducts } from "../services/productService"
+import { getCategories, getProducts } from "../services/productService"
 import ProductGrid from "../components/product/ProductGrid.vue"
 import type { Product } from "../types/product"
 
-type CategoryRouteSlug = "men" | "women" | "tech" | "lifestyle"
-
-interface RouteCategory {
-  slug: CategoryRouteSlug
+interface FilterCategory {
+  slug: string
   label: string
-  dummyCategories: string[]
+  count: number
 }
 
 const route = useRoute()
 const products = ref<Product[]>([])
+const categories = ref<string[]>([])
 const search = ref("")
 
-const routeCategories: RouteCategory[] = [
-  { slug: "men", label: "Men", dummyCategories: ["mens-shirts", "mens-shoes", "mens-watches"] },
-  { slug: "women", label: "Women", dummyCategories: ["tops", "womens-bags", "womens-dresses", "womens-jewellery", "womens-shoes", "womens-watches"] },
-  { slug: "tech", label: "Tech", dummyCategories: ["laptops", "mobile-accessories", "smartphones", "tablets"] },
-  { slug: "lifestyle", label: "Lifestyle", dummyCategories: ["beauty", "fragrances", "furniture", "groceries", "home-decoration", "kitchen-accessories", "skin-care", "sports-accessories", "sunglasses", "vehicle"] }
-]
-
-const routeCategoryMap: Record<CategoryRouteSlug, string[]> = {
+const categoryRouteMap: Record<string, string[]> = {
   men: ["mens-shirts", "mens-shoes", "mens-watches"],
   women: ["tops", "womens-bags", "womens-dresses", "womens-jewellery", "womens-shoes", "womens-watches"],
   tech: ["laptops", "mobile-accessories", "smartphones", "tablets"],
@@ -110,18 +102,23 @@ const routeCategoryMap: Record<CategoryRouteSlug, string[]> = {
 }
 
 onMounted(async () => {
-  const productData = await getProducts()
+  const [productData, categoryData] = await Promise.all([
+    getProducts(),
+    getCategories()
+  ])
+
   products.value = productData.products
+  categories.value = categoryData
 })
 
-const activeCategoryKey = computed<CategoryRouteSlug | "">(() => {
+const activeCategoryKey = computed<string>(() => {
   const slug = route.params.slug
 
   if (typeof slug !== "string") {
     return ""
   }
 
-  return slug in routeCategoryMap ? (slug as CategoryRouteSlug) : ""
+  return slug
 })
 
 const activeDummyCategories = computed<string[]>(() => {
@@ -129,7 +126,7 @@ const activeDummyCategories = computed<string[]>(() => {
     return []
   }
 
-  return routeCategoryMap[activeCategoryKey.value]
+  return categoryRouteMap[activeCategoryKey.value] || [activeCategoryKey.value]
 })
 
 const activeCategoryLabel = computed(() => {
@@ -137,7 +134,22 @@ const activeCategoryLabel = computed(() => {
     return "All"
   }
 
-  return routeCategories.find((category) => category.slug === activeCategoryKey.value)?.label || "All"
+  return formatCategoryLabel(activeCategoryKey.value)
+})
+
+const categoryCounts = computed<Record<string, number>>(() => {
+  return products.value.reduce<Record<string, number>>((counts, product) => {
+    counts[product.category] = (counts[product.category] || 0) + 1
+    return counts
+  }, {})
+})
+
+const filterCategories = computed<FilterCategory[]>(() => {
+  return categories.value.map((category) => ({
+    slug: category,
+    label: formatCategoryLabel(category),
+    count: categoryCounts.value[category] || 0
+  }))
 })
 
 const filteredProducts = computed<Product[]>(() => {
@@ -150,4 +162,11 @@ const filteredProducts = computed<Product[]>(() => {
     return matchesSearch && matchesCategory
   })
 })
+
+function formatCategoryLabel(category: string) {
+  return category
+    .split("-")
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ")
+}
 </script>
