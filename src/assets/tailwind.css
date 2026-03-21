@@ -20,6 +20,7 @@
   --accent-strong: #c2a06a;
   --glow: rgba(158, 122, 67, 0.14);
   --shadow: 0 28px 70px rgba(28, 20, 13, 0.09);
+  overflow-x: clip;
 }
 
 .dark {
@@ -60,11 +61,12 @@ body {
   color: var(--text);
   font-family: var(--font-body);
   line-height: 1.5;
+  letter-spacing: 0.01em;
+  overflow-x: clip;
   background:
     linear-gradient(var(--line) 1px, transparent 1px),
     linear-gradient(90deg, var(--line) 1px, transparent 1px);
-  background-size: 72px 72px;
-  letter-spacing: 0.01em;
+  background-size: 44px 44px;
 }
 
 a {
@@ -76,11 +78,33 @@ button,
 input,
 select,
 textarea {
+  min-height: 2.75rem;
+  padding-block: 0.875rem;
+  padding-inline: 1rem;
   font: inherit;
+  touch-action: manipulation;
 }
 
 button {
   cursor: pointer;
+}
+
+button[disabled] {
+  cursor: not-allowed;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+html,
+body,
+#app,
+.vybe-shell {
+  width: 100%;
+  overflow-x: clip;
 }
 
 #app {
@@ -90,7 +114,6 @@ button {
 .vybe-shell {
   position: relative;
   min-height: 100vh;
-  overflow: hidden;
   color: var(--text);
 }
 
@@ -107,9 +130,9 @@ button {
 
 .vybe-shell::after {
   position: absolute;
-  inset: 6rem 6% auto auto;
-  width: 20rem;
-  height: 20rem;
+  inset: 8rem 4% auto auto;
+  width: 12rem;
+  height: 12rem;
   border: 1px solid var(--line);
   border-radius: 9999px;
   content: "";
@@ -126,7 +149,7 @@ button {
   width: 100%;
   max-width: 84rem;
   margin-inline: auto;
-  padding-block: 1.5rem 3rem;
+  padding-block: 1rem 2rem;
 }
 
 .vybe-hero {
@@ -184,7 +207,6 @@ button {
 
 .vybe-button:disabled {
   opacity: 0.6;
-  cursor: not-allowed;
   box-shadow: none;
 }
 
@@ -267,6 +289,14 @@ button {
   color: var(--text);
 }
 
+.vybe-safe-grid {
+  min-width: 0;
+}
+
+.vybe-touch-target {
+  min-height: 2.75rem;
+}
+
 @keyframes vybe-reveal {
   to {
     opacity: 1;
@@ -293,14 +323,59 @@ button {
   transform: translateY(10px);
 }
 
-@media (max-width: 640px) {
+@media (min-width: 480px) {
   body {
-    background-size: 44px 44px;
+    background-size: 52px 52px;
+  }
+
+  .vybe-page {
+    padding-block: 1.25rem 2.5rem;
+  }
+
+  .vybe-label,
+  .vybe-kicker {
+    font-size: 0.75rem;
+  }
+}
+
+@media (min-width: 768px) {
+  body {
+    background-size: 60px 60px;
+  }
+
+  .vybe-page {
+    padding-block: 1.5rem 3rem;
   }
 
   .vybe-shell::after {
-    width: 12rem;
-    height: 12rem;
-    inset: 8rem 4% auto auto;
+    inset: 6rem 6% auto auto;
+    width: 16rem;
+    height: 16rem;
   }
+
+  .vybe-stat {
+    padding: 1.25rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    background-size: 72px 72px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .vybe-page {
+    padding-block: 2rem 4rem;
+  }
+
+  .vybe-shell::after {
+    inset: 6rem 6% auto auto;
+    width: 20rem;
+    height: 20rem;
+  }
+}
+
+* {
+  box-sizing: border-box;
 }
