@@ -10,85 +10,85 @@ function handleQuantityChange(id: number, event: Event) {
 </script>
 
 <template>
-  <section class="vybe-page space-y-8">
-    <div class="vybe-hero rounded-[2.4rem] p-6 sm:p-8">
-      <div class="grid gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
-        <div class="space-y-3">
-          <p class="vybe-kicker">Your cart</p>
-          <h1 class="vybe-display text-4xl leading-none sm:text-5xl lg:text-6xl">
+  <section class="vybe-page space-y-6 sm:space-y-8 md:space-y-8 lg:space-y-8">
+    <div class="vybe-hero rounded-[2.4rem] p-5 sm:p-6 md:p-8">
+      <div class="grid gap-5 sm:gap-6 md:gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
+        <div class="space-y-2.5 sm:space-y-3 md:space-y-4">
+          <p class="vybe-kicker text-[10px] sm:text-[11px]">Your cart</p>
+          <h1 class="vybe-display text-[clamp(2.5rem,7vw,5rem)] leading-[0.94]">
             Review what is coming home with you.
           </h1>
-          <p class="max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+          <p class="max-w-2xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm md:text-base md:leading-7">
             Adjust quantities, check totals, and keep the checkout flow feeling polished across every screen size.
           </p>
         </div>
 
-        <div class="grid gap-3 sm:grid-cols-3">
+        <div class="grid grid-cols-3 gap-2.5 sm:gap-3 md:gap-3">
           <div class="vybe-stat">
-            <p class="vybe-kicker">Items</p>
-            <p class="mt-3 text-2xl text-[color:var(--text)]">{{ cart.itemCount }}</p>
+            <p class="vybe-kicker text-[9px] sm:text-[10px]">Items</p>
+            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.itemCount }}</p>
           </div>
           <div class="vybe-stat">
-            <p class="vybe-kicker">Lines</p>
-            <p class="mt-3 text-2xl text-[color:var(--text)]">{{ cart.items.length }}</p>
+            <p class="vybe-kicker text-[9px] sm:text-[10px]">Lines</p>
+            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.items.length }}</p>
           </div>
           <div class="vybe-stat">
-            <p class="vybe-kicker">Total</p>
-            <p class="mt-3 text-2xl text-[color:var(--text)]">${{ cart.totalPrice }}</p>
+            <p class="vybe-kicker text-[9px] sm:text-[10px]">Total</p>
+            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">${{ cart.totalPrice }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-if="cart.items.length === 0" class="vybe-empty px-6 py-14 sm:px-8">
-      <p class="vybe-display text-3xl text-[color:var(--text)] sm:text-4xl">Your cart is empty.</p>
-      <p class="mx-auto mt-3 max-w-xl text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+    <div v-if="cart.items.length === 0" class="vybe-empty px-4 py-10 sm:px-6 sm:py-14 md:px-8">
+      <p class="vybe-display text-2xl sm:text-3xl md:text-4xl text-[color:var(--text)]">Your cart is empty.</p>
+      <p class="mx-auto mt-2 sm:mt-3 max-w-xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7 md:text-base md:leading-8">
         Explore the collection and add a few standout pieces to see them here.
       </p>
-      <RouterLink to="/products" class="vybe-button mt-6 inline-flex rounded-full px-6 py-3 text-sm uppercase tracking-[0.22em]">
+      <RouterLink to="/products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
         Browse Products
       </RouterLink>
     </div>
 
-    <div v-else class="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-      <div class="vybe-panel rounded-[2rem] p-4 sm:p-6">
-        <div class="space-y-4">
+    <div v-else class="grid gap-5 sm:gap-6 md:gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
+      <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6">
+        <div class="space-y-3 sm:space-y-4 md:space-y-5">
           <div
             v-for="item in cart.items"
             :key="item.id"
-            class="vybe-card rounded-[1.75rem] p-4 sm:p-5"
+            class="vybe-card rounded-[1.75rem] p-3 sm:p-4 md:p-5"
           >
-            <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div class="flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div class="min-w-0">
-                <p class="vybe-kicker">{{ item.category }}</p>
-                <RouterLink :to="`/product/${item.id}`" class="mt-2 block text-xl font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-2xl">
+                <p class="vybe-kicker text-[9px] sm:text-[10px]">{{ item.category }}</p>
+                <RouterLink :to="`/product/${item.id}`" class="mt-1 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
                   {{ item.title }}
                 </RouterLink>
-                <p class="mt-2 text-sm text-[color:var(--muted)]">${{ item.price }} each</p>
+                <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">${{ item.price }} each</p>
               </div>
 
-              <div class="grid gap-3 sm:grid-cols-[auto_auto_auto] sm:items-center">
+              <div class="grid gap-2 sm:gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-end">
                 <label class="vybe-field">
-                  <span class="vybe-label">Quantity</span>
+                  <span class="vybe-label text-[9px] sm:text-[10px]">Qty</span>
                   <input
                     :value="item.quantity"
                     type="number"
                     min="1"
-                    class="vybe-input w-full rounded-[1rem] px-4 py-3 sm:w-24"
+                    class="vybe-input w-full rounded-[1rem] px-3 py-2 text-xs sm:w-[clamp(5rem,12vw,6.5rem)] sm:px-4 sm:py-3 sm:text-sm"
                     @input="handleQuantityChange(item.id, $event)"
                   />
                 </label>
 
                 <div class="vybe-field">
-                  <span class="vybe-label">Line total</span>
-                  <p class="rounded-[1rem] border border-[color:var(--line)] px-4 py-3 text-sm font-medium text-[color:var(--text)]">
+                  <span class="vybe-label text-[9px] sm:text-[10px]">Line</span>
+                  <p class="rounded-[1rem] border border-[color:var(--line)] px-3 py-2 text-xs font-medium text-[color:var(--text)] sm:px-4 sm:py-3 sm:text-sm">
                     ${{ item.price * item.quantity }}
                   </p>
                 </div>
 
                 <button
                   @click="cart.removeFromCart(item.id)"
-                  class="self-end rounded-full border border-[color:var(--line)] px-4 py-3 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-red-500/40 hover:text-red-500"
+                  class="vybe-touch-target self-end rounded-full border border-[color:var(--line)] px-3 py-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-red-500/40 hover:text-red-500 sm:px-4 sm:py-3 sm:text-xs"
                 >
                   Remove
                 </button>
@@ -98,30 +98,30 @@ function handleQuantityChange(id: number, event: Event) {
         </div>
       </div>
 
-      <aside class="vybe-panel h-fit rounded-[2rem] p-5 sm:p-6">
-        <p class="vybe-kicker">Order summary</p>
-        <h2 class="vybe-display mt-3 text-3xl text-[color:var(--text)]">Ready when you are.</h2>
+      <aside class="vybe-panel h-fit rounded-[2rem] p-4 sm:p-5 md:p-6">
+        <p class="vybe-kicker text-[10px] sm:text-[11px]">Order summary</p>
+        <h2 class="vybe-display mt-2 sm:mt-3 text-2xl sm:text-3xl text-[color:var(--text)]">Ready when you are.</h2>
 
-        <div class="mt-6 space-y-4">
-          <div class="flex items-center justify-between text-sm text-[color:var(--muted)]">
+        <div class="mt-4 sm:mt-6 space-y-3 sm:space-y-4">
+          <div class="flex items-center justify-between text-xs sm:text-sm text-[color:var(--muted)]">
             <span>Products</span>
             <span class="text-[color:var(--text)]">{{ cart.items.length }}</span>
           </div>
-          <div class="flex items-center justify-between text-sm text-[color:var(--muted)]">
+          <div class="flex items-center justify-between text-xs sm:text-sm text-[color:var(--muted)]">
             <span>Quantity</span>
             <span class="text-[color:var(--text)]">{{ cart.itemCount }}</span>
           </div>
-          <div class="vybe-divider pt-4">
+          <div class="vybe-divider pt-3 sm:pt-4">
             <div class="flex items-center justify-between">
-              <span class="text-sm uppercase tracking-[0.2em] text-[color:var(--muted)]">Total</span>
-              <span class="text-3xl text-[color:var(--accent)]">${{ cart.totalPrice }}</span>
+              <span class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Total</span>
+              <span class="text-2xl sm:text-3xl text-[color:var(--accent)]">${{ cart.totalPrice }}</span>
             </div>
           </div>
         </div>
 
         <button
           @click="cart.clearCart()"
-          class="mt-6 w-full rounded-full border border-red-500/25 px-5 py-3 text-xs uppercase tracking-[0.22em] text-red-600 transition hover:bg-red-500/10 dark:text-red-300"
+          class="vybe-touch-target mt-4 w-full rounded-full border border-red-500/25 px-4 py-2.5 text-xs uppercase tracking-[0.22em] text-red-600 transition hover:bg-red-500/10 dark:text-red-300 sm:mt-6 sm:px-5 sm:py-3"
         >
           Clear Cart
         </button>

@@ -9,14 +9,14 @@ import ToastStack from "./components/ui/ToastStack.vue"
     <div class="relative z-10 min-h-screen">
       <Navbar />
 
-      <main class="mx-auto w-full max-w-7xl px-4 pb-12 pt-6 sm:px-6 lg:px-8">
+      <main class="mx-auto w-full max-w-7xl px-4 pb-8 pt-5 sm:px-5 sm:pb-10 sm:pt-6 md:px-6 md:pb-12 md:pt-6 lg:px-8 lg:pb-12 lg:pt-6">
         <RouterView v-slot="{ Component }">
           <transition name="fade" mode="out-in">
             <Suspense>
               <component :is="Component" />
 
               <template #fallback>
-                <div class="vybe-panel rounded-[2rem] px-6 py-10 text-center text-[color:var(--muted)]">
+                <div class="vybe-panel rounded-[2rem] px-4 py-8 text-center text-xs text-[color:var(--muted)] sm:px-6 sm:py-10 md:px-8 md:py-12 md:text-sm">
                   Loading page...
                 </div>
               </template>

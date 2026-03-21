@@ -50,95 +50,97 @@ watch(
 
 <template>
   <section class="vybe-page">
-    <div v-if="loading" class="vybe-panel rounded-[2rem] px-6 py-16 text-center text-[color:var(--muted)]">
-      <div class="flex flex-col items-center justify-center gap-4">
-        <div class="vybe-spinner h-10 w-10" aria-hidden="true" />
-        <p class="text-sm uppercase tracking-[0.28em]">Loading product...</p>
+    <div v-if="loading" class="vybe-panel rounded-[2rem] px-4 py-12 text-center text-[color:var(--muted)] sm:px-6 sm:py-16 md:px-8">
+      <div class="flex flex-col items-center justify-center gap-3 sm:gap-4">
+        <div class="vybe-spinner h-8 w-8 sm:h-10 sm:w-10" aria-hidden="true" />
+        <p class="text-xs uppercase tracking-[0.28em] sm:text-sm">Loading product...</p>
       </div>
     </div>
 
     <div
       v-else-if="error"
-      class="vybe-empty px-6 py-12 text-[color:var(--muted)]"
+      class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 md:px-8"
     >
       {{ error }}
     </div>
 
-    <div v-else-if="product" class="space-y-5">
+    <div v-else-if="product" class="space-y-4 sm:space-y-5 md:space-y-6">
       <div>
         <RouterLink
           to="/products"
-          class="text-xs uppercase tracking-[0.3em] text-[color:var(--muted)] transition hover:text-[color:var(--text)]"
+          class="text-[10px] uppercase tracking-[0.3em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-xs"
         >
           Back to products
         </RouterLink>
       </div>
 
-      <div class="vybe-hero grid gap-6 rounded-[2.5rem] p-4 sm:gap-8 sm:p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:p-8">
-        <div class="space-y-4">
+      <div class="vybe-hero grid gap-5 rounded-[2.5rem] p-4 sm:gap-6 sm:p-5 md:gap-8 md:p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:p-8">
+        <div class="space-y-3 sm:space-y-4">
           <img
             :src="product.thumbnail"
             :alt="product.title"
             loading="lazy"
-            class="h-72 w-full rounded-[2rem] object-cover sm:h-[28rem]"
+            class="h-[clamp(18rem,62vw,28rem)] w-full rounded-[2rem] object-cover"
           />
 
-          <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <div class="vybe-stat">
-              <p class="vybe-kicker">Brand</p>
-              <p class="mt-3 text-sm text-[color:var(--text)] sm:text-base">{{ product.brand }}</p>
+          <div class="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4 md:gap-4">
+            <div class="vybe-stat rounded-[1.5rem] p-3 sm:p-4 md:p-5">
+              <p class="vybe-kicker text-[9px] sm:text-[10px]">Brand</p>
+              <p class="mt-2 sm:mt-3 text-xs text-[color:var(--text)] sm:text-sm md:text-base">{{ product.brand }}</p>
             </div>
-            <div class="vybe-stat">
-              <p class="vybe-kicker">Category</p>
-              <p class="mt-3 text-sm text-[color:var(--text)] sm:text-base">{{ product.category }}</p>
+            <div class="vybe-stat rounded-[1.5rem] p-3 sm:p-4 md:p-5">
+              <p class="vybe-kicker text-[9px] sm:text-[10px]">Category</p>
+              <p class="mt-2 sm:mt-3 text-xs text-[color:var(--text)] sm:text-sm md:text-base">{{ product.category }}</p>
             </div>
-            <div class="vybe-stat">
-              <p class="vybe-kicker">Stock</p>
-              <p class="mt-3 text-sm text-[color:var(--text)] sm:text-base">{{ product.stock }}</p>
+            <div class="vybe-stat rounded-[1.5rem] p-3 sm:p-4 md:p-5">
+              <p class="vybe-kicker text-[9px] sm:text-[10px]">Stock</p>
+              <p class="mt-2 sm:mt-3 text-xs text-[color:var(--text)] sm:text-sm md:text-base">{{ product.stock }}</p>
             </div>
-            <div class="vybe-stat">
-              <p class="vybe-kicker">Discount</p>
-              <p class="mt-3 text-sm text-[color:var(--text)] sm:text-base">{{ product.discountPercentage }}%</p>
+            <div class="vybe-stat rounded-[1.5rem] p-3 sm:p-4 md:p-5">
+              <p class="vybe-kicker text-[9px] sm:text-[10px]">Discount</p>
+              <p class="mt-2 sm:mt-3 text-xs text-[color:var(--text)] sm:text-sm md:text-base">{{ product.discountPercentage }}%</p>
             </div>
           </div>
         </div>
 
-        <div class="flex flex-col justify-center">
-          <p class="vybe-kicker">
-            Product detail
-          </p>
-          <h1 class="vybe-display mt-3 text-4xl leading-none sm:text-5xl lg:text-6xl">
-            {{ product.title }}
-          </h1>
+        <div class="flex flex-col justify-center space-y-3 sm:space-y-4 md:space-y-5">
+          <div>
+            <p class="vybe-kicker text-[10px] sm:text-[11px]">
+              Product detail
+            </p>
+            <h1 class="vybe-display mt-2 text-[clamp(2.5rem,7vw,5rem)] leading-[0.94] sm:mt-3">
+              {{ product.title }}
+            </h1>
+          </div>
 
-          <p class="mt-5 text-sm leading-7 text-[color:var(--muted)] sm:text-base">
+          <p class="text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7 md:text-base md:leading-8">
             {{ product.description }}
           </p>
 
-          <div class="mt-6 flex flex-wrap items-center gap-3 text-sm">
-            <span class="vybe-pill rounded-full px-4 py-2">
+          <div class="flex flex-wrap items-center gap-2 text-xs sm:gap-3">
+            <span class="vybe-pill rounded-full px-3 py-2 sm:px-4 sm:py-2">
               Rating {{ product.rating }}
             </span>
-            <span class="vybe-pill rounded-full px-4 py-2">
+            <span class="vybe-pill rounded-full px-3 py-2 sm:px-4 sm:py-2">
               {{ product.images.length }} images
             </span>
           </div>
 
-          <p class="mt-7 text-4xl text-[color:var(--accent)] sm:text-5xl">
+          <p class="text-3xl sm:text-4xl md:text-5xl text-[color:var(--accent)]">
             ${{ product.price }}
           </p>
 
-          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div class="flex flex-col gap-2.5 sm:gap-3 md:flex-row md:gap-4">
             <button
               @click="handleAddToCart"
-              class="vybe-button rounded-full px-6 py-3 text-sm uppercase tracking-[0.2em] sm:flex-1"
+              class="vybe-button vybe-touch-target rounded-full px-5 py-3 text-xs uppercase tracking-[0.2em] sm:px-6 sm:py-3.5 sm:text-sm md:flex-1 md:py-4"
             >
               Add to Cart
             </button>
 
             <button
               @click="bookmarks.toggleBookmark(product)"
-              class="vybe-pill rounded-full px-6 py-3 text-sm uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:flex-1"
+              class="vybe-pill vybe-touch-target rounded-full px-5 py-3 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-6 sm:py-3.5 sm:text-sm md:flex-1 md:py-4"
             >
               {{ bookmarks.isBookmarked(product.id) ? "Remove Bookmark" : "Save Bookmark" }}
             </button>

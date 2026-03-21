@@ -10,23 +10,23 @@ const selectedCountryOption = computed(() => {
 </script>
 
 <template>
-  <footer class="px-4 pb-6 pt-6 sm:px-6 lg:px-8">
-    <div class="mx-auto grid max-w-[84rem] gap-6 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_86%,transparent)] px-5 py-8 text-sm text-[color:var(--muted)] shadow-[var(--shadow)] backdrop-blur-xl sm:px-6 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+  <footer class="px-4 pb-4 pt-6 sm:px-5 sm:pb-5 md:px-6 lg:px-8">
+    <div class="mx-auto grid max-w-[84rem] gap-4 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_86%,transparent)] px-4 py-6 text-sm text-[color:var(--muted)] shadow-[var(--shadow)] backdrop-blur-xl sm:gap-5 sm:px-5 sm:py-7 md:px-6 md:gap-6 md:py-8 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,auto)] lg:items-end">
       <div class="max-w-2xl">
-        <p class="vybe-kicker">VYBE House</p>
-        <p class="vybe-display mt-3 text-3xl leading-none text-[color:var(--text)] sm:text-4xl">Objects with presence, presented with restraint.</p>
-        <p class="mt-4 max-w-xl leading-7">
+        <p class="vybe-kicker text-[10px] sm:text-[11px]">VYBE House</p>
+        <p class="vybe-display mt-2 text-[clamp(2rem,6vw,4rem)] leading-[0.95] text-[color:var(--text)] sm:mt-3">Objects with presence, presented with restraint.</p>
+        <p class="mt-3 text-xs leading-6 sm:mt-4 sm:text-sm md:max-w-xl md:leading-7">
           A refined storefront for modern essentials, styled with the calm of an editorial spread and the precision of a luxury label.
         </p>
       </div>
 
-      <div class="flex flex-col gap-5 lg:items-end">
-        <label class="flex flex-wrap items-center gap-3 rounded-[1.5rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_74%,transparent)] px-4 py-3">
-          <span class="text-xs uppercase tracking-[0.22em] text-[color:var(--muted)]">Country</span>
+      <div class="flex flex-col gap-4 sm:gap-5 lg:items-end">
+        <label class="flex min-w-0 flex-wrap items-center gap-2 rounded-[1.5rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_74%,transparent)] px-3 py-3 sm:px-4 sm:py-3 md:gap-3 md:px-4">
+          <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Country</span>
           <span class="text-base text-[color:var(--text)]">{{ selectedCountryOption.flag }}</span>
           <select
             :value="selectedCountry"
-            class="bg-transparent text-sm uppercase tracking-[0.16em] text-[color:var(--text)] outline-none"
+            class="min-w-0 flex-1 bg-transparent text-xs uppercase tracking-[0.16em] text-[color:var(--text)] outline-none sm:text-sm"
             @change="setCountry(($event.target as HTMLSelectElement).value)"
           >
             <option
@@ -40,10 +40,10 @@ const selectedCountryOption = computed(() => {
           </select>
         </label>
 
-        <div class="flex flex-wrap gap-x-6 gap-y-3 text-xs uppercase tracking-[0.28em]">
-          <RouterLink to="/" class="transition hover:text-[color:var(--text)]">Home</RouterLink>
-          <RouterLink to="/products" class="transition hover:text-[color:var(--text)]">Products</RouterLink>
-          <RouterLink to="/profile" class="transition hover:text-[color:var(--text)]">Profile</RouterLink>
+        <div class="grid grid-cols-2 gap-2 text-[10px] uppercase tracking-[0.28em] sm:flex sm:flex-wrap sm:gap-x-6 sm:gap-y-3 sm:text-xs">
+          <RouterLink to="/" class="vybe-touch-target inline-flex items-center transition hover:text-[color:var(--text)]">Home</RouterLink>
+          <RouterLink to="/products" class="vybe-touch-target inline-flex items-center transition hover:text-[color:var(--text)]">Products</RouterLink>
+          <RouterLink to="/profile" class="vybe-touch-target inline-flex items-center transition hover:text-[color:var(--text)]">Profile</RouterLink>
         </div>
       </div>
     </div>
