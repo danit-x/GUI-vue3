@@ -81,13 +81,13 @@ function handleLogout() {
 
       <div class="flex items-center justify-end gap-1.5 sm:gap-2 md:gap-2.5">
         <button
-          class="vybe-outline-link vybe-touch-target inline-flex w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+          class="vybe-outline-link vybe-touch-target inline-flex w-11 h-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
           :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
           type="button"
           @click="toggleDark"
         >
-          <SunMedium v-if="isDark" class="h-[1.125rem] w-[1.125rem]" />
-          <MoonStar v-else class="h-[1.125rem] w-[1.125rem]" />
+          <SunMedium v-if="isDark" class="h-8 w-8" />
+          <MoonStar v-else class="h-8 w-8" />
         </button>
 
         <RouterLink
