@@ -14,6 +14,7 @@ const router = useRouter()
 const route = useRoute()
 
 const signupSuccess = route.query.signup === "success"
+const redirectTarget = typeof route.query.redirect === "string" ? route.query.redirect : "/products"
 
 async function handleLogin() {
   error.value = ""
@@ -34,7 +35,7 @@ async function handleLogin() {
       }
     })
 
-    router.push("/products")
+    router.push(redirectTarget)
   } catch {
     error.value = "Login failed. Please try again."
   } finally {
