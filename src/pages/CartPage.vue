@@ -1,11 +1,29 @@
 <script setup lang="ts">
+import { useRouter } from "vue-router"
+import { useAuthStore } from "../stores/authStore"
 import { useCartStore } from "../stores/cartStore"
 
+const auth = useAuthStore()
 const cart = useCartStore()
+const router = useRouter()
 
 function handleQuantityChange(id: number, event: Event) {
   const target = event.target as HTMLInputElement
   cart.updateQuantity(id, Number(target.value))
+}
+
+function handleProceedToCheckout() {
+  if (auth.isLoggedIn) {
+    router.push("/checkout")
+    return
+  }
+
+  router.push({
+    path: "/login",
+    query: {
+      redirect: "/checkout"
+    }
+  })
 }
 </script>
 
@@ -120,8 +138,15 @@ function handleQuantityChange(id: number, event: Event) {
         </div>
 
         <button
+          @click="handleProceedToCheckout"
+          class="vybe-button vybe-touch-target mt-4 w-full rounded-full px-4 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-5 sm:py-3"
+        >
+          Proceed to Checkout
+        </button>
+
+        <button
           @click="cart.clearCart()"
-          class="vybe-touch-target mt-4 w-full rounded-full border border-red-500/25 px-4 py-2.5 text-xs uppercase tracking-[0.22em] text-red-600 transition hover:bg-red-500/10 dark:text-red-300 sm:mt-6 sm:px-5 sm:py-3"
+          class="vybe-touch-target mt-3 w-full rounded-full border border-red-500/25 px-4 py-2.5 text-xs uppercase tracking-[0.22em] text-red-600 transition hover:bg-red-500/10 dark:text-red-300 sm:mt-4 sm:px-5 sm:py-3"
         >
           Clear Cart
         </button>
