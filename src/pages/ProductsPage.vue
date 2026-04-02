@@ -71,12 +71,38 @@
 
     <div
       v-if="loading"
-      class="vybe-panel rounded-[2rem] px-4 py-12 text-center text-[color:var(--muted)] sm:px-6 sm:py-16 md:px-8"
+      class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-6"
     >
-      <div class="flex flex-col items-center justify-center gap-3 sm:gap-4">
-        <div class="vybe-spinner h-8 w-8 sm:h-10 sm:w-10" aria-hidden="true" />
-        <p class="text-xs uppercase tracking-[0.28em] sm:text-sm">Loading products...</p>
-      </div>
+      <article
+        v-for="skeleton in skeletonCards"
+        :key="skeleton"
+        class="vybe-panel overflow-hidden rounded-[2.1rem] p-2 sm:p-3"
+        aria-hidden="true"
+      >
+        <div class="animate-pulse">
+          <div class="rounded-[1.75rem] bg-[color:color-mix(in_srgb,var(--bg-strong)_88%,transparent)] aspect-[4/3] w-full" />
+
+          <div class="space-y-3 p-3 sm:space-y-4 sm:p-4 md:p-5">
+            <div class="h-3 w-20 rounded-full bg-[color:color-mix(in_srgb,var(--line)_75%,transparent)]" />
+            <div class="space-y-2">
+              <div class="h-6 w-4/5 rounded-full bg-[color:color-mix(in_srgb,var(--bg-strong)_90%,transparent)]" />
+              <div class="h-6 w-3/5 rounded-full bg-[color:color-mix(in_srgb,var(--bg-strong)_82%,transparent)]" />
+            </div>
+            <div class="space-y-2">
+              <div class="h-3 w-full rounded-full bg-[color:color-mix(in_srgb,var(--line)_70%,transparent)]" />
+              <div class="h-3 w-5/6 rounded-full bg-[color:color-mix(in_srgb,var(--line)_58%,transparent)]" />
+            </div>
+            <div class="flex items-center justify-between gap-3 pt-1">
+              <div class="h-4 w-20 rounded-full bg-[color:color-mix(in_srgb,var(--line)_70%,transparent)]" />
+              <div class="h-6 w-16 rounded-full bg-[color:color-mix(in_srgb,var(--bg-strong)_90%,transparent)]" />
+            </div>
+            <div class="mt-2 grid gap-2 sm:grid-cols-2 sm:gap-3">
+              <div class="h-10 rounded-full bg-[color:color-mix(in_srgb,var(--bg-strong)_92%,transparent)]" />
+              <div class="h-10 rounded-full bg-[color:color-mix(in_srgb,var(--line)_70%,transparent)]" />
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
 
     <div
@@ -153,6 +179,7 @@ const search = ref("")
 const loading = ref(true)
 const error = ref("")
 const currentPage = ref(1)
+const skeletonCards = Array.from({ length: 8 }, (_, index) => index)
 
 const categoryRouteMap: Record<string, string[]> = {
   men: ["mens-shirts", "mens-shoes", "mens-watches"],
