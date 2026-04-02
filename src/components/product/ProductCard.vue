@@ -24,6 +24,12 @@ function handleAddToCart() {
   cart.addToCart(props.product)
   showToast("Added to cart")
 }
+
+function handleToggleBookmark() {
+  const message = props.isBookmarked ? "Removed from wishlist" : "Added to wishlist"
+  bookmarks.toggleBookmark(props.product)
+  showToast(message)
+}
 </script>
 
 <template>
@@ -75,7 +81,7 @@ function handleAddToCart() {
         </button>
 
         <button
-          @click.stop="bookmarks.toggleBookmark(props.product)"
+          @click.stop="handleToggleBookmark"
           class="vybe-touch-target rounded-full border border-[color:var(--line)] px-3 py-2.5 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-4 sm:py-3 md:flex-1"
         >
           {{ props.isBookmarked ? "Saved" : "Bookmark" }}

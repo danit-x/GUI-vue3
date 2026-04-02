@@ -53,6 +53,16 @@ function handleAddToCart() {
   showToast("Added to cart")
 }
 
+function handleToggleBookmark() {
+  if (!product.value) {
+    return
+  }
+
+  const message = bookmarks.isBookmarked(product.value.id) ? "Removed from wishlist" : "Added to wishlist"
+  bookmarks.toggleBookmark(product.value)
+  showToast(message)
+}
+
 function setActiveImage(image: string) {
   activeImage.value = image
 }
@@ -179,7 +189,7 @@ watch(
             </button>
 
             <button
-              @click="bookmarks.toggleBookmark(product)"
+              @click="handleToggleBookmark"
               class="vybe-pill vybe-touch-target rounded-full px-5 py-3 text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-6 sm:py-3.5 sm:text-sm md:flex-1 md:py-4"
             >
               {{ bookmarks.isBookmarked(product.id) ? "Remove Bookmark" : "Save Bookmark" }}

@@ -2,10 +2,12 @@
 import { computed, ref, watch } from "vue"
 import { useAuthStore } from "../stores/authStore"
 import { useBookmarkStore } from "../stores/bookmarkStore"
+import { useToast } from "../composables/useToast"
 import { formatPrice } from "../utils/formatPrice"
 
 const auth = useAuthStore()
 const bookmarks = useBookmarkStore()
+const { showToast } = useToast()
 const isBannerDismissed = ref(false)
 
 const showLocalWishlistBanner = computed(() =>
@@ -20,6 +22,11 @@ watch(
     }
   }
 )
+
+function handleRemoveBookmark(id: number) {
+  bookmarks.removeBookmark(id)
+  showToast("Removed from wishlist")
+}
 </script>
 
 <template>
@@ -112,7 +119,7 @@ watch(
               </RouterLink>
 
               <button
-                @click="bookmarks.removeBookmark(item.id)"
+                @click="handleRemoveBookmark(item.id)"
                 class="vybe-touch-target rounded-full border border-[color:var(--line)] px-4 py-2.5 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-red-500/40 hover:text-red-500 sm:px-5 sm:py-3"
               >
                 Remove

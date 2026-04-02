@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
+import { useToast } from "../composables/useToast"
 import { useCartStore } from "../stores/cartStore"
 import { formatPrice } from "../utils/formatPrice"
 
 const cart = useCartStore()
 const router = useRouter()
+const { showToast } = useToast()
 
 const isPlacingOrder = ref(false)
 const orderPlaced = ref(false)
@@ -34,6 +36,7 @@ async function handlePlaceOrder() {
 
     cart.clearCart()
     orderPlaced.value = true
+    showToast("Order placed successfully")
   } finally {
     isPlacingOrder.value = false
   }

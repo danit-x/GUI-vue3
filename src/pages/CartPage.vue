@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
+import { useToast } from "../composables/useToast"
 import { useAuthStore } from "../stores/authStore"
 import { useCartStore } from "../stores/cartStore"
 import { formatPrice } from "../utils/formatPrice"
@@ -7,6 +8,7 @@ import { formatPrice } from "../utils/formatPrice"
 const auth = useAuthStore()
 const cart = useCartStore()
 const router = useRouter()
+const { showToast } = useToast()
 
 function handleQuantityChange(id: number, event: Event) {
   const target = event.target as HTMLInputElement
@@ -25,6 +27,16 @@ function handleProceedToCheckout() {
       redirect: "/checkout"
     }
   })
+}
+
+function handleRemoveFromCart(id: number) {
+  cart.removeFromCart(id)
+  showToast("Removed from cart")
+}
+
+function handleClearCart() {
+  cart.clearCart()
+  showToast("Cart cleared")
 }
 </script>
 
@@ -106,7 +118,7 @@ function handleProceedToCheckout() {
                 </div>
 
                 <button
-                  @click="cart.removeFromCart(item.id)"
+                  @click="handleRemoveFromCart(item.id)"
                   class="vybe-touch-target self-end rounded-full border border-[color:var(--line)] px-3 py-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-red-500/40 hover:text-red-500 sm:px-4 sm:py-3 sm:text-xs"
                 >
                   Remove
@@ -146,7 +158,7 @@ function handleProceedToCheckout() {
         </button>
 
         <button
-          @click="cart.clearCart()"
+          @click="handleClearCart"
           class="vybe-touch-target mt-3 w-full rounded-full border border-red-500/25 px-4 py-2.5 text-xs uppercase tracking-[0.22em] text-red-600 transition hover:bg-red-500/10 dark:text-red-300 sm:mt-4 sm:px-5 sm:py-3"
         >
           Clear Cart
