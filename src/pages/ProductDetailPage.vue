@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { computed, ref, watch } from "vue"
 import { RouterLink, useRoute } from "vue-router"
 import { getProductById } from "../services/productService"
 import { useCartStore } from "../stores/cartStore"
@@ -16,6 +16,17 @@ const { showToast } = useToast()
 const product = ref<Product | null>(null)
 const loading = ref(true)
 const error = ref("")
+const activeImage = ref("")
+
+const productGallery = computed(() => {
+  if (!product.value) {
+    return []
+  }
+
+  const gallery = product.value.images.length ? product.value.images : [product.value.thumbnail]
+
+  return Array.from(new Set([product.value.thumbnail, ...gallery]))
+})
 
 async function loadProduct(id: number) {
   loading.value = true
@@ -23,8 +34,10 @@ async function loadProduct(id: number) {
 
   try {
     product.value = await getProductById(id)
+    activeImage.value = product.value.images[0] || product.value.thumbnail
   } catch {
     product.value = null
+    activeImage.value = ""
     error.value = "We couldn't load that product."
   } finally {
     loading.value = false
@@ -38,6 +51,10 @@ function handleAddToCart() {
 
   cart.addToCart(product.value)
   showToast("Added to cart")
+}
+
+function setActiveImage(image: string) {
+  activeImage.value = image
 }
 
 watch(
@@ -77,12 +94,34 @@ watch(
 
       <div class="vybe-hero grid gap-5 rounded-[2.5rem] p-4 sm:gap-6 sm:p-5 md:gap-8 md:p-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.95fr)] lg:p-8">
         <div class="space-y-3 sm:space-y-4">
-          <img
-            :src="product.thumbnail"
-            :alt="product.title"
-            loading="lazy"
-            class="h-[clamp(18rem,62vw,28rem)] w-full rounded-[2rem] object-cover"
-          />
+          <div class="group overflow-hidden rounded-[2rem]">
+            <img
+              :src="activeImage || product.thumbnail"
+              :alt="product.title"
+              loading="lazy"
+              class="h-[clamp(18rem,62vw,28rem)] w-full rounded-[2rem] object-cover transition duration-500 ease-out group-hover:scale-[1.04]"
+            />
+          </div>
+
+          <div class="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+            <button
+              v-for="image in productGallery"
+              :key="image"
+              type="button"
+              class="overflow-hidden rounded-[1.25rem] border transition"
+              :class="image === (activeImage || product.thumbnail)
+                ? 'border-[color:var(--accent)]'
+                : 'border-[color:var(--line)] hover:border-[color:var(--accent)]/50'"
+              @click="setActiveImage(image)"
+            >
+              <img
+                :src="image"
+                :alt="`${product.title} thumbnail`"
+                loading="lazy"
+                class="aspect-square w-full object-cover transition duration-300 hover:scale-[1.03]"
+              />
+            </button>
+          </div>
 
           <div class="grid grid-cols-2 gap-2 sm:gap-3 md:grid-cols-4 md:gap-4">
             <div class="vybe-stat rounded-[1.5rem] p-3 sm:p-4 md:p-5">
