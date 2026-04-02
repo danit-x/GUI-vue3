@@ -6,6 +6,7 @@ import { useCartStore } from "../stores/cartStore"
 import { useBookmarkStore } from "../stores/bookmarkStore"
 import { useToast } from "../composables/useToast"
 import type { Product } from "../types/product"
+import { formatPrice } from "../utils/formatPrice"
 
 const route = useRoute()
 const cart = useCartStore()
@@ -127,7 +128,7 @@ watch(
           </div>
 
           <p class="text-3xl sm:text-4xl md:text-5xl text-[color:var(--accent)]">
-            ${{ product.price }}
+            {{ formatPrice(product.price) }}
           </p>
 
           <div class="flex flex-col gap-2.5 sm:gap-3 md:flex-row md:gap-4">

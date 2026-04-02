@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useBookmarkStore } from "../stores/bookmarkStore"
+import { formatPrice } from "../utils/formatPrice"
 
 const bookmarks = useBookmarkStore()
 </script>
@@ -54,7 +55,7 @@ const bookmarks = useBookmarkStore()
               <RouterLink :to="`/product/${item.id}`" class="mt-1.5 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
                 {{ item.title }}
               </RouterLink>
-              <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">${{ item.price }}</p>
+              <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">{{ formatPrice(item.price) }}</p>
             </div>
 
             <div class="flex flex-col gap-2.5 sm:flex-row sm:gap-3">

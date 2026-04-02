@@ -2,6 +2,7 @@
 import { computed, ref } from "vue"
 import { useRouter } from "vue-router"
 import { useCartStore } from "../stores/cartStore"
+import { formatPrice } from "../utils/formatPrice"
 
 const cart = useCartStore()
 const router = useRouter()
@@ -9,7 +10,7 @@ const router = useRouter()
 const isPlacingOrder = ref(false)
 const orderPlaced = ref(false)
 
-const formattedTotalPrice = computed(() => cart.totalPrice.toFixed(2))
+const formattedTotalPrice = computed(() => formatPrice(cart.totalPrice))
 
 const summaryLabel = computed(() => {
   if (cart.items.length === 1) {
@@ -68,7 +69,7 @@ function handleContinueShopping() {
           </div>
           <div class="vybe-stat">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Total</p>
-            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">${{ formattedTotalPrice }}</p>
+            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ formattedTotalPrice }}</p>
           </div>
         </div>
       </div>
@@ -137,12 +138,12 @@ function handleContinueShopping() {
                   {{ item.title }}
                 </RouterLink>
                 <p class="mt-1.5 text-xs text-[color:var(--muted)] sm:mt-2 sm:text-sm">
-                  ${{ item.price.toFixed(2) }} x {{ item.quantity }}
+                  {{ formatPrice(item.price) }} x {{ item.quantity }}
                 </p>
               </div>
 
               <p class="text-lg text-[color:var(--accent)] sm:text-xl">
-                ${{ (item.price * item.quantity).toFixed(2) }}
+                {{ formatPrice(item.price * item.quantity) }}
               </p>
             </div>
           </article>
@@ -165,7 +166,7 @@ function handleContinueShopping() {
           <div class="vybe-divider pt-3 sm:pt-4">
             <div class="flex items-center justify-between">
               <span class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Total</span>
-              <span class="text-2xl sm:text-3xl text-[color:var(--accent)]">${{ formattedTotalPrice }}</span>
+              <span class="text-2xl sm:text-3xl text-[color:var(--accent)]">{{ formattedTotalPrice }}</span>
             </div>
           </div>
         </div>

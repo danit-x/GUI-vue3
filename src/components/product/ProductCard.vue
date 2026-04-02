@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import { useCartStore } from "../../stores/cartStore"
 import { useBookmarkStore } from "../../stores/bookmarkStore"
 import { useToast } from "../../composables/useToast"
+import { formatPrice } from "../../utils/formatPrice"
 
 const bookmarks = useBookmarkStore()
 const cart = useCartStore()
@@ -62,7 +63,7 @@ function handleAddToCart() {
 
       <div class="flex items-center justify-between gap-2.5 text-xs text-[color:var(--muted)] sm:gap-3 sm:text-sm">
         <span>Rating {{ props.product.rating }}</span>
-        <span class="text-lg text-[color:var(--accent)] sm:text-xl">{{ (props.product.price || 0).toFixed(0) }}</span>
+        <span class="text-lg text-[color:var(--accent)] sm:text-xl">{{ formatPrice(props.product.price || 0) }}</span>
       </div>
 
       <div class="mt-auto flex flex-col gap-2 sm:gap-3 md:flex-row md:items-center">
