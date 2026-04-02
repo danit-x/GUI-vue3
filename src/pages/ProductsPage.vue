@@ -87,7 +87,7 @@
     </div>
 
     <template v-else>
-      <ProductGrid :products="filteredProducts" />
+      <ProductGrid :products="paginatedProducts" />
 
       <div
         v-if="filteredProducts.length === 0"
@@ -98,16 +98,41 @@
 
       <div
         v-else
-        class="vybe-panel rounded-[2rem] px-4 py-4 text-center text-xs text-[color:var(--muted)] sm:px-6 sm:py-6 md:text-sm"
+        class="space-y-4 sm:space-y-5"
       >
-        Tap or click any product card to open its detail view.
+        <div class="vybe-panel flex flex-col gap-3 rounded-[2rem] px-4 py-4 text-center text-xs text-[color:var(--muted)] sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 md:text-sm">
+          <p>Tap or click any product card to open its detail view.</p>
+          <div class="flex items-center justify-center gap-3 sm:justify-end">
+            <button
+              type="button"
+              class="vybe-pill vybe-touch-target rounded-full px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-2.5 sm:text-xs"
+              :disabled="currentPage === 1"
+              @click="goToPreviousPage"
+            >
+              Previous
+            </button>
+
+            <p class="min-w-[7rem] text-center text-[10px] uppercase tracking-[0.22em] text-[color:var(--text)] sm:text-xs">
+              Page {{ currentPage }} of {{ totalPages }}
+            </p>
+
+            <button
+              type="button"
+              class="vybe-pill vybe-touch-target rounded-full px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-2.5 sm:text-xs"
+              :disabled="currentPage === totalPages"
+              @click="goToNextPage"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </template>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { getCategories, getProducts } from "../services/productService"
 import ProductGrid from "../components/product/ProductGrid.vue"
@@ -119,12 +144,15 @@ interface FilterCategory {
   count: number
 }
 
+const PRODUCTS_PER_PAGE = 24
+
 const route = useRoute()
 const products = ref<Product[]>([])
 const categories = ref<string[]>([])
 const search = ref("")
 const loading = ref(true)
 const error = ref("")
+const currentPage = ref(1)
 
 const categoryRouteMap: Record<string, string[]> = {
   men: ["mens-shirts", "mens-shoes", "mens-watches"],
@@ -203,6 +231,37 @@ const filteredProducts = computed<Product[]>(() => {
     return matchesSearch && matchesCategory
   })
 })
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredProducts.value.length / PRODUCTS_PER_PAGE)))
+
+const paginatedProducts = computed<Product[]>(() => {
+  const start = (currentPage.value - 1) * PRODUCTS_PER_PAGE
+  const end = start + PRODUCTS_PER_PAGE
+
+  return filteredProducts.value.slice(start, end)
+})
+
+watch([search, activeCategoryKey], () => {
+  currentPage.value = 1
+})
+
+watch(totalPages, (nextTotalPages) => {
+  if (currentPage.value > nextTotalPages) {
+    currentPage.value = nextTotalPages
+  }
+})
+
+function goToPreviousPage() {
+  if (currentPage.value > 1) {
+    currentPage.value -= 1
+  }
+}
+
+function goToNextPage() {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value += 1
+  }
+}
 
 function formatCategoryLabel(category: string) {
   return category
