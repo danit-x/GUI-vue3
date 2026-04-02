@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from "vue"
 import type { Product } from "../../types/product"
 import { useRouter } from "vue-router"
 import { useCartStore } from "../../stores/cartStore"
@@ -16,11 +17,18 @@ const props = defineProps<{
   isBookmarked: boolean
 }>()
 
+const isOutOfStock = computed(() => props.product.stock === 0)
+const isLowStock = computed(() => props.product.stock > 0 && props.product.stock < 10)
+
 function openProduct() {
   router.push(`/product/${props.product.id}`)
 }
 
 function handleAddToCart() {
+  if (isOutOfStock.value) {
+    return
+  }
+
   cart.addToCart(props.product)
   showToast("Added to cart")
 }
@@ -63,6 +71,20 @@ function handleToggleBookmark() {
         </div>
       </div>
 
+      <div
+        v-if="isOutOfStock || isLowStock"
+        class="flex items-center"
+      >
+        <span
+          class="rounded-full px-3 py-1.5 text-[9px] uppercase tracking-[0.22em] sm:text-[10px]"
+          :class="isOutOfStock
+            ? 'border border-red-500/30 bg-red-500/12 text-red-700 dark:text-red-300'
+            : 'border border-amber-500/30 bg-amber-500/12 text-amber-700 dark:text-amber-300'"
+        >
+          {{ isOutOfStock ? "Out of stock" : "Low stock" }}
+        </span>
+      </div>
+
       <p class="line-clamp-2 text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7">
         {{ props.product.description }}
       </p>
@@ -75,9 +97,11 @@ function handleToggleBookmark() {
       <div class="mt-auto flex flex-col gap-2 sm:gap-3 md:flex-row md:items-center">
         <button
           @click.stop="handleAddToCart"
+          :disabled="isOutOfStock"
           class="vybe-button vybe-touch-target rounded-full px-3 py-2.5 text-xs uppercase tracking-[0.2em] sm:px-4 sm:py-3 md:flex-1"
+          :class="isOutOfStock ? 'opacity-60 grayscale' : ''"
         >
-          Add To Cart
+          {{ isOutOfStock ? "Out of Stock" : "Add To Cart" }}
         </button>
 
         <button
