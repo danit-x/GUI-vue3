@@ -1,4 +1,5 @@
-const BASE_URL = "https://dummyjson.com"
+import { BASE_URL } from "./api"
+
 const SIGNUP_USERS_KEY = "auth_signup_users"
 
 export interface LoginResponse {
