@@ -23,7 +23,7 @@ const routes: RouteRecordRaw[] = [
   { path: "/cart", name: "cart", component: CartPage },
   { path: "/checkout", name: "checkout", component: CheckoutPage, meta: { requiresAuth: true } },
   { path: "/wishlist", name: "wishlist", component: WishlistPage },
-  { path: "/profile", name: "profile", component: ProfilePage },
+  { path: "/profile", name: "profile", component: ProfilePage, meta: { requiresAuth: true } },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundPage }
 ]
 

@@ -42,7 +42,7 @@ const initials = computed(() => {
       </div>
     </div>
 
-    <div v-if="auth.user" class="grid gap-5 sm:gap-6 md:gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
+    <div v-if="auth.isLoggedIn && auth.user" class="grid gap-5 sm:gap-6 md:gap-6 lg:grid-cols-[18rem_minmax(0,1fr)]">
       <aside class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6">
         <div class="flex flex-col items-center text-center">
           <div class="flex h-20 w-20 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--bg-strong)] text-2xl text-[color:var(--text)] sm:h-24 sm:w-24 sm:text-3xl">
@@ -78,9 +78,9 @@ const initials = computed(() => {
     </div>
 
     <div v-else class="vybe-empty px-4 py-10 sm:px-6 sm:py-14 md:px-8">
-      <p class="vybe-display text-2xl sm:text-3xl md:text-4xl text-[color:var(--text)]">No profile available yet.</p>
+      <p class="vybe-display text-2xl sm:text-3xl md:text-4xl text-[color:var(--text)]">Please log in to view your profile.</p>
       <p class="mx-auto mt-2 sm:mt-3 max-w-xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7 md:text-base md:leading-8">
-        Log in or create an account to see your basic profile details here.
+        Your account details are only available after signing in.
       </p>
       <div class="mt-4 sm:mt-6 flex flex-col items-center justify-center gap-2.5 sm:flex-row sm:gap-3">
       <RouterLink to="/login" class="vybe-button vybe-touch-target rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:px-6 sm:py-3 sm:text-sm">
