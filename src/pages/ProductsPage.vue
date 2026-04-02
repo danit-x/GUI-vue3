@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="vybe-reveal grid gap-4 sm:gap-5 md:gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,auto)]" style="--delay: 180ms;">
+    <div class="vybe-reveal grid gap-4 sm:gap-5 md:gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,auto)_minmax(16rem,auto)]" style="--delay: 180ms;">
       <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6">
         <label class="vybe-label mb-2.5 block text-[10px] sm:text-[11px]">
           Search products
@@ -66,6 +66,25 @@
             {{ category.label }} ({{ category.count }})
           </RouterLink>
         </div>
+      </div>
+
+      <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6">
+        <label class="vybe-label mb-2.5 block text-[10px] sm:text-[11px]">
+          Sort by
+        </label>
+        <select
+          v-model="sortBy"
+          class="vybe-input w-full rounded-[1.5rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+        >
+          <option
+            v-for="option in sortOptions"
+            :key="option.value"
+            :value="option.value"
+            class="bg-[color:var(--bg-strong)] text-[color:var(--text)]"
+          >
+            {{ option.label }}
+          </option>
+        </select>
       </div>
     </div>
 
@@ -170,16 +189,25 @@ interface FilterCategory {
   count: number
 }
 
+type SortOption = "default" | "price-asc" | "price-desc" | "rating-desc"
+
 const PRODUCTS_PER_PAGE = 24
 
 const route = useRoute()
 const products = ref<Product[]>([])
 const categories = ref<string[]>([])
 const search = ref("")
+const sortBy = ref<SortOption>("default")
 const loading = ref(true)
 const error = ref("")
 const currentPage = ref(1)
 const skeletonCards = Array.from({ length: 8 }, (_, index) => index)
+const sortOptions: { label: string; value: SortOption }[] = [
+  { label: "Featured", value: "default" },
+  { label: "Price: Low to High", value: "price-asc" },
+  { label: "Price: High to Low", value: "price-desc" },
+  { label: "Top Rated", value: "rating-desc" }
+]
 
 const categoryRouteMap: Record<string, string[]> = {
   men: ["mens-shirts", "mens-shoes", "mens-watches"],
@@ -249,7 +277,7 @@ const filterCategories = computed<FilterCategory[]>(() => {
 })
 
 const filteredProducts = computed<Product[]>(() => {
-  return products.value.filter((product) => {
+  const visibleProducts = products.value.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(search.value.toLowerCase())
     const matchesCategory =
       activeDummyCategories.value.length === 0 ||
@@ -257,6 +285,20 @@ const filteredProducts = computed<Product[]>(() => {
 
     return matchesSearch && matchesCategory
   })
+
+  if (sortBy.value === "price-asc") {
+    return [...visibleProducts].sort((a, b) => a.price - b.price)
+  }
+
+  if (sortBy.value === "price-desc") {
+    return [...visibleProducts].sort((a, b) => b.price - a.price)
+  }
+
+  if (sortBy.value === "rating-desc") {
+    return [...visibleProducts].sort((a, b) => b.rating - a.rating)
+  }
+
+  return visibleProducts
 })
 
 const totalPages = computed(() => Math.max(1, Math.ceil(filteredProducts.value.length / PRODUCTS_PER_PAGE)))
