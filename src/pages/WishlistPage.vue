@@ -70,12 +70,20 @@ watch(
     </div>
 
     <div v-if="bookmarks.items.length === 0" class="vybe-empty px-4 py-10 sm:px-6 sm:py-14 md:px-8">
+      <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_86%,transparent)] shadow-[var(--shadow)] sm:h-28 sm:w-28">
+        <div class="relative flex h-14 w-14 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_84%,transparent)]">
+          <span class="text-3xl sm:text-4xl">♡</span>
+          <span class="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-[color:var(--accent)] text-xs text-white shadow-[var(--shadow)]">
+            +
+          </span>
+        </div>
+      </div>
       <p class="vybe-display text-2xl sm:text-3xl md:text-4xl text-[color:var(--text)]">No saved items yet.</p>
       <p class="mx-auto mt-2 sm:mt-3 max-w-xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7 md:text-base md:leading-8">
         Bookmark products you want to revisit and they will appear here in a cleaner, easier-to-scan list.
       </p>
       <RouterLink to="/products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
-        Explore Products
+        Browse Products
       </RouterLink>
     </div>
 
