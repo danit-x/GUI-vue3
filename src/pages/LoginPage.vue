@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue"
+import { computed, reactive, ref } from "vue"
 import { login } from "../services/authService"
 import { useAuthStore } from "../stores/authStore"
 import { RouterLink, useRoute, useRouter } from "vue-router"
@@ -15,8 +15,41 @@ const route = useRoute()
 
 const signupSuccess = route.query.signup === "success"
 const redirectTarget = typeof route.query.redirect === "string" ? route.query.redirect : "/products"
+const touched = reactive({
+  username: false,
+  password: false
+})
+
+const usernameError = computed(() => {
+  if (!username.value.trim()) {
+    return "Username is required."
+  }
+
+  return ""
+})
+
+const passwordError = computed(() => {
+  if (password.value.length < 6) {
+    return "Password must be at least 6 characters."
+  }
+
+  return ""
+})
+
+const isFormValid = computed(() => !usernameError.value && !passwordError.value)
+
+function handleBlur(field: keyof typeof touched) {
+  touched[field] = true
+}
 
 async function handleLogin() {
+  touched.username = true
+  touched.password = true
+
+  if (!isFormValid.value) {
+    return
+  }
+
   error.value = ""
   loading.value = true
 
@@ -77,9 +110,13 @@ async function handleLogin() {
           <input
             v-model="username"
             placeholder="Enter your username"
-          class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
+            @blur="handleBlur('username')"
           />
+          <p v-if="touched.username && usernameError" class="mt-2 text-xs text-red-600 dark:text-red-300">
+            {{ usernameError }}
+          </p>
         </label>
 
         <label class="vybe-field">
@@ -88,14 +125,18 @@ async function handleLogin() {
             v-model="password"
             type="password"
             placeholder="Enter your password"
-          class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
+            @blur="handleBlur('password')"
           />
+          <p v-if="touched.password && passwordError" class="mt-2 text-xs text-red-600 dark:text-red-300">
+            {{ passwordError }}
+          </p>
         </label>
 
         <button
           @click="handleLogin"
-          :disabled="loading"
+          :disabled="loading || !isFormValid"
           class="vybe-button vybe-touch-target w-full rounded-full px-4 py-3 text-xs uppercase tracking-[0.22em] sm:px-5 sm:py-4 sm:text-sm"
         >
           {{ loading ? "Logging In..." : "Log In" }}

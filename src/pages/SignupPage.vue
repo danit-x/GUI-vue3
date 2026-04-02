@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue"
+import { computed, reactive, ref } from "vue"
 import { RouterLink, useRouter } from "vue-router"
 import { signup } from "../services/authService"
 
 const router = useRouter()
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const form = reactive({
   firstName: "",
@@ -15,8 +16,53 @@ const form = reactive({
 
 const error = ref("")
 const loading = ref(false)
+const touched = reactive({
+  firstName: false,
+  lastName: false,
+  email: false,
+  username: false,
+  password: false
+})
+
+const fieldErrors = computed(() => ({
+  firstName: form.firstName.trim() ? "" : "First name is required.",
+  lastName: form.lastName.trim() ? "" : "Last name is required.",
+  email: !form.email.trim()
+    ? "Email is required."
+    : !emailPattern.test(form.email)
+      ? "Enter a valid email address."
+      : "",
+  username: !form.username.trim()
+    ? "Username is required."
+    : form.username.trim().length < 3
+      ? "Username must be at least 3 characters."
+      : "",
+  password: !form.password
+    ? "Password is required."
+    : form.password.length < 8
+      ? "Password must be at least 8 characters."
+      : ""
+}))
+
+const isFormValid = computed(() =>
+  Object.values(fieldErrors.value).every((fieldError) => !fieldError)
+)
+
+function handleBlur(field: keyof typeof touched) {
+  touched[field] = true
+}
 
 async function handleSignup() {
+  touched.firstName = true
+  touched.lastName = true
+  touched.email = true
+  touched.username = true
+  touched.password = true
+
+  if (!isFormValid.value) {
+    return
+  }
+
   error.value = ""
   loading.value = true
 
@@ -62,7 +108,11 @@ async function handleSignup() {
             placeholder="First name"
             class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
+            @blur="handleBlur('firstName')"
           />
+          <p v-if="touched.firstName && fieldErrors.firstName" class="mt-2 text-xs text-red-600 dark:text-red-300">
+            {{ fieldErrors.firstName }}
+          </p>
         </label>
 
         <label class="vybe-field">
@@ -72,7 +122,11 @@ async function handleSignup() {
             placeholder="Last name"
             class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
+            @blur="handleBlur('lastName')"
           />
+          <p v-if="touched.lastName && fieldErrors.lastName" class="mt-2 text-xs text-red-600 dark:text-red-300">
+            {{ fieldErrors.lastName }}
+          </p>
         </label>
 
         <label class="vybe-field sm:col-span-2">
@@ -83,7 +137,11 @@ async function handleSignup() {
             placeholder="Email"
             class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
+            @blur="handleBlur('email')"
           />
+          <p v-if="touched.email && fieldErrors.email" class="mt-2 text-xs text-red-600 dark:text-red-300">
+            {{ fieldErrors.email }}
+          </p>
         </label>
 
         <label class="vybe-field sm:col-span-2">
@@ -93,7 +151,11 @@ async function handleSignup() {
             placeholder="Username"
             class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
+            @blur="handleBlur('username')"
           />
+          <p v-if="touched.username && fieldErrors.username" class="mt-2 text-xs text-red-600 dark:text-red-300">
+            {{ fieldErrors.username }}
+          </p>
         </label>
 
         <label class="vybe-field sm:col-span-2">
@@ -104,13 +166,17 @@ async function handleSignup() {
             placeholder="Password"
             class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
+            @blur="handleBlur('password')"
           />
+          <p v-if="touched.password && fieldErrors.password" class="mt-2 text-xs text-red-600 dark:text-red-300">
+            {{ fieldErrors.password }}
+          </p>
         </label>
       </div>
 
       <button
         @click="handleSignup"
-        :disabled="loading"
+        :disabled="loading || !isFormValid"
         class="vybe-button vybe-touch-target mt-4 w-full rounded-full px-4 py-3 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-5 sm:py-4 sm:text-sm"
       >
         {{ loading ? "Creating Account..." : "Create Account" }}
