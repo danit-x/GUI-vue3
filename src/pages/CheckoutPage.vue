@@ -5,12 +5,13 @@ import { useToast } from "../composables/useToast"
 import { useCartStore } from "../stores/cartStore"
 import { formatPrice } from "../utils/formatPrice"
 
+const ORDER_SUMMARY_KEY = "latest_order_summary"
+
 const cart = useCartStore()
 const router = useRouter()
 const { showToast } = useToast()
 
 const isPlacingOrder = ref(false)
-const orderPlaced = ref(false)
 
 const formattedTotalPrice = computed(() => formatPrice(cart.totalPrice))
 
@@ -34,16 +35,26 @@ async function handlePlaceOrder() {
       window.setTimeout(() => resolve(), 900)
     })
 
+    const orderSummary = {
+      id: `VYBE-${Date.now()}`,
+      items: cart.items.map((item) => ({
+        id: item.id,
+        title: item.title,
+        quantity: item.quantity,
+        price: item.price
+      })),
+      itemCount: cart.itemCount,
+      totalPrice: cart.totalPrice,
+      placedAt: new Date().toISOString()
+    }
+
+    sessionStorage.setItem(ORDER_SUMMARY_KEY, JSON.stringify(orderSummary))
     cart.clearCart()
-    orderPlaced.value = true
     showToast("Order placed successfully")
+    router.push({ name: "order-success" })
   } finally {
     isPlacingOrder.value = false
   }
-}
-
-function handleContinueShopping() {
-  router.push("/products")
 }
 </script>
 
@@ -79,28 +90,7 @@ function handleContinueShopping() {
     </div>
 
     <div
-      v-if="orderPlaced"
-      class="vybe-panel rounded-[2rem] p-5 text-center sm:p-6 md:p-8"
-    >
-      <p class="vybe-kicker text-[10px] sm:text-[11px]">Success</p>
-      <h2 class="vybe-display mt-2 text-3xl text-[color:var(--text)] sm:mt-3 sm:text-4xl">
-        Order placed successfully
-      </h2>
-      <p class="mx-auto mt-3 max-w-2xl text-xs leading-6 text-[color:var(--muted)] sm:mt-4 sm:text-sm md:text-base md:leading-7">
-        Your cart is now clear and the order flow has been completed. Keep exploring for your next standout pick.
-      </p>
-
-      <button
-        class="vybe-button vybe-touch-target mt-5 rounded-full px-5 py-3 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:text-sm"
-        type="button"
-        @click="handleContinueShopping"
-      >
-        Continue Shopping
-      </button>
-    </div>
-
-    <div
-      v-else-if="cart.items.length === 0"
+      v-if="cart.items.length === 0"
       class="vybe-empty px-4 py-10 sm:px-6 sm:py-14 md:px-8"
     >
       <p class="vybe-display text-2xl sm:text-3xl md:text-4xl text-[color:var(--text)]">Your checkout is empty.</p>
