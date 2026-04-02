@@ -26,13 +26,7 @@ export interface SignupResponse extends SignupPayload {
   id: number
 }
 
-interface StoredSignupUser {
-  id: number
-  username: string
-  email: string
-  firstName: string
-  lastName: string
-}
+type StoredSignupUser = Pick<SignupResponse, "id" | "username" | "email" | "firstName" | "lastName">
 
 function getStoredSignupUsers(): StoredSignupUser[] {
   return JSON.parse(localStorage.getItem(SIGNUP_USERS_KEY) || "[]") as StoredSignupUser[]
