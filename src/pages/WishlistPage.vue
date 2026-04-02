@@ -1,12 +1,49 @@
 <script setup lang="ts">
+import { computed, ref, watch } from "vue"
+import { useAuthStore } from "../stores/authStore"
 import { useBookmarkStore } from "../stores/bookmarkStore"
 import { formatPrice } from "../utils/formatPrice"
 
+const auth = useAuthStore()
 const bookmarks = useBookmarkStore()
+const isBannerDismissed = ref(false)
+
+const showLocalWishlistBanner = computed(() =>
+  !auth.isLoggedIn && bookmarks.items.length > 0 && !isBannerDismissed.value
+)
+
+watch(
+  () => bookmarks.items.length,
+  (nextCount, previousCount = 0) => {
+    if (!auth.isLoggedIn && nextCount > 0 && nextCount > previousCount) {
+      isBannerDismissed.value = false
+    }
+  }
+)
 </script>
 
 <template>
   <section class="vybe-page space-y-6 sm:space-y-8 md:space-y-8 lg:space-y-8">
+    <div
+      v-if="showLocalWishlistBanner"
+      class="vybe-panel flex flex-col gap-3 rounded-[1.75rem] border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-800 dark:text-amber-200 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:p-5 sm:text-sm"
+    >
+      <p class="max-w-3xl leading-6 sm:leading-7">
+        Your wishlist is saved locally and will not sync across devices until you
+        <RouterLink to="/login" class="font-medium underline underline-offset-4 transition hover:opacity-80">
+          log in
+        </RouterLink>.
+      </p>
+
+      <button
+        type="button"
+        class="self-start rounded-full border border-amber-600/30 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition hover:bg-amber-500/10 sm:text-xs"
+        @click="isBannerDismissed = true"
+      >
+        Dismiss
+      </button>
+    </div>
+
     <div class="vybe-hero rounded-[2.4rem] p-5 sm:p-6 md:p-8">
       <div class="grid gap-5 sm:gap-6 md:gap-6 lg:grid-cols-[1.08fr_0.92fr] lg:items-end">
         <div class="space-y-2.5 sm:space-y-3 md:space-y-4">
