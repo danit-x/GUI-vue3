@@ -1,49 +1,149 @@
 <script setup lang="ts">
-import { computed } from "vue"
+import { ChevronDown } from "lucide-vue-next"
+import { computed, onMounted, onUnmounted, ref, watch } from "vue"
+import { useRoute } from "vue-router"
 import { countryOptions, useCountryPreference } from "../../composables/useCountryPreference"
 
 const { selectedCountry, setCountry } = useCountryPreference()
+const route = useRoute()
+const isOpen = ref(false)
+const dropdownRef = ref<HTMLElement | null>(null)
 
 const selectedCountryOption = computed(() => {
-  return countryOptions.find((country) => country.name === selectedCountry.value) || countryOptions[0]
+  return countryOptions.find((country) => country.name === selectedCountry.value) ?? { name: "", flag: "" }
 })
+
+function toggleDropdown() {
+  isOpen.value = !isOpen.value
+}
+
+function selectCountry(countryName: string) {
+  setCountry(countryName)
+  isOpen.value = false
+}
+
+function handleDocumentMouseDown(event: MouseEvent) {
+  if (!dropdownRef.value) {
+    return
+  }
+
+  const target = event.target
+
+  if (target instanceof Node && !dropdownRef.value.contains(target)) {
+    isOpen.value = false
+  }
+}
+
+watch(
+  () => route.fullPath,
+  () => {
+    isOpen.value = false
+  }
+)
+
+onMounted(() => {
+  document.addEventListener("mousedown", handleDocumentMouseDown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener("mousedown", handleDocumentMouseDown)
+})
+
+const currentYear = new Date().getFullYear()
 </script>
 
 <template>
   <footer class="px-4 pb-4 pt-6 sm:px-5 sm:pb-5 md:px-6 lg:px-8">
-    <div class="mx-auto grid max-w-[84rem] gap-4 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_86%,transparent)] px-4 py-6 text-sm text-[color:var(--muted)] shadow-[var(--shadow)] backdrop-blur-xl sm:gap-5 sm:px-5 sm:py-7 md:px-6 md:gap-6 md:py-8 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,auto)] lg:items-end">
-      <div class="max-w-2xl">
-        <p class="vybe-kicker text-[10px] sm:text-[11px]">VYBE House</p>
-        <p class="vybe-display mt-2 text-[clamp(2rem,6vw,4rem)] leading-[0.95] text-[color:var(--text)] sm:mt-3">Objects with presence, presented with restraint.</p>
-        <p class="mt-3 text-xs leading-6 sm:mt-4 sm:text-sm md:max-w-xl md:leading-7">
-          A refined storefront for modern essentials, styled with the calm of an editorial spread and the precision of a luxury label.
-        </p>
+    <div class="mx-auto max-w-[84rem] rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_86%,transparent)] px-4 py-6 shadow-[var(--shadow)] backdrop-blur-xl sm:px-5 sm:py-7 md:px-6 md:py-8">
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-6">
+        <div class="max-w-xs">
+          <p class="vybe-kicker text-[10px] sm:text-[11px]">VYBE House</p>
+          <p class="vybe-display mt-2 text-[clamp(1.8rem,5vw,3rem)] leading-[0.95] text-[color:var(--text)] sm:mt-3">
+            Objects with presence.
+          </p>
+          <p class="mt-3 text-xs leading-6 text-[color:var(--muted)] sm:mt-4 sm:text-sm sm:leading-7">
+            A refined storefront for modern essentials, styled with the calm of an editorial spread.
+          </p>
+        </div>
+
+        <div>
+          <p class="vybe-kicker text-[10px] sm:text-[11px]">Shop</p>
+          <ul class="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
+            <li><RouterLink to="/products" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">All Products</RouterLink></li>
+            <li><RouterLink to="/category/men" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Men</RouterLink></li>
+            <li><RouterLink to="/category/women" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Women</RouterLink></li>
+            <li><RouterLink to="/category/tech" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Tech</RouterLink></li>
+            <li><RouterLink to="/category/lifestyle" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Lifestyle</RouterLink></li>
+          </ul>
+        </div>
+
+        <div>
+          <p class="vybe-kicker text-[10px] sm:text-[11px]">Account</p>
+          <ul class="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
+            <li><RouterLink to="/profile" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Profile</RouterLink></li>
+            <li><RouterLink to="/wishlist" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Wishlist</RouterLink></li>
+            <li><RouterLink to="/cart" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Cart</RouterLink></li>
+            <li><RouterLink to="/login" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Sign In</RouterLink></li>
+          </ul>
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <p class="vybe-kicker text-[10px] sm:text-[11px]">Region</p>
+
+          <div ref="dropdownRef" class="relative">
+            <button
+              type="button"
+              class="flex w-full min-w-0 items-center gap-2 rounded-[1.5rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_74%,transparent)] px-3 py-2.5 text-left sm:px-4 sm:py-3"
+              :aria-expanded="isOpen"
+              aria-haspopup="listbox"
+              @click="toggleDropdown"
+            >
+              <span class="text-base text-[color:var(--text)]">{{ selectedCountryOption.flag }}</span>
+              <span class="min-w-0 flex-1 truncate text-xs uppercase tracking-[0.16em] text-[color:var(--text)] sm:text-sm">
+                {{ selectedCountryOption.name }}
+              </span>
+              <ChevronDown
+                class="h-4 w-4 shrink-0 text-[color:var(--muted)] transition"
+                :class="isOpen ? 'rotate-180' : ''"
+              />
+            </button>
+
+            <div
+              v-if="isOpen"
+              class="absolute bottom-full left-0 right-0 z-20 mb-2 overflow-hidden rounded-[1.5rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-xl"
+            >
+              <div class="max-h-64 overflow-y-auto p-2">
+                <button
+                  v-for="country in countryOptions"
+                  :key="country.name"
+                  type="button"
+                  class="flex w-full items-center gap-3 rounded-[1rem] px-3 py-2.5 text-left text-xs transition hover:bg-[color:color-mix(in_srgb,var(--bg-strong)_80%,transparent)] sm:text-sm"
+                  :class="country.name === selectedCountry ? 'text-[color:var(--accent)]' : 'text-[color:var(--text)]'"
+                  @click="selectCountry(country.name)"
+                >
+                  <span class="text-base">{{ country.flag }}</span>
+                  <span class="truncate">{{ country.name }}</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-[10px] leading-5 text-[color:var(--muted)] sm:text-xs sm:leading-6">
+            Prices and availability may vary based on your selected region.
+          </p>
+        </div>
       </div>
 
-      <div class="flex flex-col gap-4 sm:gap-5 lg:items-end">
-        <label class="flex min-w-0 flex-wrap items-center gap-2 rounded-[1.5rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_74%,transparent)] px-3 py-3 sm:px-4 sm:py-3 md:gap-3 md:px-4">
-          <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Country</span>
-          <span class="text-base text-[color:var(--text)]">{{ selectedCountryOption.flag }}</span>
-          <select
-            :value="selectedCountry"
-            class="min-w-0 flex-1 bg-transparent text-xs uppercase tracking-[0.16em] text-[color:var(--text)] outline-none sm:text-sm"
-            @change="setCountry(($event.target as HTMLSelectElement).value)"
-          >
-            <option
-              v-for="country in countryOptions"
-              :key="country.name"
-              :value="country.name"
-              class="bg-[color:var(--bg-strong)] text-[color:var(--text)]"
-            >
-              {{ country.flag }} {{ country.name }}
-            </option>
-          </select>
-        </label>
+      <div class="vybe-divider mt-6 sm:mt-8" />
 
-        <div class="grid grid-cols-2 gap-2 text-[10px] uppercase tracking-[0.28em] sm:flex sm:flex-wrap sm:gap-x-6 sm:gap-y-3 sm:text-xs">
-          <RouterLink to="/" class="vybe-touch-target inline-flex items-center transition hover:text-[color:var(--text)]">Home</RouterLink>
-          <RouterLink to="/products" class="vybe-touch-target inline-flex items-center transition hover:text-[color:var(--text)]">Products</RouterLink>
-          <RouterLink to="/profile" class="vybe-touch-target inline-flex items-center transition hover:text-[color:var(--text)]">Profile</RouterLink>
+      <div class="mt-4 flex flex-col gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-between">
+        <p class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">
+          © {{ currentYear }} VYBE House. All rights reserved.
+        </p>
+        <div class="flex flex-wrap gap-x-5 gap-y-2">
+          <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Privacy Policy</span>
+          <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Terms of Use</span>
+          <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Cookie Settings</span>
         </div>
       </div>
     </div>

@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router"
+import { useToast } from "../composables/useToast"
 import { useAuthStore } from "../stores/authStore"
 import { useCartStore } from "../stores/cartStore"
+import { formatPrice } from "../utils/formatPrice"
 
 const auth = useAuthStore()
 const cart = useCartStore()
 const router = useRouter()
+const { showToast } = useToast()
 
 function handleQuantityChange(id: number, event: Event) {
   const target = event.target as HTMLInputElement
@@ -24,6 +27,16 @@ function handleProceedToCheckout() {
       redirect: "/checkout"
     }
   })
+}
+
+function handleRemoveFromCart(id: number) {
+  cart.removeFromCart(id)
+  showToast("Removed from cart")
+}
+
+function handleClearCart() {
+  cart.clearCart()
+  showToast("Cart cleared")
 }
 </script>
 
@@ -52,7 +65,7 @@ function handleProceedToCheckout() {
           </div>
           <div class="vybe-stat">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Total</p>
-            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">${{ cart.totalPrice }}</p>
+            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ formatPrice(cart.totalPrice) }}</p>
           </div>
         </div>
       </div>
@@ -82,7 +95,7 @@ function handleProceedToCheckout() {
                 <RouterLink :to="`/product/${item.id}`" class="mt-1 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
                   {{ item.title }}
                 </RouterLink>
-                <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">${{ item.price }} each</p>
+                <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">{{ formatPrice(item.price) }} each</p>
               </div>
 
               <div class="grid gap-2 sm:gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-end">
@@ -100,12 +113,12 @@ function handleProceedToCheckout() {
                 <div class="vybe-field">
                   <span class="vybe-label text-[9px] sm:text-[10px]">Line</span>
                   <p class="rounded-[1rem] border border-[color:var(--line)] px-3 py-2 text-xs font-medium text-[color:var(--text)] sm:px-4 sm:py-3 sm:text-sm">
-                    ${{ item.price * item.quantity }}
+                    {{ formatPrice(item.price * item.quantity) }}
                   </p>
                 </div>
 
                 <button
-                  @click="cart.removeFromCart(item.id)"
+                  @click="handleRemoveFromCart(item.id)"
                   class="vybe-touch-target self-end rounded-full border border-[color:var(--line)] px-3 py-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-red-500/40 hover:text-red-500 sm:px-4 sm:py-3 sm:text-xs"
                 >
                   Remove
@@ -132,7 +145,7 @@ function handleProceedToCheckout() {
           <div class="vybe-divider pt-3 sm:pt-4">
             <div class="flex items-center justify-between">
               <span class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Total</span>
-              <span class="text-2xl sm:text-3xl text-[color:var(--accent)]">${{ cart.totalPrice }}</span>
+              <span class="text-2xl sm:text-3xl text-[color:var(--accent)]">{{ formatPrice(cart.totalPrice) }}</span>
             </div>
           </div>
         </div>
@@ -145,7 +158,7 @@ function handleProceedToCheckout() {
         </button>
 
         <button
-          @click="cart.clearCart()"
+          @click="handleClearCart"
           class="vybe-touch-target mt-3 w-full rounded-full border border-red-500/25 px-4 py-2.5 text-xs uppercase tracking-[0.22em] text-red-600 transition hover:bg-red-500/10 dark:text-red-300 sm:mt-4 sm:px-5 sm:py-3"
         >
           Clear Cart

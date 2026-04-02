@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div class="vybe-reveal grid gap-4 sm:gap-5 md:gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,auto)]" style="--delay: 180ms;">
+    <div class="vybe-reveal grid gap-4 sm:gap-5 md:gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(18rem,auto)_minmax(16rem,auto)]" style="--delay: 180ms;">
       <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6">
         <label class="vybe-label mb-2.5 block text-[10px] sm:text-[11px]">
           Search products
@@ -67,16 +67,61 @@
           </RouterLink>
         </div>
       </div>
+
+      <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6">
+        <label class="vybe-label mb-2.5 block text-[10px] sm:text-[11px]">
+          Sort by
+        </label>
+        <select
+          v-model="sortBy"
+          class="vybe-input w-full rounded-[1.5rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+        >
+          <option
+            v-for="option in sortOptions"
+            :key="option.value"
+            :value="option.value"
+            class="bg-[color:var(--bg-strong)] text-[color:var(--text)]"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
     </div>
 
     <div
       v-if="loading"
-      class="vybe-panel rounded-[2rem] px-4 py-12 text-center text-[color:var(--muted)] sm:px-6 sm:py-16 md:px-8"
+      class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-6"
     >
-      <div class="flex flex-col items-center justify-center gap-3 sm:gap-4">
-        <div class="vybe-spinner h-8 w-8 sm:h-10 sm:w-10" aria-hidden="true" />
-        <p class="text-xs uppercase tracking-[0.28em] sm:text-sm">Loading products...</p>
-      </div>
+      <article
+        v-for="skeleton in skeletonCards"
+        :key="skeleton"
+        class="vybe-panel overflow-hidden rounded-[2.1rem] p-2 sm:p-3"
+        aria-hidden="true"
+      >
+        <div class="animate-pulse">
+          <div class="rounded-[1.75rem] bg-[color:color-mix(in_srgb,var(--bg-strong)_88%,transparent)] aspect-[4/3] w-full" />
+
+          <div class="space-y-3 p-3 sm:space-y-4 sm:p-4 md:p-5">
+            <div class="h-3 w-20 rounded-full bg-[color:color-mix(in_srgb,var(--line)_75%,transparent)]" />
+            <div class="space-y-2">
+              <div class="h-6 w-4/5 rounded-full bg-[color:color-mix(in_srgb,var(--bg-strong)_90%,transparent)]" />
+              <div class="h-6 w-3/5 rounded-full bg-[color:color-mix(in_srgb,var(--bg-strong)_82%,transparent)]" />
+            </div>
+            <div class="space-y-2">
+              <div class="h-3 w-full rounded-full bg-[color:color-mix(in_srgb,var(--line)_70%,transparent)]" />
+              <div class="h-3 w-5/6 rounded-full bg-[color:color-mix(in_srgb,var(--line)_58%,transparent)]" />
+            </div>
+            <div class="flex items-center justify-between gap-3 pt-1">
+              <div class="h-4 w-20 rounded-full bg-[color:color-mix(in_srgb,var(--line)_70%,transparent)]" />
+              <div class="h-6 w-16 rounded-full bg-[color:color-mix(in_srgb,var(--bg-strong)_90%,transparent)]" />
+            </div>
+            <div class="mt-2 grid gap-2 sm:grid-cols-2 sm:gap-3">
+              <div class="h-10 rounded-full bg-[color:color-mix(in_srgb,var(--bg-strong)_92%,transparent)]" />
+              <div class="h-10 rounded-full bg-[color:color-mix(in_srgb,var(--line)_70%,transparent)]" />
+            </div>
+          </div>
+        </div>
+      </article>
     </div>
 
     <div
@@ -87,7 +132,7 @@
     </div>
 
     <template v-else>
-      <ProductGrid :products="filteredProducts" />
+      <ProductGrid :products="paginatedProducts" />
 
       <div
         v-if="filteredProducts.length === 0"
@@ -98,16 +143,41 @@
 
       <div
         v-else
-        class="vybe-panel rounded-[2rem] px-4 py-4 text-center text-xs text-[color:var(--muted)] sm:px-6 sm:py-6 md:text-sm"
+        class="space-y-4 sm:space-y-5"
       >
-        Tap or click any product card to open its detail view.
+        <div class="vybe-panel flex flex-col gap-3 rounded-[2rem] px-4 py-4 text-center text-xs text-[color:var(--muted)] sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5 md:text-sm">
+          <p>Tap or click any product card to open its detail view.</p>
+          <div class="flex items-center justify-center gap-3 sm:justify-end">
+            <button
+              type="button"
+              class="vybe-pill vybe-touch-target rounded-full px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-2.5 sm:text-xs"
+              :disabled="currentPage === 1"
+              @click="goToPreviousPage"
+            >
+              Previous
+            </button>
+
+            <p class="min-w-[7rem] text-center text-[10px] uppercase tracking-[0.22em] text-[color:var(--text)] sm:text-xs">
+              Page {{ currentPage }} of {{ totalPages }}
+            </p>
+
+            <button
+              type="button"
+              class="vybe-pill vybe-touch-target rounded-full px-4 py-2 text-[10px] uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] disabled:cursor-not-allowed disabled:opacity-50 sm:px-5 sm:py-2.5 sm:text-xs"
+              :disabled="currentPage === totalPages"
+              @click="goToNextPage"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </template>
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from "vue"
+import { computed, onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { getCategories, getProducts } from "../services/productService"
 import ProductGrid from "../components/product/ProductGrid.vue"
@@ -119,12 +189,25 @@ interface FilterCategory {
   count: number
 }
 
+type SortOption = "default" | "price-asc" | "price-desc" | "rating-desc"
+
+const PRODUCTS_PER_PAGE = 24
+
 const route = useRoute()
 const products = ref<Product[]>([])
 const categories = ref<string[]>([])
 const search = ref("")
+const sortBy = ref<SortOption>("default")
 const loading = ref(true)
 const error = ref("")
+const currentPage = ref(1)
+const skeletonCards = Array.from({ length: 8 }, (_, index) => index)
+const sortOptions: { label: string; value: SortOption }[] = [
+  { label: "Featured", value: "default" },
+  { label: "Price: Low to High", value: "price-asc" },
+  { label: "Price: High to Low", value: "price-desc" },
+  { label: "Top Rated", value: "rating-desc" }
+]
 
 const categoryRouteMap: Record<string, string[]> = {
   men: ["mens-shirts", "mens-shoes", "mens-watches"],
@@ -194,7 +277,7 @@ const filterCategories = computed<FilterCategory[]>(() => {
 })
 
 const filteredProducts = computed<Product[]>(() => {
-  return products.value.filter((product) => {
+  const visibleProducts = products.value.filter((product) => {
     const matchesSearch = product.title.toLowerCase().includes(search.value.toLowerCase())
     const matchesCategory =
       activeDummyCategories.value.length === 0 ||
@@ -202,7 +285,52 @@ const filteredProducts = computed<Product[]>(() => {
 
     return matchesSearch && matchesCategory
   })
+
+  if (sortBy.value === "price-asc") {
+    return [...visibleProducts].sort((a, b) => a.price - b.price)
+  }
+
+  if (sortBy.value === "price-desc") {
+    return [...visibleProducts].sort((a, b) => b.price - a.price)
+  }
+
+  if (sortBy.value === "rating-desc") {
+    return [...visibleProducts].sort((a, b) => b.rating - a.rating)
+  }
+
+  return visibleProducts
 })
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredProducts.value.length / PRODUCTS_PER_PAGE)))
+
+const paginatedProducts = computed<Product[]>(() => {
+  const start = (currentPage.value - 1) * PRODUCTS_PER_PAGE
+  const end = start + PRODUCTS_PER_PAGE
+
+  return filteredProducts.value.slice(start, end)
+})
+
+watch([search, activeCategoryKey], () => {
+  currentPage.value = 1
+})
+
+watch(totalPages, (nextTotalPages) => {
+  if (currentPage.value > nextTotalPages) {
+    currentPage.value = nextTotalPages
+  }
+})
+
+function goToPreviousPage() {
+  if (currentPage.value > 1) {
+    currentPage.value -= 1
+  }
+}
+
+function goToNextPage() {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value += 1
+  }
+}
 
 function formatCategoryLabel(category: string) {
   return category

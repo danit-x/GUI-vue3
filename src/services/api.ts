@@ -1,4 +1,4 @@
-const BASE_URL = "https://dummyjson.com"
+export const BASE_URL = "https://dummyjson.com"
 
 export async function apiFetch<T>(endpoint: string): Promise<T> {
   const response = await fetch(`${BASE_URL}${endpoint}`)

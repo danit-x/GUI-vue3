@@ -4,6 +4,7 @@ import { useRouter } from "vue-router"
 import { useCartStore } from "../../stores/cartStore"
 import { useBookmarkStore } from "../../stores/bookmarkStore"
 import { useToast } from "../../composables/useToast"
+import { formatPrice } from "../../utils/formatPrice"
 
 const bookmarks = useBookmarkStore()
 const cart = useCartStore()
@@ -22,6 +23,12 @@ function openProduct() {
 function handleAddToCart() {
   cart.addToCart(props.product)
   showToast("Added to cart")
+}
+
+function handleToggleBookmark() {
+  const message = props.isBookmarked ? "Removed from wishlist" : "Added to wishlist"
+  bookmarks.toggleBookmark(props.product)
+  showToast(message)
 }
 </script>
 
@@ -62,7 +69,7 @@ function handleAddToCart() {
 
       <div class="flex items-center justify-between gap-2.5 text-xs text-[color:var(--muted)] sm:gap-3 sm:text-sm">
         <span>Rating {{ props.product.rating }}</span>
-        <span class="text-lg text-[color:var(--accent)] sm:text-xl">{{ (props.product.price || 0).toFixed(0) }}</span>
+        <span class="text-lg text-[color:var(--accent)] sm:text-xl">{{ formatPrice(props.product.price || 0) }}</span>
       </div>
 
       <div class="mt-auto flex flex-col gap-2 sm:gap-3 md:flex-row md:items-center">
@@ -74,7 +81,7 @@ function handleAddToCart() {
         </button>
 
         <button
-          @click.stop="bookmarks.toggleBookmark(props.product)"
+          @click.stop="handleToggleBookmark"
           class="vybe-touch-target rounded-full border border-[color:var(--line)] px-3 py-2.5 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-4 sm:py-3 md:flex-1"
         >
           {{ props.isBookmarked ? "Saved" : "Bookmark" }}
