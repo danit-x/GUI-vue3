@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { computed, ref, watch } from "vue"
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { Heart, Menu, MoonStar, ShoppingBag, SunMedium, UserRound, X } from "lucide-vue-next"
+import { Heart, Menu, MoonStar, Search, ShoppingBag, SunMedium, UserRound, X } from "lucide-vue-next"
 import { useAuthStore } from "../../stores/authStore"
 import { useBookmarkStore } from "../../stores/bookmarkStore"
 import { useCartStore } from "../../stores/cartStore"
 import { useDarkMode } from "../../composables/useDarkMode"
+import { getProducts } from "../../services/productService"
+import { formatPrice } from "../../utils/formatPrice"
+import type { Product } from "../../types/product"
 
 const route = useRoute()
 const router = useRouter()
@@ -14,6 +17,13 @@ const bookmarks = useBookmarkStore()
 const cart = useCartStore()
 const { toggleDark, isDark } = useDarkMode()
 const isMobileMenuOpen = ref(false)
+const isSearchOpen = ref(false)
+const searchQuery = ref("")
+const searchInput = ref<HTMLInputElement | null>(null)
+const searchProducts = ref<Product[]>([])
+const isSearchLoading = ref(false)
+const searchError = ref("")
+const hasLoadedSearchProducts = ref(false)
 
 const navItems = [
   { label: "Men", to: "/category/men" },
@@ -30,12 +40,46 @@ const profileLabel = computed(() => {
   return auth.user?.firstName || "Profile"
 })
 
+const quickSearchResults = computed(() => {
+  const normalizedQuery = searchQuery.value.trim().toLowerCase()
+
+  if (!normalizedQuery) {
+    return []
+  }
+
+  return searchProducts.value
+    .filter((product) => product.title.toLowerCase().includes(normalizedQuery))
+    .slice(0, 6)
+})
+
 watch(
   () => route.fullPath,
   () => {
     isMobileMenuOpen.value = false
+    closeSearch()
   }
 )
+
+watch(isSearchOpen, async (open) => {
+  if (typeof document !== "undefined") {
+    document.body.style.overflow = open ? "hidden" : ""
+  }
+
+  if (!open) {
+    searchQuery.value = ""
+    return
+  }
+
+  await ensureSearchProducts()
+  await nextTick()
+  searchInput.value?.focus()
+})
+
+onBeforeUnmount(() => {
+  if (typeof document !== "undefined") {
+    document.body.style.overflow = ""
+  }
+})
 
 function isNavItemActive(label: string) {
   return route.path === `/category/${label.toLowerCase()}`
@@ -50,6 +94,39 @@ function handleLogout() {
   auth.logout()
   isMobileMenuOpen.value = false
   router.push("/")
+}
+
+async function ensureSearchProducts() {
+  if (hasLoadedSearchProducts.value || isSearchLoading.value) {
+    return
+  }
+
+  isSearchLoading.value = true
+  searchError.value = ""
+
+  try {
+    const productData = await getProducts()
+    searchProducts.value = productData.products
+    hasLoadedSearchProducts.value = true
+  } catch {
+    searchError.value = "Quick search is unavailable right now."
+  } finally {
+    isSearchLoading.value = false
+  }
+}
+
+function openSearch() {
+  isMobileMenuOpen.value = false
+  isSearchOpen.value = true
+}
+
+function closeSearch() {
+  isSearchOpen.value = false
+}
+
+function openSearchProduct(productId: number) {
+  closeSearch()
+  router.push(`/product/${productId}`)
 }
 </script>
 
@@ -80,6 +157,15 @@ function handleLogout() {
       </div>
 
       <div class="flex items-center justify-end gap-1.5 sm:gap-2 md:gap-2.5">
+        <button
+          class="vybe-outline-link vybe-touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+          aria-label="Open quick search"
+          type="button"
+          @click="openSearch"
+        >
+          <Search class="h-[1.125rem] w-[1.125rem]" />
+        </button>
+
         <button
           class="vybe-outline-link vybe-touch-target inline-flex w-11 h-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
           :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
@@ -193,5 +279,134 @@ function handleLogout() {
         </div>
       </div>
     </nav>
+
+    <transition name="quick-search">
+      <div
+        v-if="isSearchOpen"
+        class="fixed inset-0 z-50 px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6"
+        aria-modal="true"
+        role="dialog"
+      >
+        <button
+          class="absolute inset-0 bg-[color:color-mix(in_srgb,var(--bg)_74%,black_26%)] backdrop-blur-md"
+          aria-label="Close quick search"
+          type="button"
+          @click="closeSearch"
+        />
+
+        <div class="relative mx-auto flex max-w-3xl flex-col overflow-hidden rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl">
+          <div class="flex items-center gap-3 border-b border-[color:var(--line)] px-4 py-4 sm:px-5 sm:py-5">
+            <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_86%,transparent)] text-[color:var(--muted)]">
+              <Search class="h-5 w-5" />
+            </div>
+
+            <div class="min-w-0 flex-1">
+              <label for="global-product-search" class="vybe-label mb-2 block text-[10px] sm:text-[11px]">
+                Quick search
+              </label>
+              <input
+                id="global-product-search"
+                ref="searchInput"
+                v-model="searchQuery"
+                placeholder="Search products by title"
+                class="vybe-input w-full rounded-[1.4rem] px-4 py-3 text-sm sm:px-5 sm:text-base"
+                @keydown.esc="closeSearch"
+              />
+            </div>
+
+            <button
+              class="vybe-outline-link vybe-touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+              aria-label="Close quick search"
+              type="button"
+              @click="closeSearch"
+            >
+              <X class="h-[1.125rem] w-[1.125rem]" />
+            </button>
+          </div>
+
+          <div class="max-h-[70vh] overflow-y-auto p-4 sm:p-5">
+            <div
+              v-if="isSearchLoading"
+              class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm"
+            >
+              Loading the catalog for search...
+            </div>
+
+            <div
+              v-else-if="searchError"
+              class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm"
+            >
+              {{ searchError }}
+            </div>
+
+            <div
+              v-else-if="!searchQuery.trim()"
+              class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm"
+            >
+              Start typing to search the full product catalog.
+            </div>
+
+            <div
+              v-else-if="quickSearchResults.length === 0"
+              class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm"
+            >
+              No products matched "{{ searchQuery.trim() }}".
+            </div>
+
+            <div v-else class="space-y-3">
+              <button
+                v-for="product in quickSearchResults"
+                :key="product.id"
+                class="vybe-panel vybe-outline-link flex w-full items-center gap-3 rounded-[1.6rem] p-3 text-left sm:gap-4 sm:p-4"
+                type="button"
+                @click="openSearchProduct(product.id)"
+              >
+                <img
+                  :src="product.thumbnail"
+                  :alt="product.title"
+                  class="h-18 w-18 shrink-0 rounded-[1.2rem] object-cover sm:h-20 sm:w-20"
+                />
+
+                <div class="min-w-0 flex-1">
+                  <p class="vybe-kicker text-[9px] sm:text-[10px]">
+                    {{ product.category }}
+                  </p>
+                  <h2 class="vybe-display mt-1 line-clamp-2 text-2xl leading-tight sm:text-3xl">
+                    {{ product.title }}
+                  </h2>
+                  <p class="mt-2 line-clamp-2 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+                    {{ product.description }}
+                  </p>
+                </div>
+
+                <div class="shrink-0 text-right">
+                  <p class="text-base text-[color:var(--accent)] sm:text-lg">
+                    {{ formatPrice(product.price || 0) }}
+                  </p>
+                  <p class="mt-2 text-[10px] uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-[11px]">
+                    View
+                  </p>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </transition>
   </header>
 </template>
+
+<style scoped>
+.quick-search-enter-active,
+.quick-search-leave-active {
+  transition:
+    opacity 220ms ease,
+    transform 220ms ease;
+}
+
+.quick-search-enter-from,
+.quick-search-leave-to {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+</style>
