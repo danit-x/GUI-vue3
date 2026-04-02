@@ -25,7 +25,13 @@ export interface SignupResponse extends SignupPayload {
   id: number
 }
 
-interface StoredSignupUser extends SignupResponse {}
+interface StoredSignupUser {
+  id: number
+  username: string
+  email: string
+  firstName: string
+  lastName: string
+}
 
 function getStoredSignupUsers(): StoredSignupUser[] {
   return JSON.parse(localStorage.getItem(SIGNUP_USERS_KEY) || "[]") as StoredSignupUser[]
@@ -35,10 +41,6 @@ function saveStoredSignupUser(user: StoredSignupUser) {
   const users = getStoredSignupUsers()
   users.push(user)
   localStorage.setItem(SIGNUP_USERS_KEY, JSON.stringify(users))
-}
-
-function createSimulatedToken(username: string) {
-  return btoa(`${username}:${Date.now()}`)
 }
 
 export async function login(username: string, password: string): Promise<LoginResponse> {
@@ -62,18 +64,13 @@ export async function login(username: string, password: string): Promise<LoginRe
     console.warn("DummyJSON login request failed, falling back to simulated signup users.", error)
   }
 
-  const matchedUser = getStoredSignupUsers().find(
-    (user) => user.username === username && user.password === password
-  )
+  const matchedUser = getStoredSignupUsers().find((user) => user.username === username)
 
   if (!matchedUser) {
     throw new Error("Login failed")
   }
 
-  return {
-    ...matchedUser,
-    accessToken: createSimulatedToken(matchedUser.username)
-  }
+  throw new Error("Use the original DummyJSON credentials to log in.")
 }
 
 export async function signup(payload: SignupPayload): Promise<SignupResponse> {
@@ -91,11 +88,17 @@ export async function signup(payload: SignupPayload): Promise<SignupResponse> {
 
   const createdUser = await response.json() as SignupResponse
   const signupUser = {
-    ...payload,
-    id: createdUser.id
+    id: createdUser.id,
+    username: payload.username,
+    email: payload.email,
+    firstName: payload.firstName,
+    lastName: payload.lastName
   }
 
   saveStoredSignupUser(signupUser)
 
-  return signupUser
+  return {
+    ...payload,
+    id: createdUser.id
+  }
 }
