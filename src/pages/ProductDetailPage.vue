@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 import { RouterLink, useRoute } from "vue-router"
+import { ROUTES, getProductDetailRoute } from "../router/routes"
 import { getProductById } from "../services/productService"
 import { useCartStore } from "../stores/cartStore"
 import { useBookmarkStore } from "../stores/bookmarkStore"
@@ -30,6 +31,15 @@ const productGallery = computed(() => {
   const gallery = product.value.images.length ? product.value.images : [product.value.thumbnail]
 
   return Array.from(new Set([product.value.thumbnail, ...gallery]))
+})
+
+const isOutOfStock = computed(() => product.value?.stock === 0)
+const isLowStock = computed(() => {
+  if (!product.value) {
+    return false
+  }
+
+  return product.value.stock > 0 && product.value.stock < 10
 })
 
 function getStoredRecentlyViewedIds() {
@@ -75,7 +85,7 @@ async function loadProduct(id: number) {
 }
 
 function handleAddToCart() {
-  if (!product.value) {
+  if (!product.value || isOutOfStock.value) {
     return
   }
 
@@ -125,7 +135,7 @@ watch(
     <div v-else-if="product" class="space-y-4 sm:space-y-5 md:space-y-6">
       <div>
         <RouterLink
-          to="/products"
+          :to="ROUTES.products"
           class="text-[10px] uppercase tracking-[0.3em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-xs"
         >
           Back to products
@@ -204,6 +214,15 @@ watch(
             <span class="vybe-pill rounded-full px-3 py-2 sm:px-4 sm:py-2">
               {{ product.images.length }} images
             </span>
+            <span
+              v-if="isOutOfStock || isLowStock"
+              class="rounded-full px-3 py-2 uppercase tracking-[0.2em] sm:px-4"
+              :class="isOutOfStock
+                ? 'border border-red-500/30 bg-red-500/12 text-red-700 dark:text-red-300'
+                : 'border border-amber-500/30 bg-amber-500/12 text-amber-700 dark:text-amber-300'"
+            >
+              {{ isOutOfStock ? "Out of stock" : "Low stock" }}
+            </span>
           </div>
 
           <p class="text-3xl sm:text-4xl md:text-5xl text-[color:var(--accent)]">
@@ -213,9 +232,11 @@ watch(
           <div class="flex flex-col gap-2.5 sm:gap-3 md:flex-row md:gap-4">
             <button
               @click="handleAddToCart"
+              :disabled="isOutOfStock"
               class="vybe-button vybe-touch-target rounded-full px-5 py-3 text-xs uppercase tracking-[0.2em] sm:px-6 sm:py-3.5 sm:text-sm md:flex-1 md:py-4"
+              :class="isOutOfStock ? 'opacity-60 grayscale' : ''"
             >
-              Add to Cart
+              {{ isOutOfStock ? "Out of Stock" : "Add to Cart" }}
             </button>
 
             <button
@@ -245,7 +266,7 @@ watch(
           <RouterLink
             v-for="recentProduct in recentlyViewedProducts"
             :key="recentProduct.id"
-            :to="`/product/${recentProduct.id}`"
+            :to="getProductDetailRoute(recentProduct.id)"
             class="vybe-panel group overflow-hidden rounded-[2rem] p-2 transition duration-300 hover:-translate-y-1 sm:p-3"
           >
             <div class="overflow-hidden rounded-[1.6rem]">

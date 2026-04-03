@@ -1,32 +1,33 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useToast } from "../composables/useToast"
+import { ROUTES, getProductDetailRoute } from "../router/routes"
 import { useAuthStore } from "../stores/authStore"
 import { useCartStore } from "../stores/cartStore"
+import { buildLoginLocation } from "../utils/loginRedirect"
 import { formatPrice } from "../utils/formatPrice"
 
 const auth = useAuthStore()
 const cart = useCartStore()
+const route = useRoute()
 const router = useRouter()
 const { showToast } = useToast()
 
-function handleQuantityChange(id: number, event: Event) {
-  const target = event.target as HTMLInputElement
-  cart.updateQuantity(id, Number(target.value))
+function handleDecreaseQuantity(id: number, quantity: number) {
+  cart.updateQuantity(id, quantity - 1)
+}
+
+function handleIncreaseQuantity(id: number, quantity: number) {
+  cart.updateQuantity(id, quantity + 1)
 }
 
 function handleProceedToCheckout() {
   if (auth.isLoggedIn) {
-    router.push("/checkout")
+    router.push(ROUTES.checkout)
     return
   }
 
-  router.push({
-    path: "/login",
-    query: {
-      redirect: "/checkout"
-    }
-  })
+  router.push(buildLoginLocation(route.fullPath))
 }
 
 function handleRemoveFromCart(id: number) {
@@ -76,7 +77,7 @@ function handleClearCart() {
       <p class="mx-auto mt-2 sm:mt-3 max-w-xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7 md:text-base md:leading-8">
         Explore the collection and add a few standout pieces to see them here.
       </p>
-      <RouterLink to="/products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
+      <RouterLink :to="ROUTES.products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
         Browse Products
       </RouterLink>
     </div>
@@ -92,23 +93,37 @@ function handleClearCart() {
             <div class="flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div class="min-w-0">
                 <p class="vybe-kicker text-[9px] sm:text-[10px]">{{ item.category }}</p>
-                <RouterLink :to="`/product/${item.id}`" class="mt-1 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
+                <RouterLink :to="getProductDetailRoute(item.id)" class="mt-1 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
                   {{ item.title }}
                 </RouterLink>
                 <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">{{ formatPrice(item.price) }} each</p>
               </div>
 
               <div class="grid gap-2 sm:gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-end">
-                <label class="vybe-field">
+                <div class="vybe-field">
                   <span class="vybe-label text-[9px] sm:text-[10px]">Qty</span>
-                  <input
-                    :value="item.quantity"
-                    type="number"
-                    min="1"
-                    class="vybe-input w-full rounded-[1rem] px-3 py-2 text-xs sm:w-[clamp(5rem,12vw,6.5rem)] sm:px-4 sm:py-3 sm:text-sm"
-                    @input="handleQuantityChange(item.id, $event)"
-                  />
-                </label>
+                  <div class="flex items-center rounded-[1rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_76%,transparent)]">
+                    <button
+                      type="button"
+                      class="vybe-touch-target inline-flex min-h-10 min-w-10 items-center justify-center rounded-l-[1rem] px-3 text-base text-[color:var(--text)] transition hover:bg-[color:var(--accent-soft)] sm:min-h-12 sm:min-w-12 sm:text-lg"
+                      aria-label="Decrease quantity"
+                      @click="handleDecreaseQuantity(item.id, item.quantity)"
+                    >
+                      -
+                    </button>
+                    <span class="inline-flex min-h-10 min-w-[2.75rem] items-center justify-center px-2 text-sm font-medium text-[color:var(--text)] sm:min-h-12 sm:min-w-[3.25rem] sm:text-base">
+                      {{ item.quantity }}
+                    </span>
+                    <button
+                      type="button"
+                      class="vybe-touch-target inline-flex min-h-10 min-w-10 items-center justify-center rounded-r-[1rem] px-3 text-base text-[color:var(--text)] transition hover:bg-[color:var(--accent-soft)] sm:min-h-12 sm:min-w-12 sm:text-lg"
+                      aria-label="Increase quantity"
+                      @click="handleIncreaseQuantity(item.id, item.quantity)"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
 
                 <div class="vybe-field">
                   <span class="vybe-label text-[9px] sm:text-[10px]">Line</span>

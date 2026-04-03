@@ -3,11 +3,14 @@ import { ChevronDown } from "lucide-vue-next"
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { countryOptions, useCountryPreference } from "../../composables/useCountryPreference"
+import { ROUTES, getCategoryRoute } from "../../router/routes"
+import { buildLoginLocation } from "../../utils/loginRedirect"
 
 const { selectedCountry, setCountry } = useCountryPreference()
 const route = useRoute()
 const isOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
+const loginLocation = computed(() => buildLoginLocation(route.fullPath))
 
 const selectedCountryOption = computed(() => {
   return countryOptions.find((country) => country.name === selectedCountry.value) ?? { name: "", flag: "" }
@@ -69,21 +72,21 @@ const currentYear = new Date().getFullYear()
         <div>
           <p class="vybe-kicker text-[10px] sm:text-[11px]">Shop</p>
           <ul class="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
-            <li><RouterLink to="/products" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">All Products</RouterLink></li>
-            <li><RouterLink to="/category/men" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Men</RouterLink></li>
-            <li><RouterLink to="/category/women" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Women</RouterLink></li>
-            <li><RouterLink to="/category/tech" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Tech</RouterLink></li>
-            <li><RouterLink to="/category/lifestyle" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Lifestyle</RouterLink></li>
+            <li><RouterLink :to="ROUTES.products" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">All Products</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('men')" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Men</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('women')" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Women</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('tech')" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Tech</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('lifestyle')" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Lifestyle</RouterLink></li>
           </ul>
         </div>
 
         <div>
           <p class="vybe-kicker text-[10px] sm:text-[11px]">Account</p>
           <ul class="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
-            <li><RouterLink to="/profile" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Profile</RouterLink></li>
-            <li><RouterLink to="/wishlist" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Wishlist</RouterLink></li>
-            <li><RouterLink to="/cart" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Cart</RouterLink></li>
-            <li><RouterLink to="/login" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Sign In</RouterLink></li>
+            <li><RouterLink :to="ROUTES.profile" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Profile</RouterLink></li>
+            <li><RouterLink :to="ROUTES.wishlist" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Wishlist</RouterLink></li>
+            <li><RouterLink :to="ROUTES.cart" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Cart</RouterLink></li>
+            <li><RouterLink :to="loginLocation" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Sign In</RouterLink></li>
           </ul>
         </div>
 

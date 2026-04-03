@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue"
+import { useRoute } from "vue-router"
 import { useAuthStore } from "../stores/authStore"
 import { useCountryPreference } from "../composables/useCountryPreference"
+import { ROUTES } from "../router/routes"
+import { buildLoginLocation } from "../utils/loginRedirect"
 
 const auth = useAuthStore()
+const route = useRoute()
 const { selectedCountry } = useCountryPreference()
+const loginLocation = computed(() => buildLoginLocation(route.fullPath))
 
 const initials = computed(() => {
   if (!auth.user) {
@@ -83,10 +88,10 @@ const initials = computed(() => {
         Your account details are only available after signing in.
       </p>
       <div class="mt-4 sm:mt-6 flex flex-col items-center justify-center gap-2.5 sm:flex-row sm:gap-3">
-      <RouterLink to="/login" class="vybe-button vybe-touch-target rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:px-6 sm:py-3 sm:text-sm">
-        Log In
-      </RouterLink>
-        <RouterLink to="/signup" class="vybe-pill vybe-touch-target rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-6 sm:py-3 sm:text-sm">
+        <RouterLink :to="loginLocation" class="vybe-button vybe-touch-target rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:px-6 sm:py-3 sm:text-sm">
+          Log In
+        </RouterLink>
+        <RouterLink :to="ROUTES.signup" class="vybe-pill vybe-touch-target rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-6 sm:py-3 sm:text-sm">
           Create Account
         </RouterLink>
       </div>

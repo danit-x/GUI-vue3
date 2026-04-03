@@ -1,12 +1,14 @@
 import { createRouter, createWebHistory } from "vue-router"
 import type { RouteRecordRaw } from "vue-router"
 import { useAuthStore } from "../stores/authStore"
+import { ROUTES } from "./routes"
 
 const HomePage = () => import("../pages/HomePage.vue")
 const ProductsPage = () => import("../pages/ProductsPage.vue")
 const LoginPage = () => import("../pages/LoginPage.vue")
 const CartPage = () => import("../pages/CartPage.vue")
 const CheckoutPage = () => import("../pages/CheckoutPage.vue")
+const OrderSuccessPage = () => import("../pages/OrderSuccessPage.vue")
 const SignupPage = () => import("../pages/SignupPage.vue")
 const ProductDetailPage = () => import("../pages/ProductDetailPage.vue")
 const WishlistPage = () => import("../pages/WishlistPage.vue")
@@ -14,16 +16,17 @@ const ProfilePage = () => import("../pages/ProfilePage.vue")
 const NotFoundPage = () => import("../pages/NotFoundPage.vue")
 
 const routes: RouteRecordRaw[] = [
-  { path: "/", name: "home", component: HomePage },
-  { path: "/products", name: "products", component: ProductsPage },
-  { path: "/category/:slug", name: "category", component: ProductsPage },
-  { path: "/product/:id", name: "product-detail", component: ProductDetailPage },
-  { path: "/login", name: "login", component: LoginPage },
-  { path: "/signup", name: "signup", component: SignupPage },
-  { path: "/cart", name: "cart", component: CartPage },
-  { path: "/checkout", name: "checkout", component: CheckoutPage, meta: { requiresAuth: true } },
-  { path: "/wishlist", name: "wishlist", component: WishlistPage },
-  { path: "/profile", name: "profile", component: ProfilePage, meta: { requiresAuth: true } },
+  { path: ROUTES.home, name: "home", component: HomePage },
+  { path: ROUTES.products, name: "products", component: ProductsPage },
+  { path: ROUTES.category, name: "category", component: ProductsPage },
+  { path: ROUTES.productDetail, name: "product-detail", component: ProductDetailPage },
+  { path: ROUTES.login, name: "login", component: LoginPage },
+  { path: ROUTES.signup, name: "signup", component: SignupPage },
+  { path: ROUTES.cart, name: "cart", component: CartPage },
+  { path: ROUTES.checkout, name: "checkout", component: CheckoutPage, meta: { requiresAuth: true } },
+  { path: ROUTES.orderSuccess, name: "order-success", component: OrderSuccessPage, meta: { requiresAuth: true } },
+  { path: ROUTES.wishlist, name: "wishlist", component: WishlistPage },
+  { path: ROUTES.profile, name: "profile", component: ProfilePage, meta: { requiresAuth: true } },
   { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundPage }
 ]
 
@@ -44,7 +47,7 @@ router.beforeEach((to) => {
   }
 
   return {
-    path: "/login",
+    path: ROUTES.login,
     query: {
       redirect: to.fullPath
     }

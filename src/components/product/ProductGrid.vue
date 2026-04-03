@@ -14,7 +14,7 @@ const bookmarkedProductIds = computed(() => new Set(bookmarks.items.map((item) =
 </script>
 
 <template>
-  <div class="grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-2 md:gap-5 lg:gap-6 xl:grid-cols-3">
+  <div class="grid grid-cols-2 gap-2.5 sm:gap-4 md:gap-5 lg:gap-6 xl:grid-cols-3">
     <div
       v-for="(product, index) in props.products"
       :key="product.id"
