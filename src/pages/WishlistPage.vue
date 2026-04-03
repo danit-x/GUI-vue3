@@ -1,14 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
+import { useRoute } from "vue-router"
 import { useAuthStore } from "../stores/authStore"
 import { useBookmarkStore } from "../stores/bookmarkStore"
 import { useToast } from "../composables/useToast"
+import { buildLoginLocation } from "../utils/loginRedirect"
 import { formatPrice } from "../utils/formatPrice"
 
 const auth = useAuthStore()
 const bookmarks = useBookmarkStore()
+const route = useRoute()
 const { showToast } = useToast()
 const isBannerDismissed = ref(false)
+const loginLocation = computed(() => buildLoginLocation(route.fullPath))
 
 const showLocalWishlistBanner = computed(() =>
   !auth.isLoggedIn && bookmarks.items.length > 0 && !isBannerDismissed.value
@@ -37,7 +41,7 @@ function handleRemoveBookmark(id: number) {
     >
       <p class="max-w-3xl leading-6 sm:leading-7">
         Your wishlist is saved locally and will not sync across devices until you
-        <RouterLink to="/login" class="font-medium underline underline-offset-4 transition hover:opacity-80">
+        <RouterLink :to="loginLocation" class="font-medium underline underline-offset-4 transition hover:opacity-80">
           log in
         </RouterLink>.
       </p>

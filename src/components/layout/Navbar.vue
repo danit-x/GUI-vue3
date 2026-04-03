@@ -7,6 +7,7 @@ import { useBookmarkStore } from "../../stores/bookmarkStore"
 import { useCartStore } from "../../stores/cartStore"
 import { useDarkMode } from "../../composables/useDarkMode"
 import { getProducts } from "../../services/productService"
+import { buildLoginLocation } from "../../utils/loginRedirect"
 import { formatPrice } from "../../utils/formatPrice"
 import type { Product } from "../../types/product"
 
@@ -87,7 +88,7 @@ function isNavItemActive(label: string) {
 
 function handleProfileClick() {
   isMobileMenuOpen.value = false
-  router.push(auth.isLoggedIn ? "/profile" : "/login")
+  router.push(auth.isLoggedIn ? "/profile" : buildLoginLocation(route.fullPath))
 }
 
 function handleLogout() {

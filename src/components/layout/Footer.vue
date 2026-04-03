@@ -3,11 +3,13 @@ import { ChevronDown } from "lucide-vue-next"
 import { computed, onMounted, onUnmounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { countryOptions, useCountryPreference } from "../../composables/useCountryPreference"
+import { buildLoginLocation } from "../../utils/loginRedirect"
 
 const { selectedCountry, setCountry } = useCountryPreference()
 const route = useRoute()
 const isOpen = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
+const loginLocation = computed(() => buildLoginLocation(route.fullPath))
 
 const selectedCountryOption = computed(() => {
   return countryOptions.find((country) => country.name === selectedCountry.value) ?? { name: "", flag: "" }
@@ -83,7 +85,7 @@ const currentYear = new Date().getFullYear()
             <li><RouterLink to="/profile" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Profile</RouterLink></li>
             <li><RouterLink to="/wishlist" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Wishlist</RouterLink></li>
             <li><RouterLink to="/cart" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Cart</RouterLink></li>
-            <li><RouterLink to="/login" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Sign In</RouterLink></li>
+            <li><RouterLink :to="loginLocation" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Sign In</RouterLink></li>
           </ul>
         </div>
 

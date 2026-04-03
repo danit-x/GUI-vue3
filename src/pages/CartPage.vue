@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useToast } from "../composables/useToast"
 import { useAuthStore } from "../stores/authStore"
 import { useCartStore } from "../stores/cartStore"
+import { buildLoginLocation } from "../utils/loginRedirect"
 import { formatPrice } from "../utils/formatPrice"
 
 const auth = useAuthStore()
 const cart = useCartStore()
+const route = useRoute()
 const router = useRouter()
 const { showToast } = useToast()
 
@@ -21,12 +23,7 @@ function handleProceedToCheckout() {
     return
   }
 
-  router.push({
-    path: "/login",
-    query: {
-      redirect: "/checkout"
-    }
-  })
+  router.push(buildLoginLocation(route.fullPath))
 }
 
 function handleRemoveFromCart(id: number) {
