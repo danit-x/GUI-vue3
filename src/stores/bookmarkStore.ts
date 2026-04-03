@@ -33,6 +33,11 @@ export const useBookmarkStore = defineStore("bookmark", {
     removeBookmark(id: number) {
       this.items = this.items.filter((product) => product.id !== id)
       this.persistBookmarks()
+    },
+
+    clearBookmarks() {
+      this.items = []
+      localStorage.removeItem(BOOKMARKS_STORAGE_KEY)
     }
   }
 })

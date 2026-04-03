@@ -1,4 +1,6 @@
 import { defineStore } from "pinia"
+import { useBookmarkStore } from "./bookmarkStore"
+import { useCartStore } from "./cartStore"
 
 const TOKEN_KEY = "auth_token"
 const USER_KEY = "auth_user"
@@ -49,6 +51,11 @@ export const useAuthStore = defineStore("auth", {
     },
 
     logout() {
+      const cartStore = useCartStore()
+      const bookmarkStore = useBookmarkStore()
+
+      cartStore.clearCart()
+      bookmarkStore.clearBookmarks()
       this.token = null
       this.user = null
       localStorage.removeItem(TOKEN_KEY)
