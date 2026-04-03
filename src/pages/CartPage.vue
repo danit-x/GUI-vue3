@@ -13,9 +13,12 @@ const route = useRoute()
 const router = useRouter()
 const { showToast } = useToast()
 
-function handleQuantityChange(id: number, event: Event) {
-  const target = event.target as HTMLInputElement
-  cart.updateQuantity(id, Number(target.value))
+function handleDecreaseQuantity(id: number, quantity: number) {
+  cart.updateQuantity(id, quantity - 1)
+}
+
+function handleIncreaseQuantity(id: number, quantity: number) {
+  cart.updateQuantity(id, quantity + 1)
 }
 
 function handleProceedToCheckout() {
@@ -97,16 +100,30 @@ function handleClearCart() {
               </div>
 
               <div class="grid gap-2 sm:gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-end">
-                <label class="vybe-field">
+                <div class="vybe-field">
                   <span class="vybe-label text-[9px] sm:text-[10px]">Qty</span>
-                  <input
-                    :value="item.quantity"
-                    type="number"
-                    min="1"
-                    class="vybe-input w-full rounded-[1rem] px-3 py-2 text-xs sm:w-[clamp(5rem,12vw,6.5rem)] sm:px-4 sm:py-3 sm:text-sm"
-                    @input="handleQuantityChange(item.id, $event)"
-                  />
-                </label>
+                  <div class="flex items-center rounded-[1rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_76%,transparent)]">
+                    <button
+                      type="button"
+                      class="vybe-touch-target inline-flex min-h-10 min-w-10 items-center justify-center rounded-l-[1rem] px-3 text-base text-[color:var(--text)] transition hover:bg-[color:var(--accent-soft)] sm:min-h-12 sm:min-w-12 sm:text-lg"
+                      aria-label="Decrease quantity"
+                      @click="handleDecreaseQuantity(item.id, item.quantity)"
+                    >
+                      -
+                    </button>
+                    <span class="inline-flex min-h-10 min-w-[2.75rem] items-center justify-center px-2 text-sm font-medium text-[color:var(--text)] sm:min-h-12 sm:min-w-[3.25rem] sm:text-base">
+                      {{ item.quantity }}
+                    </span>
+                    <button
+                      type="button"
+                      class="vybe-touch-target inline-flex min-h-10 min-w-10 items-center justify-center rounded-r-[1rem] px-3 text-base text-[color:var(--text)] transition hover:bg-[color:var(--accent-soft)] sm:min-h-12 sm:min-w-12 sm:text-lg"
+                      aria-label="Increase quantity"
+                      @click="handleIncreaseQuantity(item.id, item.quantity)"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
 
                 <div class="vybe-field">
                   <span class="vybe-label text-[9px] sm:text-[10px]">Line</span>
