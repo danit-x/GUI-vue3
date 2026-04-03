@@ -58,6 +58,7 @@ async function handleLogin() {
 
     auth.setAuth({
       token: data.accessToken || data.token || "",
+      expiresAt: Date.now() + 30 * 60 * 1000,
       user: {
         id: data.id,
         username: data.username,
