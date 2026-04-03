@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue"
+import { getProductDetailRoute } from "../../router/routes"
 import type { Product } from "../../types/product"
 import { useRouter } from "vue-router"
 import { useCartStore } from "../../stores/cartStore"
@@ -21,7 +22,7 @@ const isOutOfStock = computed(() => props.product.stock === 0)
 const isLowStock = computed(() => props.product.stock > 0 && props.product.stock < 10)
 
 function openProduct() {
-  router.push(`/product/${props.product.id}`)
+  router.push(getProductDetailRoute(props.product.id))
 }
 
 function handleAddToCart() {

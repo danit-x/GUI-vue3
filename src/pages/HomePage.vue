@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { ROUTES } from "../router/routes"
+</script>
+
 <template>
   <section class="vybe-page space-y-6 sm:space-y-8 md:space-y-10 lg:space-y-12">
     <div class="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1.04fr)_minmax(18rem,0.96fr)] lg:items-start lg:gap-8 md:gap-7">
@@ -24,10 +28,10 @@
         </div>
 
         <div class="vybe-reveal flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4" style="--delay: 280ms;">
-          <RouterLink to="/products" class="vybe-button rounded-full px-6 py-3 text-center text-xs uppercase tracking-[0.28em] sm:px-8 sm:py-4 sm:text-sm md:px-10 md:py-4">
+          <RouterLink :to="ROUTES.products" class="vybe-button rounded-full px-6 py-3 text-center text-xs uppercase tracking-[0.28em] sm:px-8 sm:py-4 sm:text-sm md:px-10 md:py-4">
             Enter The Collection
           </RouterLink>
-          <RouterLink to="/wishlist" class="vybe-outline-link vybe-pill rounded-full px-6 py-3 text-center text-xs uppercase tracking-[0.28em] sm:px-8 sm:py-4 sm:text-sm md:px-10 md:py-4">
+          <RouterLink :to="ROUTES.wishlist" class="vybe-outline-link vybe-pill rounded-full px-6 py-3 text-center text-xs uppercase tracking-[0.28em] sm:px-8 sm:py-4 sm:text-sm md:px-10 md:py-4">
             View Private Selection
           </RouterLink>
         </div>

@@ -6,6 +6,7 @@ import { useAuthStore } from "../../stores/authStore"
 import { useBookmarkStore } from "../../stores/bookmarkStore"
 import { useCartStore } from "../../stores/cartStore"
 import { useDarkMode } from "../../composables/useDarkMode"
+import { ROUTES, getCategoryRoute, getProductDetailRoute } from "../../router/routes"
 import { getProducts } from "../../services/productService"
 import { buildLoginLocation } from "../../utils/loginRedirect"
 import { formatPrice } from "../../utils/formatPrice"
@@ -27,10 +28,10 @@ const searchError = ref("")
 const hasLoadedSearchProducts = ref(false)
 
 const navItems = [
-  { label: "Men", to: "/category/men" },
-  { label: "Women", to: "/category/women" },
-  { label: "Lifestyle", to: "/category/lifestyle" },
-  { label: "Tech", to: "/category/tech" }
+  { label: "Men", to: getCategoryRoute("men") },
+  { label: "Women", to: getCategoryRoute("women") },
+  { label: "Lifestyle", to: getCategoryRoute("lifestyle") },
+  { label: "Tech", to: getCategoryRoute("tech") }
 ] as const
 
 const profileLabel = computed(() => {
@@ -83,18 +84,18 @@ onBeforeUnmount(() => {
 })
 
 function isNavItemActive(label: string) {
-  return route.path === `/category/${label.toLowerCase()}`
+  return route.path === getCategoryRoute(label.toLowerCase())
 }
 
 function handleProfileClick() {
   isMobileMenuOpen.value = false
-  router.push(auth.isLoggedIn ? "/profile" : buildLoginLocation(route.fullPath))
+  router.push(auth.isLoggedIn ? ROUTES.profile : buildLoginLocation(route.fullPath))
 }
 
 function handleLogout() {
   auth.logout()
   isMobileMenuOpen.value = false
-  router.push("/")
+  router.push(ROUTES.home)
 }
 
 async function ensureSearchProducts() {
@@ -127,7 +128,7 @@ function closeSearch() {
 
 function openSearchProduct(productId: number) {
   closeSearch()
-  router.push(`/product/${productId}`)
+  router.push(getProductDetailRoute(productId))
 }
 </script>
 
@@ -136,7 +137,7 @@ function openSearchProduct(productId: number) {
     <nav class="mx-auto grid max-w-[84rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_84%,transparent)] px-3 py-3 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-4 sm:py-4 md:gap-4 md:px-5 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-6 lg:px-6">
       <div class="flex min-w-0 items-center justify-between gap-3 lg:min-w-[12rem] lg:justify-start">
         <RouterLink
-          to="/"
+          :to="ROUTES.home"
           class="group inline-flex min-w-0 flex-col leading-none transition-opacity duration-300 hover:opacity-80"
         >
           <span class="vybe-display text-[clamp(1.5rem,5vw,1.85rem)] tracking-[0.12em] text-[color:var(--text)]">VYBE</span>
@@ -178,7 +179,7 @@ function openSearchProduct(productId: number) {
         </button>
 
         <RouterLink
-          to="/wishlist"
+          :to="ROUTES.wishlist"
           class="vybe-outline-link vybe-touch-target relative inline-flex w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
           aria-label="Wishlist"
         >
@@ -192,7 +193,7 @@ function openSearchProduct(productId: number) {
         </RouterLink>
 
         <RouterLink
-          to="/cart"
+          :to="ROUTES.cart"
           class="vybe-outline-link vybe-touch-target relative inline-flex w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
           aria-label="Cart"
         >

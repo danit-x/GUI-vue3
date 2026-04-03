@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue"
 import { RouterLink, useRoute } from "vue-router"
+import { ROUTES, getProductDetailRoute } from "../router/routes"
 import { getProductById } from "../services/productService"
 import { useCartStore } from "../stores/cartStore"
 import { useBookmarkStore } from "../stores/bookmarkStore"
@@ -134,7 +135,7 @@ watch(
     <div v-else-if="product" class="space-y-4 sm:space-y-5 md:space-y-6">
       <div>
         <RouterLink
-          to="/products"
+          :to="ROUTES.products"
           class="text-[10px] uppercase tracking-[0.3em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-xs"
         >
           Back to products
@@ -265,7 +266,7 @@ watch(
           <RouterLink
             v-for="recentProduct in recentlyViewedProducts"
             :key="recentProduct.id"
-            :to="`/product/${recentProduct.id}`"
+            :to="getProductDetailRoute(recentProduct.id)"
             class="vybe-panel group overflow-hidden rounded-[2rem] p-2 transition duration-300 hover:-translate-y-1 sm:p-3"
           >
             <div class="overflow-hidden rounded-[1.6rem]">

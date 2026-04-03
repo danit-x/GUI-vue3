@@ -49,7 +49,7 @@
         </p>
         <div class="flex flex-wrap gap-2 sm:gap-2.5 md:gap-3">
           <RouterLink
-            to="/products"
+            :to="ROUTES.products"
             class="vybe-pill vybe-touch-target rounded-full px-3 py-2 text-[9px] uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-4 sm:py-2 sm:text-[10px]"
             :class="!activeCategoryKey ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
           >
@@ -59,7 +59,7 @@
           <RouterLink
             v-for="category in filterCategories"
             :key="category.slug"
-            :to="`/category/${category.slug}`"
+            :to="getCategoryRoute(category.slug)"
             class="vybe-pill vybe-touch-target rounded-full px-3 py-2 text-[9px] uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-4 sm:py-2 sm:text-[10px]"
             :class="activeCategoryKey === category.slug ? '!border-[color:var(--accent)] !text-[color:var(--text)]' : ''"
           >
@@ -179,6 +179,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue"
 import { useRoute } from "vue-router"
+import { ROUTES, getCategoryRoute } from "../router/routes"
 import { getCategories, getProducts } from "../services/productService"
 import ProductGrid from "../components/product/ProductGrid.vue"
 import type { Product } from "../types/product"

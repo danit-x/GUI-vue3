@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue"
 import { login } from "../services/authService"
+import { ROUTES } from "../router/routes"
 import { useAuthStore } from "../stores/authStore"
 import { RouterLink, useRoute, useRouter } from "vue-router"
 
@@ -14,7 +15,7 @@ const router = useRouter()
 const route = useRoute()
 
 const signupSuccess = route.query.signup === "success"
-const redirectTarget = typeof route.query.redirect === "string" ? route.query.redirect : "/products"
+const redirectTarget = typeof route.query.redirect === "string" ? route.query.redirect : ROUTES.products
 const touched = reactive({
   username: false,
   password: false
@@ -146,7 +147,7 @@ async function handleLogin() {
 
       <p class="mt-4 sm:mt-6 text-xs sm:text-sm text-[color:var(--muted)]">
         Need an account?
-        <RouterLink to="/signup" class="text-[color:var(--accent)] transition hover:opacity-80">
+        <RouterLink :to="ROUTES.signup" class="text-[color:var(--accent)] transition hover:opacity-80">
           Join the collection
         </RouterLink>
       </p>

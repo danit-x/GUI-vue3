@@ -1,6 +1,8 @@
+import { ROUTES } from "../router/routes"
+
 export function buildLoginLocation(redirectPath: string) {
   return {
-    path: "/login",
+    path: ROUTES.login,
     query: {
       redirect: redirectPath
     }

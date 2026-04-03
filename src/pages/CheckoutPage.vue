@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "vue"
+import { ROUTES, getProductDetailRoute } from "../router/routes"
 import { useRouter } from "vue-router"
 import { useToast } from "../composables/useToast"
 import { useCartStore } from "../stores/cartStore"
@@ -51,7 +52,7 @@ async function handlePlaceOrder() {
     sessionStorage.setItem(ORDER_SUMMARY_KEY, JSON.stringify(orderSummary))
     cart.clearCart()
     showToast("Order placed successfully")
-    router.push({ name: "order-success" })
+    router.push(ROUTES.orderSuccess)
   } finally {
     isPlacingOrder.value = false
   }
@@ -98,7 +99,7 @@ async function handlePlaceOrder() {
         Add a few products to your cart before heading back here to place an order.
       </p>
       <RouterLink
-        to="/products"
+        :to="ROUTES.products"
         class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm"
       >
         Browse Products
@@ -125,7 +126,7 @@ async function handlePlaceOrder() {
               <div class="min-w-0">
                 <p class="vybe-kicker text-[9px] sm:text-[10px]">{{ item.category }}</p>
                 <RouterLink
-                  :to="`/product/${item.id}`"
+                  :to="getProductDetailRoute(item.id)"
                   class="mt-1.5 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:mt-2 sm:text-xl md:text-2xl"
                 >
                   {{ item.title }}
@@ -174,7 +175,7 @@ async function handlePlaceOrder() {
         </button>
 
         <RouterLink
-          to="/cart"
+          :to="ROUTES.cart"
           class="vybe-pill vybe-touch-target mt-3 inline-flex w-full items-center justify-center rounded-full px-4 py-3 text-xs uppercase tracking-[0.22em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:mt-4 sm:px-5 sm:py-3.5 sm:text-sm"
         >
           Back to Cart

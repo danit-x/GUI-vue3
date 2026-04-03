@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "vue"
+import { ROUTES } from "../router/routes"
 import { RouterLink, useRouter } from "vue-router"
 import { signup } from "../services/authService"
 
@@ -68,7 +69,7 @@ async function handleSignup() {
 
   try {
     await signup({ ...form })
-    router.push({ path: "/login", query: { signup: "success" } })
+    router.push({ path: ROUTES.login, query: { signup: "success" } })
   } catch {
     error.value = "Signup failed. Please try again."
   } finally {
@@ -184,7 +185,7 @@ async function handleSignup() {
 
       <p class="mt-4 sm:mt-6 text-xs sm:text-sm text-[color:var(--muted)]">
         Already have an account?
-        <RouterLink to="/login" class="text-[color:var(--accent)] transition hover:opacity-80">
+        <RouterLink :to="ROUTES.login" class="text-[color:var(--accent)] transition hover:opacity-80">
           Log in
         </RouterLink>
       </p>

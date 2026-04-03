@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue"
+import { ROUTES } from "../router/routes"
 import { useRouter } from "vue-router"
 import { formatPrice } from "../utils/formatPrice"
 
@@ -42,7 +43,7 @@ const formattedPlacedAt = computed(() => {
       <p class="mx-auto mt-2 sm:mt-3 max-w-xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7 md:text-base md:leading-8">
         Place an order from checkout to see your confirmation details here.
       </p>
-      <RouterLink to="/products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
+      <RouterLink :to="ROUTES.products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
         Browse Products
       </RouterLink>
     </div>
@@ -134,7 +135,7 @@ const formattedPlacedAt = computed(() => {
           <button
             class="vybe-button vybe-touch-target mt-4 w-full rounded-full px-4 py-3 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-5 sm:py-3.5 sm:text-sm"
             type="button"
-            @click="router.push('/products')"
+            @click="router.push(ROUTES.products)"
           >
             Continue Shopping
           </button>

@@ -2,6 +2,7 @@
 import { computed, ref, watch } from "vue"
 import { useRoute } from "vue-router"
 import { useAuthStore } from "../stores/authStore"
+import { ROUTES, getProductDetailRoute } from "../router/routes"
 import { useBookmarkStore } from "../stores/bookmarkStore"
 import { useToast } from "../composables/useToast"
 import { buildLoginLocation } from "../utils/loginRedirect"
@@ -93,7 +94,7 @@ function handleRemoveBookmark(id: number) {
       <p class="mx-auto mt-2 sm:mt-3 max-w-xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7 md:text-base md:leading-8">
         Bookmark products you want to revisit and they will appear here in a cleaner, easier-to-scan list.
       </p>
-      <RouterLink to="/products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
+      <RouterLink :to="ROUTES.products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
         Browse Products
       </RouterLink>
     </div>
@@ -108,7 +109,7 @@ function handleRemoveBookmark(id: number) {
           <div class="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div class="min-w-0">
               <p class="vybe-kicker text-[9px] sm:text-[10px]">{{ item.category }}</p>
-              <RouterLink :to="`/product/${item.id}`" class="mt-1.5 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
+              <RouterLink :to="getProductDetailRoute(item.id)" class="mt-1.5 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
                 {{ item.title }}
               </RouterLink>
               <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">{{ formatPrice(item.price) }}</p>
@@ -116,7 +117,7 @@ function handleRemoveBookmark(id: number) {
 
             <div class="flex flex-col gap-2.5 sm:flex-row sm:gap-3">
               <RouterLink
-                :to="`/product/${item.id}`"
+                :to="getProductDetailRoute(item.id)"
                 class="vybe-pill vybe-touch-target rounded-full px-4 py-2.5 text-center text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-5 sm:py-3 sm:text-xs"
               >
                 View Product

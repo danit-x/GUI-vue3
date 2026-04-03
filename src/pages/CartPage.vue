@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from "vue-router"
 import { useToast } from "../composables/useToast"
+import { ROUTES, getProductDetailRoute } from "../router/routes"
 import { useAuthStore } from "../stores/authStore"
 import { useCartStore } from "../stores/cartStore"
 import { buildLoginLocation } from "../utils/loginRedirect"
@@ -19,7 +20,7 @@ function handleQuantityChange(id: number, event: Event) {
 
 function handleProceedToCheckout() {
   if (auth.isLoggedIn) {
-    router.push("/checkout")
+    router.push(ROUTES.checkout)
     return
   }
 
@@ -73,7 +74,7 @@ function handleClearCart() {
       <p class="mx-auto mt-2 sm:mt-3 max-w-xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7 md:text-base md:leading-8">
         Explore the collection and add a few standout pieces to see them here.
       </p>
-      <RouterLink to="/products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
+      <RouterLink :to="ROUTES.products" class="vybe-button vybe-touch-target mt-4 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3 sm:text-sm">
         Browse Products
       </RouterLink>
     </div>
@@ -89,7 +90,7 @@ function handleClearCart() {
             <div class="flex flex-col gap-3 sm:gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div class="min-w-0">
                 <p class="vybe-kicker text-[9px] sm:text-[10px]">{{ item.category }}</p>
-                <RouterLink :to="`/product/${item.id}`" class="mt-1 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
+                <RouterLink :to="getProductDetailRoute(item.id)" class="mt-1 sm:mt-2 block text-lg font-semibold text-[color:var(--text)] transition hover:text-[color:var(--accent)] sm:text-xl md:text-2xl">
                   {{ item.title }}
                 </RouterLink>
                 <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">{{ formatPrice(item.price) }} each</p>
