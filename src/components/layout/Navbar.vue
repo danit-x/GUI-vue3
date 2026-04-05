@@ -220,7 +220,7 @@ function openSearchProduct(productId: number) {
         </button>
 
         <button
-          class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full lg:hidden"
+          class="vybe-icon-button vybe-touch-target hidden h-11 w-11 rounded-full max-lg:inline-flex"
           :aria-expanded="isMobileMenuOpen"
           aria-controls="mobile-nav-panel"
           :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
