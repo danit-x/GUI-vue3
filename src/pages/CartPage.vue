@@ -134,7 +134,7 @@ function handleClearCart() {
 
                 <button
                   @click="handleRemoveFromCart(item.id)"
-                  class="vybe-touch-target self-end rounded-full border border-[color:var(--line)] px-3 py-2 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-red-500/40 hover:text-red-500 sm:px-4 sm:py-3 sm:text-xs"
+                  class="vybe-danger-button vybe-touch-target self-end rounded-full px-3 py-2 text-xs uppercase tracking-[0.2em] sm:px-4 sm:py-3 sm:text-xs"
                 >
                   Remove
                 </button>
@@ -174,7 +174,7 @@ function handleClearCart() {
 
         <button
           @click="handleClearCart"
-          class="vybe-touch-target mt-3 w-full rounded-full border border-red-500/25 px-4 py-2.5 text-xs uppercase tracking-[0.22em] text-red-600 transition hover:bg-red-500/10 dark:text-red-300 sm:mt-4 sm:px-5 sm:py-3"
+          class="vybe-danger-button vybe-touch-target mt-3 w-full rounded-full px-4 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-4 sm:px-5 sm:py-3"
         >
           Clear Cart
         </button>

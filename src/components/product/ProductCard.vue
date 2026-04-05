@@ -107,7 +107,7 @@ function handleToggleBookmark() {
 
         <button
           @click.stop="handleToggleBookmark"
-          class="vybe-touch-target rounded-full border border-[color:var(--line)] px-2.5 py-2 text-[10px] uppercase tracking-[0.16em] text-[color:var(--muted)] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-4 sm:py-3 sm:text-xs md:flex-1"
+          class="vybe-surface-link vybe-touch-target rounded-full px-2.5 py-2 text-[10px] uppercase tracking-[0.16em] sm:px-4 sm:py-3 sm:text-xs md:flex-1"
         >
           {{ props.isBookmarked ? "Saved" : "Bookmark" }}
         </button>

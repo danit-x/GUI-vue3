@@ -200,7 +200,7 @@ export const countryOptions: { name: string; flag: string }[] = [
   { name: "Zimbabwe", flag: "🇿🇼" }
 ]
 
-const defaultCountry = countryOptions[0].name
+const defaultCountry = countryOptions[0]?.name ?? "Afghanistan"
 const selectedCountry = ref(localStorage.getItem(COUNTRY_KEY) || defaultCountry)
 
 export function useCountryPreference() {

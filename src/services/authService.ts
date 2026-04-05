@@ -26,7 +26,9 @@ export interface SignupResponse extends SignupPayload {
   id: number
 }
 
-type StoredSignupUser = Pick<SignupResponse, "id" | "username" | "email" | "firstName" | "lastName">
+type StoredSignupUser = Pick<SignupResponse, "id" | "username" | "email" | "firstName" | "lastName"> & {
+  password: string
+}
 
 function getStoredSignupUsers(): StoredSignupUser[] {
   return JSON.parse(localStorage.getItem(SIGNUP_USERS_KEY) || "[]") as StoredSignupUser[]
@@ -59,13 +61,22 @@ export async function login(username: string, password: string): Promise<LoginRe
     console.warn("DummyJSON login request failed, falling back to simulated signup users.", error)
   }
 
-  const matchedUser = getStoredSignupUsers().find((user) => user.username === username)
+  const matchedUser = getStoredSignupUsers().find(
+    (user) => user.username === username && user.password === password
+  )
 
   if (!matchedUser) {
     throw new Error("Login failed")
   }
 
-  throw new Error("Use the original DummyJSON credentials to log in.")
+  return {
+    accessToken: `local-demo-token-${matchedUser.id}`,
+    id: matchedUser.id,
+    username: matchedUser.username,
+    email: matchedUser.email,
+    firstName: matchedUser.firstName,
+    lastName: matchedUser.lastName
+  }
 }
 
 export async function signup(payload: SignupPayload): Promise<SignupResponse> {
@@ -87,7 +98,8 @@ export async function signup(payload: SignupPayload): Promise<SignupResponse> {
     username: payload.username,
     email: payload.email,
     firstName: payload.firstName,
-    lastName: payload.lastName
+    lastName: payload.lastName,
+    password: payload.password
   }
 
   saveStoredSignupUser(signupUser)

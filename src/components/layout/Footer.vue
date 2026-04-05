@@ -72,21 +72,21 @@ const currentYear = new Date().getFullYear()
         <div>
           <p class="vybe-kicker text-[10px] sm:text-[11px]">Shop</p>
           <ul class="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
-            <li><RouterLink :to="ROUTES.products" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">All Products</RouterLink></li>
-            <li><RouterLink :to="getCategoryRoute('men')" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Men</RouterLink></li>
-            <li><RouterLink :to="getCategoryRoute('women')" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Women</RouterLink></li>
-            <li><RouterLink :to="getCategoryRoute('tech')" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Tech</RouterLink></li>
-            <li><RouterLink :to="getCategoryRoute('lifestyle')" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Lifestyle</RouterLink></li>
+            <li><RouterLink :to="ROUTES.products" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">All Products</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('men')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Men</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('women')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Women</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('tech')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Tech</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('lifestyle')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Lifestyle</RouterLink></li>
           </ul>
         </div>
 
         <div>
           <p class="vybe-kicker text-[10px] sm:text-[11px]">Account</p>
           <ul class="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
-            <li><RouterLink :to="ROUTES.profile" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Profile</RouterLink></li>
-            <li><RouterLink :to="ROUTES.wishlist" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Wishlist</RouterLink></li>
-            <li><RouterLink :to="ROUTES.cart" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Cart</RouterLink></li>
-            <li><RouterLink :to="loginLocation" class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:text-[color:var(--text)] sm:text-sm">Sign In</RouterLink></li>
+            <li><RouterLink :to="ROUTES.profile" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Profile</RouterLink></li>
+            <li><RouterLink :to="ROUTES.wishlist" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Wishlist</RouterLink></li>
+            <li><RouterLink :to="ROUTES.cart" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Cart</RouterLink></li>
+            <li><RouterLink :to="loginLocation" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Sign In</RouterLink></li>
           </ul>
         </div>
 
@@ -96,7 +96,7 @@ const currentYear = new Date().getFullYear()
           <div ref="dropdownRef" class="relative">
             <button
               type="button"
-              class="flex w-full min-w-0 items-center gap-2 rounded-[1.5rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_74%,transparent)] px-3 py-2.5 text-left sm:px-4 sm:py-3"
+              class="vybe-surface-link flex w-full min-w-0 items-center gap-2 rounded-[1.5rem] px-3 py-2.5 text-left sm:px-4 sm:py-3"
               :aria-expanded="isOpen"
               aria-haspopup="listbox"
               @click="toggleDropdown"
@@ -120,7 +120,7 @@ const currentYear = new Date().getFullYear()
                   v-for="country in countryOptions"
                   :key="country.name"
                   type="button"
-                  class="flex w-full items-center gap-3 rounded-[1rem] px-3 py-2.5 text-left text-xs transition hover:bg-[color:color-mix(in_srgb,var(--bg-strong)_80%,transparent)] sm:text-sm"
+                  class="vybe-outline-link flex w-full items-center gap-3 rounded-[1rem] px-3 py-2.5 text-left text-xs sm:text-sm hover:bg-[color:color-mix(in_srgb,var(--bg-strong)_80%,transparent)]"
                   :class="country.name === selectedCountry ? 'text-[color:var(--accent)]' : 'text-[color:var(--text)]'"
                   @click="selectCountry(country.name)"
                 >
@@ -141,7 +141,7 @@ const currentYear = new Date().getFullYear()
 
       <div class="mt-4 flex flex-col gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">
-          © {{ currentYear }} VYBE House. All rights reserved.
+          &copy; {{ currentYear }} VYBE House. All rights reserved.
         </p>
         <div class="flex flex-wrap gap-x-5 gap-y-2">
           <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Privacy Policy</span>

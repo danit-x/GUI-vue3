@@ -133,8 +133,8 @@ function openSearchProduct(productId: number) {
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 px-4 pt-3 sm:px-5 md:px-6 lg:px-8">
-    <nav class="mx-auto grid max-w-[84rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_84%,transparent)] px-3 py-3 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-4 sm:py-4 md:gap-4 md:px-5 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-6 lg:px-6">
+  <header class="sticky top-0 z-40 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5 sm:pt-[max(0.75rem,env(safe-area-inset-top))] md:px-6 lg:px-8">
+    <nav class="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_84%,transparent)] px-4 py-3 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-5 sm:py-4 md:gap-4 md:px-6 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-6 lg:px-8">
       <div class="flex min-w-0 items-center justify-between gap-3 lg:min-w-[12rem] lg:justify-start">
         <RouterLink
           :to="ROUTES.home"
@@ -149,10 +149,10 @@ function openSearchProduct(productId: number) {
           v-for="item in navItems"
           :key="item.label"
           :to="item.to"
-          class="vybe-outline-link vybe-touch-target inline-flex shrink-0 items-center justify-center rounded-full border px-5 py-2.5 text-xs uppercase tracking-[0.26em] transition-all duration-300 ease-out"
+          class="vybe-surface-link vybe-touch-target inline-flex shrink-0 items-center justify-center rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.26em]"
           :class="isNavItemActive(item.label)
-            ? 'border-[color:var(--accent)] bg-[color:var(--accent-soft)] text-[color:var(--text)]'
-            : 'border-[color:var(--line)] text-[color:var(--muted)] hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]'"
+            ? '!border-[color:var(--accent)] bg-[color:var(--accent-soft)] !text-[color:var(--text)]'
+            : ''"
         >
           {{ item.label }}
         </RouterLink>
@@ -160,7 +160,7 @@ function openSearchProduct(productId: number) {
 
       <div class="flex items-center justify-end gap-1.5 sm:gap-2 md:gap-2.5">
         <button
-          class="vybe-outline-link vybe-touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+          class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full"
           aria-label="Open quick search"
           type="button"
           @click="openSearch"
@@ -169,7 +169,7 @@ function openSearchProduct(productId: number) {
         </button>
 
         <button
-          class="vybe-outline-link vybe-touch-target inline-flex w-11 h-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+          class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full"
           :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
           type="button"
           @click="toggleDark"
@@ -180,7 +180,7 @@ function openSearchProduct(productId: number) {
 
         <RouterLink
           :to="ROUTES.wishlist"
-          class="vybe-outline-link vybe-touch-target relative inline-flex w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+          class="vybe-icon-button vybe-touch-target relative h-11 w-11 rounded-full"
           aria-label="Wishlist"
         >
           <Heart class="h-[1.125rem] w-[1.125rem]" />
@@ -194,7 +194,7 @@ function openSearchProduct(productId: number) {
 
         <RouterLink
           :to="ROUTES.cart"
-          class="vybe-outline-link vybe-touch-target relative inline-flex w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+          class="vybe-icon-button vybe-touch-target relative h-11 w-11 rounded-full"
           aria-label="Cart"
         >
           <ShoppingBag class="h-[1.125rem] w-[1.125rem]" />
@@ -207,7 +207,7 @@ function openSearchProduct(productId: number) {
         </RouterLink>
 
         <button
-          class="vybe-outline-link vybe-touch-target hidden items-center gap-3 rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] px-3 py-2 text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)] sm:inline-flex"
+          class="vybe-surface-link vybe-touch-target hidden items-center gap-3 rounded-full px-3 py-2 sm:inline-flex"
           type="button"
           @click="handleProfileClick"
         >
@@ -220,7 +220,7 @@ function openSearchProduct(productId: number) {
         </button>
 
         <button
-          class="vybe-outline-link vybe-touch-target inline-flex w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)] lg:hidden"
+          class="vybe-icon-button vybe-touch-target hidden h-11 w-11 rounded-full max-lg:inline-flex"
           :aria-expanded="isMobileMenuOpen"
           aria-controls="mobile-nav-panel"
           :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
@@ -233,7 +233,7 @@ function openSearchProduct(productId: number) {
 
         <button
           v-if="auth.isLoggedIn"
-          class="vybe-outline-link vybe-touch-target hidden rounded-full border border-[color:var(--line)] px-5 py-2 text-[0.625rem] uppercase tracking-[0.24em] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)] xl:inline-flex"
+          class="vybe-surface-link vybe-touch-target hidden rounded-full px-5 py-2 text-[0.625rem] uppercase tracking-[0.24em] xl:inline-flex"
           type="button"
           @click="handleLogout"
         >
@@ -244,17 +244,17 @@ function openSearchProduct(productId: number) {
       <div
         v-if="isMobileMenuOpen"
         id="mobile-nav-panel"
-        class="col-span-2 grid gap-3 border-t border-[color:var(--line)] pt-3 lg:hidden"
+        class="col-span-2 grid gap-3 border-t border-[color:var(--line)] pt-3 pb-[max(0rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         <div class="grid gap-2 sm:grid-cols-2">
           <RouterLink
             v-for="item in navItems"
             :key="item.to"
             :to="item.to"
-            class="vybe-outline-link vybe-touch-target inline-flex items-center justify-center rounded-[1.35rem] border px-4 py-3 text-center text-[0.6875rem] uppercase tracking-[0.24em] transition-all duration-300 ease-out"
+            class="vybe-surface-link vybe-touch-target inline-flex items-center justify-center rounded-[1.35rem] px-4 py-3 text-center text-[0.6875rem] uppercase tracking-[0.24em]"
             :class="isNavItemActive(item.label)
-              ? 'border-[color:var(--accent)] bg-[color:var(--accent-soft)] text-[color:var(--text)]'
-              : 'border-[color:var(--line)] text-[color:var(--muted)] hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]'"
+              ? '!border-[color:var(--accent)] bg-[color:var(--accent-soft)] !text-[color:var(--text)]'
+              : ''"
           >
             {{ item.label }}
           </RouterLink>
@@ -262,7 +262,7 @@ function openSearchProduct(productId: number) {
 
         <div class="grid gap-2 sm:grid-cols-2">
           <button
-            class="vybe-outline-link vybe-touch-target inline-flex items-center justify-center gap-2 rounded-[1.35rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] px-4 py-3 text-[0.6875rem] uppercase tracking-[0.22em] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+            class="vybe-surface-link vybe-touch-target inline-flex items-center justify-center gap-2 rounded-[1.35rem] px-4 py-3 text-[0.6875rem] uppercase tracking-[0.22em]"
             type="button"
             @click="handleProfileClick"
           >
@@ -272,7 +272,7 @@ function openSearchProduct(productId: number) {
 
           <button
             v-if="auth.isLoggedIn"
-            class="vybe-outline-link vybe-touch-target inline-flex items-center justify-center rounded-[1.35rem] border border-[color:var(--line)] px-4 py-3 text-[0.6875rem] uppercase tracking-[0.22em] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+            class="vybe-surface-link vybe-touch-target inline-flex items-center justify-center rounded-[1.35rem] px-4 py-3 text-[0.6875rem] uppercase tracking-[0.22em]"
             type="button"
             @click="handleLogout"
           >
@@ -285,7 +285,7 @@ function openSearchProduct(productId: number) {
     <transition name="quick-search">
       <div
         v-if="isSearchOpen"
-        class="fixed inset-0 z-50 px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6"
+        class="fixed inset-0 z-50 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-5 sm:py-5 md:px-6 md:py-6"
         aria-modal="true"
         role="dialog"
       >
@@ -296,7 +296,7 @@ function openSearchProduct(productId: number) {
           @click="closeSearch"
         />
 
-        <div class="relative mx-auto flex max-w-3xl flex-col overflow-hidden rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl">
+        <div class="relative mt-auto flex w-full flex-col overflow-hidden rounded-t-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl sm:mx-auto sm:mt-0 sm:max-w-lg sm:rounded-[2rem] md:max-w-3xl">
           <div class="flex items-center gap-3 border-b border-[color:var(--line)] px-4 py-4 sm:px-5 sm:py-5">
             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_86%,transparent)] text-[color:var(--muted)]">
               <Search class="h-5 w-5" />
@@ -317,7 +317,7 @@ function openSearchProduct(productId: number) {
             </div>
 
             <button
-              class="vybe-outline-link vybe-touch-target inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)] text-[color:var(--muted)] transition-all duration-300 ease-out hover:border-[color:var(--text)]/30 hover:text-[color:var(--text)]"
+              class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full"
               aria-label="Close quick search"
               type="button"
               @click="closeSearch"
