@@ -133,8 +133,8 @@ function openSearchProduct(productId: number) {
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 px-4 pt-3 sm:px-5 md:px-6 lg:px-8">
-    <nav class="mx-auto grid max-w-[84rem] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_84%,transparent)] px-3 py-3 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-4 sm:py-4 md:gap-4 md:px-5 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-6 lg:px-6">
+  <header class="sticky top-0 z-40 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5 sm:pt-[max(0.75rem,env(safe-area-inset-top))] md:px-6 lg:px-8">
+    <nav class="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_84%,transparent)] px-4 py-3 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-5 sm:py-4 md:gap-4 md:px-6 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-6 lg:px-8">
       <div class="flex min-w-0 items-center justify-between gap-3 lg:min-w-[12rem] lg:justify-start">
         <RouterLink
           :to="ROUTES.home"
@@ -244,7 +244,7 @@ function openSearchProduct(productId: number) {
       <div
         v-if="isMobileMenuOpen"
         id="mobile-nav-panel"
-        class="col-span-2 grid gap-3 border-t border-[color:var(--line)] pt-3 lg:hidden"
+        class="col-span-2 grid gap-3 border-t border-[color:var(--line)] pt-3 pb-[max(0rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         <div class="grid gap-2 sm:grid-cols-2">
           <RouterLink
@@ -285,7 +285,7 @@ function openSearchProduct(productId: number) {
     <transition name="quick-search">
       <div
         v-if="isSearchOpen"
-        class="fixed inset-0 z-50 px-4 py-4 sm:px-5 sm:py-5 md:px-6 md:py-6"
+        class="fixed inset-0 z-50 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-5 sm:py-5 md:px-6 md:py-6"
         aria-modal="true"
         role="dialog"
       >
@@ -296,7 +296,7 @@ function openSearchProduct(productId: number) {
           @click="closeSearch"
         />
 
-        <div class="relative mx-auto flex max-w-3xl flex-col overflow-hidden rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl">
+        <div class="relative mt-auto flex w-full flex-col overflow-hidden rounded-t-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl sm:mx-auto sm:mt-0 sm:max-w-lg sm:rounded-[2rem] md:max-w-3xl">
           <div class="flex items-center gap-3 border-b border-[color:var(--line)] px-4 py-4 sm:px-5 sm:py-5">
             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_86%,transparent)] text-[color:var(--muted)]">
               <Search class="h-5 w-5" />

@@ -77,6 +77,16 @@ a {
   text-decoration: none;
 }
 
+a,
+button,
+input,
+select,
+textarea,
+[role="button"],
+[tabindex]:not([tabindex="-1"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+
 button,
 input,
 select,
@@ -94,6 +104,19 @@ button {
 
 button[disabled] {
   cursor: not-allowed;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--bg) 96%, transparent),
+    0 0 0 4px var(--accent);
 }
 
 img {
@@ -156,6 +179,19 @@ body,
   max-width: 84rem;
   margin-inline: auto;
   padding-block: 1rem 2rem;
+}
+
+.vybe-scroll-strip {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.25rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.vybe-scroll-strip::-webkit-scrollbar {
+  display: none;
 }
 
 .vybe-hero {

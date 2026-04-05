@@ -5,7 +5,7 @@ const { toasts, dismissToast } = useToast()
 </script>
 
 <template>
-  <div class="pointer-events-none fixed inset-x-3 bottom-4 z-50 flex flex-col items-center gap-2 sm:inset-x-auto sm:right-4 sm:bottom-6 sm:items-end sm:gap-3 md:right-6">
+  <div class="pointer-events-none fixed inset-x-3 bottom-[max(1rem,env(safe-area-inset-bottom))] z-50 flex flex-col items-center gap-2 sm:inset-x-auto sm:right-4 sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))] sm:items-end sm:gap-3 md:right-6">
     <transition-group name="toast">
       <div
         v-for="toast in toasts"
