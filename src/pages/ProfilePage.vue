@@ -91,7 +91,7 @@ const initials = computed(() => {
         <RouterLink :to="loginLocation" class="vybe-button vybe-touch-target rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:px-6 sm:py-3 sm:text-sm">
           Log In
         </RouterLink>
-        <RouterLink :to="ROUTES.signup" class="vybe-pill vybe-touch-target rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-6 sm:py-3 sm:text-sm">
+        <RouterLink :to="ROUTES.signup" class="vybe-surface-link vybe-touch-target rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:px-6 sm:py-3 sm:text-sm">
           Create Account
         </RouterLink>
       </div>

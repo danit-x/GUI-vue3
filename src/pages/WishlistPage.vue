@@ -49,7 +49,7 @@ function handleRemoveBookmark(id: number) {
 
       <button
         type="button"
-        class="self-start rounded-full border border-amber-600/30 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] transition hover:bg-amber-500/10 sm:text-xs"
+        class="vybe-surface-link self-start rounded-full border-amber-600/30 bg-amber-500/8 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-amber-800 hover:bg-amber-500/12 dark:text-amber-200 sm:text-xs"
         @click="isBannerDismissed = true"
       >
         Dismiss
@@ -84,7 +84,7 @@ function handleRemoveBookmark(id: number) {
     <div v-if="bookmarks.items.length === 0" class="vybe-empty px-4 py-10 sm:px-6 sm:py-14 md:px-8">
       <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_86%,transparent)] shadow-[var(--shadow)] sm:h-28 sm:w-28">
         <div class="relative flex h-14 w-14 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_84%,transparent)]">
-          <span class="text-3xl sm:text-4xl">♡</span>
+          <span class="text-3xl sm:text-4xl">&#9825;</span>
           <span class="absolute -right-1 -top-1 flex h-6 w-6 items-center justify-center rounded-full bg-[color:var(--accent)] text-xs text-white shadow-[var(--shadow)]">
             +
           </span>
@@ -118,14 +118,14 @@ function handleRemoveBookmark(id: number) {
             <div class="flex flex-col gap-2.5 sm:flex-row sm:gap-3">
               <RouterLink
                 :to="getProductDetailRoute(item.id)"
-                class="vybe-pill vybe-touch-target rounded-full px-4 py-2.5 text-center text-xs uppercase tracking-[0.2em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-5 sm:py-3 sm:text-xs"
+                class="vybe-surface-link vybe-touch-target rounded-full px-4 py-2.5 text-center text-xs uppercase tracking-[0.2em] sm:px-5 sm:py-3 sm:text-xs"
               >
                 View Product
               </RouterLink>
 
               <button
                 @click="handleRemoveBookmark(item.id)"
-                class="vybe-touch-target rounded-full border border-[color:var(--line)] px-4 py-2.5 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] transition hover:border-red-500/40 hover:text-red-500 sm:px-5 sm:py-3"
+                class="vybe-danger-button vybe-touch-target rounded-full px-4 py-2.5 text-xs uppercase tracking-[0.2em] sm:px-5 sm:py-3"
               >
                 Remove
               </button>

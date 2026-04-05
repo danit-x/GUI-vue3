@@ -176,7 +176,7 @@ async function handlePlaceOrder() {
 
         <RouterLink
           :to="ROUTES.cart"
-          class="vybe-pill vybe-touch-target mt-3 inline-flex w-full items-center justify-center rounded-full px-4 py-3 text-xs uppercase tracking-[0.22em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:mt-4 sm:px-5 sm:py-3.5 sm:text-sm"
+          class="vybe-surface-link vybe-touch-target mt-3 inline-flex w-full items-center justify-center rounded-full px-4 py-3 text-xs uppercase tracking-[0.22em] sm:mt-4 sm:px-5 sm:py-3.5 sm:text-sm"
         >
           Back to Cart
         </RouterLink>
