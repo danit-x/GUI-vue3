@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
-import { Heart, Menu, MoonStar, Search, ShoppingBag, SunMedium, UserRound, X } from "lucide-vue-next"
+import { Heart, MoonStar, Search, ShoppingBag, SunMedium, UserRound, X } from "lucide-vue-next"
 import { useAuthStore } from "../../stores/authStore"
 import { useBookmarkStore } from "../../stores/bookmarkStore"
 import { useCartStore } from "../../stores/cartStore"
@@ -220,16 +220,29 @@ function openSearchProduct(productId: number) {
         </button>
 
         <button
-          class="vybe-icon-button vybe-touch-target hidden h-11 w-11 rounded-full max-lg:inline-flex"
-          :aria-expanded="isMobileMenuOpen"
-          aria-controls="mobile-nav-panel"
-          :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
-          type="button"
-          @click="isMobileMenuOpen = !isMobileMenuOpen"
-        >
-          <X v-if="isMobileMenuOpen" class="h-[1.125rem] w-[1.125rem]" />
-          <Menu v-else class="h-[1.125rem] w-[1.125rem]" />
-        </button>
+  class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full lg:hidden"
+  :aria-expanded="isMobileMenuOpen"
+  aria-controls="mobile-nav-panel"
+  :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
+  type="button"
+  @click="isMobileMenuOpen = !isMobileMenuOpen"
+>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" class="menu-icon">
+    <line
+      v-bind="isMobileMenuOpen
+        ? { x1: 4, y1: 4, x2: 16, y2: 16 }
+        : { x1: 3, y1: 7, x2: 17, y2: 7 }"
+      stroke-width="1.6"
+    />
+    <rect
+      v-bind="isMobileMenuOpen
+        ? { x: 5.2, y: 9, width: 14, height: 2, rx: 1, transform: 'rotate(-45, 10, 10)' }
+        : { x: 3, y: 11.5, width: 14, height: 2, rx: 1 }"
+      fill="currentColor"
+      stroke="none"
+    />
+  </svg>
+</button>
 
         <button
           v-if="auth.isLoggedIn"
@@ -399,6 +412,14 @@ function openSearchProduct(productId: number) {
 </template>
 
 <style scoped>
+
+
+.menu-icon line,
+.menu-icon rect {
+  transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+
 .quick-search-enter-active,
 .quick-search-leave-active {
   transition:

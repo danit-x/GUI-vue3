@@ -5,6 +5,8 @@ import { useAuthStore } from "../stores/authStore"
 import { useCountryPreference } from "../composables/useCountryPreference"
 import { ROUTES } from "../router/routes"
 import { buildLoginLocation } from "../utils/loginRedirect"
+import { formatPrice } from "../utils/formatPrice"
+import { getOrdersForUser } from "../utils/orderHistory"
 
 const auth = useAuthStore()
 const route = useRoute()
@@ -18,6 +20,8 @@ const initials = computed(() => {
 
   return `${auth.user.firstName?.[0] || ""}${auth.user.lastName?.[0] || ""}`.toUpperCase()
 })
+
+const orderHistory = computed(() => getOrdersForUser(auth.user?.id))
 </script>
 
 <template>
@@ -60,23 +64,125 @@ const initials = computed(() => {
         </div>
       </aside>
 
-      <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6 lg:p-8">
-        <div class="grid gap-3 sm:gap-4 sm:grid-cols-2 md:gap-5">
-          <div class="vybe-card rounded-[1.5rem] p-4 sm:p-5 md:p-6">
-            <p class="vybe-kicker text-[9px] sm:text-[10px]">First name</p>
-            <p class="mt-2 sm:mt-3 text-base sm:text-lg text-[color:var(--text)]">{{ auth.user.firstName }}</p>
+      <div class="space-y-5 sm:space-y-6">
+        <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6 lg:p-8">
+          <div class="grid gap-3 sm:gap-4 sm:grid-cols-2 md:gap-5">
+            <div class="vybe-card rounded-[1.5rem] p-4 sm:p-5 md:p-6">
+              <p class="vybe-kicker text-[9px] sm:text-[10px]">First name</p>
+              <p class="mt-2 sm:mt-3 text-base sm:text-lg text-[color:var(--text)]">{{ auth.user.firstName }}</p>
+            </div>
+            <div class="vybe-card rounded-[1.5rem] p-4 sm:p-5 md:p-6">
+              <p class="vybe-kicker text-[9px] sm:text-[10px]">Last name</p>
+              <p class="mt-2 sm:mt-3 text-base sm:text-lg text-[color:var(--text)]">{{ auth.user.lastName }}</p>
+            </div>
+            <div class="vybe-card rounded-[1.5rem] p-4 sm:p-5 md:p-6">
+              <p class="vybe-kicker text-[9px] sm:text-[10px]">Username</p>
+              <p class="mt-2 sm:mt-3 text-base sm:text-lg text-[color:var(--text)]">{{ auth.user.username }}</p>
+            </div>
+            <div class="vybe-card rounded-[1.5rem] p-4 sm:p-5 md:p-6">
+              <p class="vybe-kicker text-[9px] sm:text-[10px]">Email</p>
+              <p class="mt-2 sm:mt-3 break-all text-base sm:text-lg text-[color:var(--text)]">{{ auth.user.email }}</p>
+            </div>
           </div>
-          <div class="vybe-card rounded-[1.5rem] p-4 sm:p-5 md:p-6">
-            <p class="vybe-kicker text-[9px] sm:text-[10px]">Last name</p>
-            <p class="mt-2 sm:mt-3 text-base sm:text-lg text-[color:var(--text)]">{{ auth.user.lastName }}</p>
+        </div>
+
+        <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6 lg:p-8">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <p class="vybe-kicker text-[10px] sm:text-[11px]">Orders</p>
+              <h2 class="vybe-display mt-2 text-2xl sm:text-3xl text-[color:var(--text)]">Your order history.</h2>
+            </div>
+            <p class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">
+              {{ orderHistory.length }} {{ orderHistory.length === 1 ? "order" : "orders" }}
+            </p>
           </div>
-          <div class="vybe-card rounded-[1.5rem] p-4 sm:p-5 md:p-6">
-            <p class="vybe-kicker text-[9px] sm:text-[10px]">Username</p>
-            <p class="mt-2 sm:mt-3 text-base sm:text-lg text-[color:var(--text)]">{{ auth.user.username }}</p>
+
+          <div v-if="orderHistory.length" class="mt-5 grid gap-4 sm:mt-6 sm:gap-5">
+            <article
+              v-for="order in orderHistory"
+              :key="order.id"
+              class="vybe-card rounded-[1.75rem] p-4 sm:p-5 md:p-6"
+            >
+              <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+                <div class="min-w-0">
+                  <p class="vybe-kicker text-[9px] sm:text-[10px]">Order {{ order.id }}</p>
+                  <h3 class="mt-2 text-xl font-semibold text-[color:var(--text)] sm:text-2xl">
+                    {{ order.status }}
+                  </h3>
+                  <p class="mt-2 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+                    {{ new Date(order.placedAt).toLocaleString() }}
+                  </p>
+                  <p class="mt-2 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+                    {{ order.paymentMethod.label }} | {{ order.paymentMethod.detail }}
+                  </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5 sm:gap-3">
+                  <div class="rounded-[1.25rem] border border-[color:var(--line)] px-4 py-3">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-[color:var(--muted)]">Items</p>
+                    <p class="mt-2 text-lg text-[color:var(--text)]">{{ order.itemCount }}</p>
+                  </div>
+                  <div class="rounded-[1.25rem] border border-[color:var(--line)] px-4 py-3">
+                    <p class="text-[10px] uppercase tracking-[0.2em] text-[color:var(--muted)]">Total</p>
+                    <p class="mt-2 text-lg text-[color:var(--accent)]">{{ formatPrice(order.totalPrice) }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 grid gap-2.5 sm:mt-5">
+                <div
+                  v-for="step in order.progressSteps"
+                  :key="`${order.id}-${step.label}`"
+                  class="rounded-[1.35rem] border p-3 sm:p-4"
+                  :class="step.state === 'complete'
+                    ? 'border-emerald-500/30 bg-emerald-500/10'
+                    : step.state === 'current'
+                      ? 'border-[color:var(--accent)] bg-[color:var(--accent-soft)]'
+                      : 'border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)]'"
+                >
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <p class="text-[10px] uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-[11px]">
+                        {{ step.state === "current" ? "Current step" : step.state === "complete" ? "Done" : "Upcoming" }}
+                      </p>
+                      <p class="mt-1 text-sm font-semibold text-[color:var(--text)] sm:text-base">{{ step.label }}</p>
+                      <p class="mt-1 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">{{ step.detail }}</p>
+                    </div>
+                    <span
+                      class="mt-1 inline-flex h-3.5 w-3.5 shrink-0 rounded-full"
+                      :class="step.state === 'complete'
+                        ? 'bg-emerald-500'
+                        : step.state === 'current'
+                          ? 'bg-[color:var(--accent)]'
+                          : 'bg-[color:var(--line)]'"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-4 grid gap-3 sm:mt-5">
+                <div
+                  v-for="item in order.items"
+                  :key="`${order.id}-${item.id}`"
+                  class="flex items-center justify-between gap-3 rounded-[1.25rem] border border-[color:var(--line)] px-4 py-3"
+                >
+                  <div class="min-w-0">
+                    <p class="text-sm font-semibold text-[color:var(--text)] sm:text-base">{{ item.title }}</p>
+                    <p class="mt-1 text-xs text-[color:var(--muted)] sm:text-sm">
+                      {{ formatPrice(item.price) }} x {{ item.quantity }}
+                    </p>
+                  </div>
+                  <p class="text-sm text-[color:var(--accent)] sm:text-base">{{ formatPrice(item.price * item.quantity) }}</p>
+                </div>
+              </div>
+            </article>
           </div>
-          <div class="vybe-card rounded-[1.5rem] p-4 sm:p-5 md:p-6">
-            <p class="vybe-kicker text-[9px] sm:text-[10px]">Email</p>
-            <p class="mt-2 sm:mt-3 break-all text-base sm:text-lg text-[color:var(--text)]">{{ auth.user.email }}</p>
+
+          <div v-else class="vybe-empty mt-5 px-4 py-10 sm:mt-6 sm:px-6 sm:py-12">
+            <p class="vybe-display text-2xl sm:text-3xl text-[color:var(--text)]">No past orders yet.</p>
+            <p class="mx-auto mt-2 max-w-xl text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7">
+              Place an order and it will stay here so you can revisit the timeline and payment method later.
+            </p>
           </div>
         </div>
       </div>
