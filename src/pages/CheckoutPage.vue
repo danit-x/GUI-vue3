@@ -3,18 +3,37 @@ import { computed, ref } from "vue"
 import { ROUTES, getProductDetailRoute } from "../router/routes"
 import { useRouter } from "vue-router"
 import { useToast } from "../composables/useToast"
+import { useAuthStore } from "../stores/authStore"
 import { useCartStore } from "../stores/cartStore"
 import { formatPrice } from "../utils/formatPrice"
+import { ORDER_SUMMARY_KEY, saveOrderToHistory, type OrderPaymentMethod } from "../utils/orderHistory"
 
-const ORDER_SUMMARY_KEY = "latest_order_summary"
+const ORDER_PROGRESS_STEPS = [
+  { label: "Confirmed", detail: "Payment verified and order received.", state: "complete" },
+  { label: "Packed", detail: "Warehouse is preparing your items.", state: "current" },
+  { label: "Shipped", detail: "Carrier pickup is the next milestone.", state: "upcoming" },
+  { label: "Out for delivery", detail: "Final handoff before arrival.", state: "upcoming" },
+  { label: "Delivered", detail: "Package arrives at the destination.", state: "upcoming" }
+] as const
+const PAYMENT_METHODS: OrderPaymentMethod[] = [
+  { id: "card", label: "Credit Card", detail: "Visa, Mastercard, or Amex ending in 4242." },
+  { id: "paypal", label: "PayPal", detail: "Fast checkout from your PayPal balance." },
+  { id: "cod", label: "Cash on Delivery", detail: "Pay when the order reaches your doorstep." }
+]
+const DEFAULT_PAYMENT_METHOD = PAYMENT_METHODS[0] as OrderPaymentMethod
 
+const auth = useAuthStore()
 const cart = useCartStore()
 const router = useRouter()
 const { showToast } = useToast()
 
 const isPlacingOrder = ref(false)
+const selectedPaymentMethodId = ref(DEFAULT_PAYMENT_METHOD.id)
 
 const formattedTotalPrice = computed(() => formatPrice(cart.totalPrice))
+const selectedPaymentMethod = computed(() =>
+  PAYMENT_METHODS.find((method) => method.id === selectedPaymentMethodId.value) ?? DEFAULT_PAYMENT_METHOD
+)
 
 const summaryLabel = computed(() => {
   if (cart.items.length === 1) {
@@ -38,6 +57,7 @@ async function handlePlaceOrder() {
 
     const orderSummary = {
       id: `VYBE-${Date.now()}`,
+      userId: auth.user?.id ?? null,
       items: cart.items.map((item) => ({
         id: item.id,
         title: item.title,
@@ -46,10 +66,14 @@ async function handlePlaceOrder() {
       })),
       itemCount: cart.itemCount,
       totalPrice: cart.totalPrice,
-      placedAt: new Date().toISOString()
+      placedAt: new Date().toISOString(),
+      status: "Packed",
+      paymentMethod: selectedPaymentMethod.value,
+      progressSteps: [...ORDER_PROGRESS_STEPS]
     }
 
     sessionStorage.setItem(ORDER_SUMMARY_KEY, JSON.stringify(orderSummary))
+    saveOrderToHistory(orderSummary)
     cart.clearCart()
     showToast("Order placed successfully")
     router.push(ROUTES.orderSuccess)
@@ -149,6 +173,30 @@ async function handlePlaceOrder() {
         <h2 class="vybe-display mt-2 sm:mt-3 text-2xl sm:text-3xl text-[color:var(--text)]">Place your order.</h2>
 
         <div class="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
+          <div class="space-y-2.5">
+            <p class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Payment method</p>
+            <label
+              v-for="method in PAYMENT_METHODS"
+              :key="method.id"
+              class="flex cursor-pointer items-start gap-3 rounded-[1.35rem] border p-3 transition sm:p-4"
+              :class="selectedPaymentMethodId === method.id
+                ? 'border-[color:var(--accent)] bg-[color:var(--accent-soft)]'
+                : 'border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)]'"
+            >
+              <input
+                v-model="selectedPaymentMethodId"
+                :value="method.id"
+                type="radio"
+                name="payment-method"
+                class="mt-1 h-4 w-4 accent-[color:var(--accent)]"
+              >
+              <span class="min-w-0">
+                <span class="block text-sm font-semibold text-[color:var(--text)] sm:text-base">{{ method.label }}</span>
+                <span class="mt-1 block text-xs leading-6 text-[color:var(--muted)] sm:text-sm">{{ method.detail }}</span>
+              </span>
+            </label>
+          </div>
+
           <div class="flex items-center justify-between text-xs text-[color:var(--muted)] sm:text-sm">
             <span>Products</span>
             <span class="text-[color:var(--text)]">{{ cart.items.length }}</span>
@@ -156,6 +204,10 @@ async function handlePlaceOrder() {
           <div class="flex items-center justify-between text-xs text-[color:var(--muted)] sm:text-sm">
             <span>Total quantity</span>
             <span class="text-[color:var(--text)]">{{ cart.itemCount }}</span>
+          </div>
+          <div class="flex items-center justify-between gap-3 text-xs text-[color:var(--muted)] sm:text-sm">
+            <span>Account</span>
+            <span class="text-right text-[color:var(--text)]">{{ auth.user?.email ?? "Guest" }}</span>
           </div>
           <div class="vybe-divider pt-3 sm:pt-4">
             <div class="flex items-center justify-between">

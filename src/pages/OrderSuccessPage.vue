@@ -3,23 +3,7 @@ import { computed } from "vue"
 import { ROUTES } from "../router/routes"
 import { useRouter } from "vue-router"
 import { formatPrice } from "../utils/formatPrice"
-
-const ORDER_SUMMARY_KEY = "latest_order_summary"
-
-interface OrderSummaryItem {
-  id: number
-  title: string
-  quantity: number
-  price: number
-}
-
-interface OrderSummary {
-  id: string
-  items: OrderSummaryItem[]
-  itemCount: number
-  totalPrice: number
-  placedAt: string
-}
+import { ORDER_SUMMARY_KEY, type OrderSummary } from "../utils/orderHistory"
 
 const router = useRouter()
 const orderSummary = computed<OrderSummary | null>(() => {
@@ -34,6 +18,11 @@ const formattedPlacedAt = computed(() => {
 
   return new Date(orderSummary.value.placedAt).toLocaleString()
 })
+
+const progressSteps = computed(() => orderSummary.value?.progressSteps ?? [])
+const currentStatus = computed(() => orderSummary.value?.status ?? "Confirmed")
+const paymentMethodLabel = computed(() => orderSummary.value?.paymentMethod?.label ?? "")
+const paymentMethodDetail = computed(() => orderSummary.value?.paymentMethod?.detail ?? "")
 </script>
 
 <template>
@@ -113,12 +102,16 @@ const formattedPlacedAt = computed(() => {
 
         <aside class="vybe-panel h-fit rounded-[2rem] p-4 sm:p-5 md:p-6">
           <p class="vybe-kicker text-[10px] sm:text-[11px]">Next move</p>
-          <h2 class="vybe-display mt-2 sm:mt-3 text-2xl sm:text-3xl text-[color:var(--text)]">Keep browsing.</h2>
+          <h2 class="vybe-display mt-2 sm:mt-3 text-2xl sm:text-3xl text-[color:var(--text)]">Track your progress.</h2>
 
           <div class="mt-4 space-y-3 sm:mt-6 sm:space-y-4">
             <div class="flex items-center justify-between text-xs text-[color:var(--muted)] sm:text-sm">
               <span>Order status</span>
-              <span class="text-[color:var(--text)]">Confirmed</span>
+              <span class="text-[color:var(--text)]">{{ currentStatus }}</span>
+            </div>
+            <div class="flex items-center justify-between gap-3 text-xs text-[color:var(--muted)] sm:text-sm">
+              <span>Payment</span>
+              <span class="text-right text-[color:var(--text)]">{{ paymentMethodLabel }}</span>
             </div>
             <div class="flex items-center justify-between text-xs text-[color:var(--muted)] sm:text-sm">
               <span>Products</span>
@@ -132,12 +125,60 @@ const formattedPlacedAt = computed(() => {
             </div>
           </div>
 
+          <p v-if="paymentMethodDetail" class="mt-4 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+            {{ paymentMethodDetail }}
+          </p>
+
+          <div v-if="progressSteps.length" class="mt-5 space-y-3 sm:mt-6">
+            <div
+              v-for="step in progressSteps"
+              :key="step.label"
+              class="rounded-[1.4rem] border p-3 sm:p-4"
+              :class="step.state === 'complete'
+                ? 'border-emerald-500/30 bg-emerald-500/10'
+                : step.state === 'current'
+                  ? 'border-[color:var(--accent)] bg-[color:var(--accent-soft)]'
+                  : 'border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)]'"
+            >
+              <div class="flex items-start justify-between gap-3">
+                <div>
+                  <p class="text-[10px] uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-[11px]">
+                    {{ step.state === "current" ? "Current step" : step.state === "complete" ? "Done" : "Upcoming" }}
+                  </p>
+                  <p class="mt-1 text-sm font-semibold text-[color:var(--text)] sm:text-base">
+                    {{ step.label }}
+                  </p>
+                  <p class="mt-1 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+                    {{ step.detail }}
+                  </p>
+                </div>
+
+                <span
+                  class="mt-1 inline-flex h-3.5 w-3.5 shrink-0 rounded-full"
+                  :class="step.state === 'complete'
+                    ? 'bg-emerald-500'
+                    : step.state === 'current'
+                      ? 'bg-[color:var(--accent)]'
+                      : 'bg-[color:var(--line)]'"
+                />
+              </div>
+            </div>
+          </div>
+
           <button
             class="vybe-button vybe-touch-target mt-4 w-full rounded-full px-4 py-3 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-5 sm:py-3.5 sm:text-sm"
             type="button"
             @click="router.push(ROUTES.products)"
           >
             Continue Shopping
+          </button>
+
+          <button
+            class="vybe-surface-link vybe-touch-target mt-3 w-full rounded-full px-4 py-3 text-xs uppercase tracking-[0.22em] sm:px-5 sm:py-3.5 sm:text-sm"
+            type="button"
+            @click="router.push(ROUTES.profile)"
+          >
+            View Order History
           </button>
         </aside>
       </div>
