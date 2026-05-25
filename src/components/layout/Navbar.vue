@@ -18,6 +18,7 @@ const auth = useAuthStore()
 const bookmarks = useBookmarkStore()
 const cart = useCartStore()
 const { toggleDark, isDark } = useDarkMode()
+
 const isMobileMenuOpen = ref(false)
 const isSearchOpen = ref(false)
 const searchQuery = ref("")
@@ -35,20 +36,13 @@ const navItems = [
 ] as const
 
 const profileLabel = computed(() => {
-  if (!auth.isLoggedIn) {
-    return "Login"
-  }
-
+  if (!auth.isLoggedIn) return "Login"
   return auth.user?.firstName || "Profile"
 })
 
 const quickSearchResults = computed(() => {
   const normalizedQuery = searchQuery.value.trim().toLowerCase()
-
-  if (!normalizedQuery) {
-    return []
-  }
-
+  if (!normalizedQuery) return []
   return searchProducts.value
     .filter((product) => product.title.toLowerCase().includes(normalizedQuery))
     .slice(0, 6)
@@ -66,12 +60,10 @@ watch(isSearchOpen, async (open) => {
   if (typeof document !== "undefined") {
     document.body.style.overflow = open ? "hidden" : ""
   }
-
   if (!open) {
     searchQuery.value = ""
     return
   }
-
   await ensureSearchProducts()
   await nextTick()
   searchInput.value?.focus()
@@ -92,20 +84,10 @@ function handleProfileClick() {
   router.push(auth.isLoggedIn ? ROUTES.profile : buildLoginLocation(route.fullPath))
 }
 
-function handleLogout() {
-  auth.logout()
-  isMobileMenuOpen.value = false
-  router.push(ROUTES.home)
-}
-
 async function ensureSearchProducts() {
-  if (hasLoadedSearchProducts.value || isSearchLoading.value) {
-    return
-  }
-
+  if (hasLoadedSearchProducts.value || isSearchLoading.value) return
   isSearchLoading.value = true
   searchError.value = ""
-
   try {
     const productData = await getProducts()
     searchProducts.value = productData.products
@@ -133,34 +115,36 @@ function openSearchProduct(productId: number) {
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 px-4 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-5 sm:pt-[max(0.75rem,env(safe-area-inset-top))] md:px-6 lg:px-8">
-    <nav class="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_84%,transparent)] px-4 py-3 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-5 sm:py-4 md:gap-4 md:px-6 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-6 lg:px-8">
-      <div class="flex min-w-0 items-center justify-between gap-3 lg:min-w-[12rem] lg:justify-start">
+  <header class="sticky top-0 z-40 w-full">
+    <nav class="grid w-full grid-cols-[auto_1fr_auto] items-center gap-0 border-b border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] px-4 py-0 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-6 md:px-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:px-10 xl:px-14">
+
+      <div class="flex items-center py-3 pr-4 sm:py-4 sm:pr-6 lg:pr-8">
         <RouterLink
           :to="ROUTES.home"
-          class="group inline-flex min-w-0 flex-col leading-none transition-opacity duration-300 hover:opacity-80"
+          class="inline-flex leading-none transition-opacity duration-200 hover:opacity-70"
         >
-          <span class="vybe-display text-[clamp(1.5rem,5vw,1.85rem)] tracking-[0.12em] text-[color:var(--text)]">VYBE</span>
+          <span class="vybe-display text-[1.6rem] tracking-[0.14em] text-[color:var(--text)] sm:text-[1.75rem]">VYBE</span>
         </RouterLink>
       </div>
 
-      <div class="hidden min-w-0 lg:flex lg:items-center lg:justify-center lg:gap-3">
+      <div class="hidden items-center justify-center gap-1 lg:flex">
         <RouterLink
           v-for="item in navItems"
           :key="item.label"
           :to="item.to"
-          class="vybe-surface-link vybe-touch-target inline-flex shrink-0 items-center justify-center rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.26em]"
+          class="vybe-surface-link inline-flex h-11 shrink-0 items-center justify-center rounded-full px-5 text-[0.6875rem] uppercase tracking-[0.24em] transition-colors duration-200"
           :class="isNavItemActive(item.label)
-            ? '!border-[color:var(--accent)] bg-[color:var(--accent-soft)] !text-[color:var(--text)]'
-            : ''"
+            ? 'bg-[color:var(--text)] text-[color:var(--bg)] border-transparent'
+            : 'text-[color:var(--muted)] hover:text-[color:var(--text)] hover:bg-[color:var(--accent-soft)]'"
         >
           {{ item.label }}
         </RouterLink>
       </div>
 
-      <div class="flex items-center justify-end gap-1.5 sm:gap-2 md:gap-2.5">
+      <div class="flex items-center justify-end gap-1 py-2 pl-2 sm:py-2.5 sm:pl-4">
+
         <button
-          class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full"
+          class="vybe-icon-button inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200"
           aria-label="Open quick search"
           type="button"
           @click="openSearch"
@@ -169,24 +153,24 @@ function openSearchProduct(productId: number) {
         </button>
 
         <button
-          class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full"
+          class="vybe-icon-button hidden h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 lg:inline-flex"
           :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
           type="button"
           @click="toggleDark"
         >
-          <SunMedium v-if="isDark" class="h-8 w-8" />
-          <MoonStar v-else class="h-8 w-8" />
+          <SunMedium v-if="isDark" class="h-5 w-5" />
+          <MoonStar v-else class="h-5 w-5" />
         </button>
 
         <RouterLink
           :to="ROUTES.wishlist"
-          class="vybe-icon-button vybe-touch-target relative h-11 w-11 rounded-full"
+          class="vybe-icon-button relative hidden h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 lg:inline-flex"
           aria-label="Wishlist"
         >
           <Heart class="h-[1.125rem] w-[1.125rem]" />
           <span
             v-if="bookmarks.count"
-            class="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full border border-[color:var(--line-strong)] bg-[color:var(--bg)] px-1 text-[0.5625rem] font-bold text-[color:var(--text)] sm:px-1.5 sm:text-[0.625rem]"
+            class="absolute -right-0.5 -top-0.5 inline-flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-[color:var(--bg-elevated)] bg-[color:var(--bg)] px-1 text-[0.5625rem] font-bold text-[color:var(--text)]"
           >
             {{ bookmarks.count }}
           </span>
@@ -194,88 +178,90 @@ function openSearchProduct(productId: number) {
 
         <RouterLink
           :to="ROUTES.cart"
-          class="vybe-icon-button vybe-touch-target relative h-11 w-11 rounded-full"
+          class="vybe-icon-button relative inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200"
           aria-label="Cart"
         >
           <ShoppingBag class="h-[1.125rem] w-[1.125rem]" />
           <span
             v-if="cart.itemCount"
-            class="absolute -right-1 -top-1 inline-flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[color:var(--accent)] px-1 text-[0.5625rem] font-bold text-black sm:px-1.5 sm:text-[0.625rem]"
+            class="absolute -right-0.5 -top-0.5 inline-flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-[color:var(--bg-elevated)] bg-[color:var(--accent)] px-1 text-[0.5625rem] font-bold text-black"
           >
             {{ cart.itemCount }}
           </span>
         </RouterLink>
 
+        <div class="mx-2 hidden h-6 w-px bg-[color:var(--line)] lg:block" aria-hidden="true" />
+
         <button
-          class="vybe-surface-link vybe-touch-target hidden items-center gap-3 rounded-full px-3 py-2 sm:inline-flex"
+          class="vybe-surface-link hidden h-11 items-center gap-2.5 rounded-full border border-[color:var(--line)] px-4 text-[0.6875rem] uppercase tracking-[0.2em] transition-colors duration-200 lg:inline-flex"
           type="button"
           @click="handleProfileClick"
         >
-          <span class="inline-flex h-7 w-7 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--bg-elevated)] text-[color:var(--text)]">
-            <UserRound class="h-4 w-4" />
+          <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[color:var(--bg-elevated)] text-[color:var(--text)]">
+            <UserRound class="h-3.5 w-3.5" />
           </span>
-          <span class="text-xs uppercase tracking-[0.18em]">
-            {{ profileLabel }}
-          </span>
+          {{ profileLabel }}
         </button>
 
         <button
-  class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full lg:hidden"
-  :aria-expanded="isMobileMenuOpen"
-  aria-controls="mobile-nav-panel"
-  :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
-  type="button"
-  @click="isMobileMenuOpen = !isMobileMenuOpen"
->
-  <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" class="menu-icon">
-    <line
-      v-bind="isMobileMenuOpen
-        ? { x1: 4, y1: 4, x2: 16, y2: 16 }
-        : { x1: 3, y1: 7, x2: 17, y2: 7 }"
-      stroke-width="1.6"
-    />
-    <rect
-      v-bind="isMobileMenuOpen
-        ? { x: 5.2, y: 9, width: 14, height: 2, rx: 1, transform: 'rotate(-45, 10, 10)' }
-        : { x: 3, y: 11.5, width: 14, height: 2, rx: 1 }"
-      fill="currentColor"
-      stroke="none"
-    />
-  </svg>
-</button>
-
-        <button
-          v-if="auth.isLoggedIn"
-          class="vybe-surface-link vybe-touch-target hidden rounded-full px-5 py-2 text-[0.625rem] uppercase tracking-[0.24em] xl:inline-flex"
+          class="vybe-icon-button ml-1 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 lg:hidden"
+          :aria-expanded="isMobileMenuOpen"
+          aria-controls="mobile-nav-panel"
+          :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
           type="button"
-          @click="handleLogout"
+          @click="isMobileMenuOpen = !isMobileMenuOpen"
         >
-          Log Out
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" class="menu-icon">
+            <line
+              v-bind="isMobileMenuOpen ? { x1: 4, y1: 4, x2: 16, y2: 16 } : { x1: 3, y1: 7, x2: 17, y2: 7 }"
+              stroke-width="1.6"
+            />
+            <rect
+              v-bind="isMobileMenuOpen
+                ? { x: 5.2, y: 9, width: 14, height: 2, rx: 1, transform: 'rotate(-45, 10, 10)' }
+                : { x: 3, y: 11.5, width: 14, height: 2, rx: 1 }"
+              fill="currentColor"
+              stroke="none"
+            />
+          </svg>
         </button>
       </div>
+    </nav>
 
+    <transition name="mobile-menu">
       <div
         v-if="isMobileMenuOpen"
         id="mobile-nav-panel"
-        class="col-span-2 grid gap-3 border-t border-[color:var(--line)] pt-3 pb-[max(0rem,env(safe-area-inset-bottom))] lg:hidden"
+        class="w-full border-b border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_98%,transparent)] px-4 pb-5 pt-3 backdrop-blur-2xl sm:px-6 lg:hidden"
       >
-        <div class="grid gap-2 sm:grid-cols-2">
+        <div class="flex flex-col gap-2">
           <RouterLink
             v-for="item in navItems"
             :key="item.to"
             :to="item.to"
-            class="vybe-surface-link vybe-touch-target inline-flex items-center justify-center rounded-[1.35rem] px-4 py-3 text-center text-[0.6875rem] uppercase tracking-[0.24em]"
+            class="vybe-surface-link inline-flex h-12 w-full items-center justify-center rounded-2xl text-center text-[0.6875rem] uppercase tracking-[0.24em] transition-colors duration-200"
             :class="isNavItemActive(item.label)
-              ? '!border-[color:var(--accent)] bg-[color:var(--accent-soft)] !text-[color:var(--text)]'
+              ? 'bg-[color:var(--text)] text-[color:var(--bg)] border-transparent'
               : ''"
           >
             {{ item.label }}
           </RouterLink>
         </div>
 
-        <div class="grid gap-2 sm:grid-cols-2">
+        <div class="mt-2 flex flex-col gap-2">
+          <RouterLink
+            :to="ROUTES.wishlist"
+            class="vybe-surface-link inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl text-[0.6875rem] uppercase tracking-[0.22em] transition-colors duration-200"
+          >
+            <Heart class="h-4 w-4" />
+            Wishlist
+            <span v-if="bookmarks.count" class="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-[color:var(--bg)] px-1 text-[0.5625rem] font-bold">
+              {{ bookmarks.count }}
+            </span>
+          </RouterLink>
+
           <button
-            class="vybe-surface-link vybe-touch-target inline-flex items-center justify-center gap-2 rounded-[1.35rem] px-4 py-3 text-[0.6875rem] uppercase tracking-[0.22em]"
+            class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[color:var(--text)] text-[color:var(--bg)] text-[0.6875rem] font-semibold uppercase tracking-[0.22em] transition-opacity duration-200 hover:opacity-80"
             type="button"
             @click="handleProfileClick"
           >
@@ -283,17 +269,9 @@ function openSearchProduct(productId: number) {
             {{ profileLabel }}
           </button>
 
-          <button
-            v-if="auth.isLoggedIn"
-            class="vybe-surface-link vybe-touch-target inline-flex items-center justify-center rounded-[1.35rem] px-4 py-3 text-[0.6875rem] uppercase tracking-[0.22em]"
-            type="button"
-            @click="handleLogout"
-          >
-            Log Out
-          </button>
         </div>
       </div>
-    </nav>
+    </transition>
 
     <transition name="quick-search">
       <div
@@ -309,7 +287,7 @@ function openSearchProduct(productId: number) {
           @click="closeSearch"
         />
 
-        <div class="relative mt-auto flex w-full flex-col overflow-hidden rounded-t-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl sm:mx-auto sm:mt-0 sm:max-w-lg sm:rounded-[2rem] md:max-w-3xl">
+        <div class="fixed inset-x-0 bottom-0 flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl sm:relative sm:inset-auto sm:top-1/4 sm:mx-auto sm:max-w-lg sm:rounded-[2rem] md:max-w-3xl">
           <div class="flex items-center gap-3 border-b border-[color:var(--line)] px-4 py-4 sm:px-5 sm:py-5">
             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_86%,transparent)] text-[color:var(--muted)]">
               <Search class="h-5 w-5" />
@@ -330,7 +308,7 @@ function openSearchProduct(productId: number) {
             </div>
 
             <button
-              class="vybe-icon-button vybe-touch-target h-11 w-11 rounded-full"
+              class="vybe-icon-button inline-flex h-11 w-11 items-center justify-center rounded-full"
               aria-label="Close quick search"
               type="button"
               @click="closeSearch"
@@ -340,31 +318,16 @@ function openSearchProduct(productId: number) {
           </div>
 
           <div class="max-h-[70vh] overflow-y-auto p-4 sm:p-5">
-            <div
-              v-if="isSearchLoading"
-              class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm"
-            >
+            <div v-if="isSearchLoading" class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm">
               Loading the catalog for search...
             </div>
-
-            <div
-              v-else-if="searchError"
-              class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm"
-            >
+            <div v-else-if="searchError" class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm">
               {{ searchError }}
             </div>
-
-            <div
-              v-else-if="!searchQuery.trim()"
-              class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm"
-            >
+            <div v-else-if="!searchQuery.trim()" class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm">
               Start typing to search the full product catalog.
             </div>
-
-            <div
-              v-else-if="quickSearchResults.length === 0"
-              class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm"
-            >
+            <div v-else-if="quickSearchResults.length === 0" class="vybe-empty px-4 py-10 text-xs text-[color:var(--muted)] sm:px-6 sm:py-12 sm:text-sm">
               No products matched "{{ searchQuery.trim() }}".
             </div>
 
@@ -381,26 +344,14 @@ function openSearchProduct(productId: number) {
                   :alt="product.title"
                   class="h-18 w-18 shrink-0 rounded-[1.2rem] object-cover sm:h-20 sm:w-20"
                 />
-
                 <div class="min-w-0 flex-1">
-                  <p class="vybe-kicker text-[9px] sm:text-[10px]">
-                    {{ product.category }}
-                  </p>
-                  <h2 class="vybe-display mt-1 line-clamp-2 text-2xl leading-tight sm:text-3xl">
-                    {{ product.title }}
-                  </h2>
-                  <p class="mt-2 line-clamp-2 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
-                    {{ product.description }}
-                  </p>
+                  <p class="vybe-kicker text-[9px] sm:text-[10px]">{{ product.category }}</p>
+                  <h2 class="vybe-display mt-1 line-clamp-2 text-base leading-tight sm:text-xl md:text-2xl">{{ product.title }}</h2>
+                  <p class="mt-2 line-clamp-2 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">{{ product.description }}</p>
                 </div>
-
                 <div class="shrink-0 text-right">
-                  <p class="text-base text-[color:var(--accent)] sm:text-lg">
-                    {{ formatPrice(product.price || 0) }}
-                  </p>
-                  <p class="mt-2 text-[10px] uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-[11px]">
-                    View
-                  </p>
+                  <p class="text-base text-[color:var(--accent)] sm:text-lg">{{ formatPrice(product.price || 0) }}</p>
+                  <p class="mt-2 text-[10px] uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-[11px]">View</p>
                 </div>
               </button>
             </div>
@@ -412,24 +363,28 @@ function openSearchProduct(productId: number) {
 </template>
 
 <style scoped>
-
-
 .menu-icon line,
 .menu-icon rect {
   transition: all 0.32s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-
 .quick-search-enter-active,
 .quick-search-leave-active {
-  transition:
-    opacity 220ms ease,
-    transform 220ms ease;
+  transition: opacity 220ms ease, transform 220ms ease;
 }
-
 .quick-search-enter-from,
 .quick-search-leave-to {
   opacity: 0;
   transform: translateY(-8px);
+}
+
+.mobile-menu-enter-active,
+.mobile-menu-leave-active {
+  transition: opacity 200ms ease, transform 200ms ease;
+}
+.mobile-menu-enter-from,
+.mobile-menu-leave-to {
+  opacity: 0;
+  transform: translateY(-6px);
 }
 </style>
