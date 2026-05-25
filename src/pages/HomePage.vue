@@ -1,110 +1,157 @@
 <script setup lang="ts">
-import { ROUTES } from "../router/routes"
+import { ArrowRight, Sparkles, Hexagon, Layers } from "lucide-vue-next"
+import { ROUTES, getCategoryRoute } from "../router/routes"
 </script>
 
 <template>
-  <section class="vybe-page space-y-6 sm:space-y-8 md:space-y-10 lg:space-y-12">
-    <div class="grid gap-6 sm:gap-8 lg:grid-cols-[minmax(0,1.04fr)_minmax(18rem,0.96fr)] lg:items-start lg:gap-8 md:gap-7">
-      <div class="space-y-6 sm:space-y-8 md:space-y-10 lg:space-y-10">
-        <div class="vybe-reveal space-y-4 sm:space-y-5" style="--delay: 80ms;">
-          <p class="vybe-kicker text-[10px] sm:text-[11px]">
-            House of elevated objects
-          </p>
+  <section class="vybe-page space-y-8 sm:space-y-12 md:space-y-16">
+    
+    <div class="vybe-reveal relative flex h-[75vh] min-h-[35rem] w-full flex-col items-center justify-center overflow-hidden rounded-[2.5rem]" style="--delay: 100ms;">
+      
+      <video 
+        autoplay 
+        loop 
+        muted 
+        playsinline 
+        preload="auto"
+        class="absolute inset-0 h-full w-full object-cover transition-transform duration-[20s] hover:scale-105"
+        poster="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1800&q=80"
+      >
+        <source src="/hero-loop.mp4" type="video/mp4" />
+      </video>
 
-          <h1 class="vybe-display max-w-5xl text-[clamp(3.2rem,10vw,7.5rem)] leading-[0.9]">
-            Dress your space with pieces that hold their own.
-          </h1>
-        </div>
+      <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/70"></div>
 
-        <div class="vybe-reveal grid gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(11rem,13rem)]" style="--delay: 180ms;">
-          <p class="max-w-2xl text-sm leading-7 text-[color:var(--muted)] sm:text-base md:text-lg md:leading-8">
-            VYBE curates modern tech, sculptural accessories, and quiet essentials with the discipline of a fashion house. The atmosphere is cinematic in the dark and editorial in the light.
-          </p>
+      <div class="relative z-10 flex flex-col items-center px-6 text-center">
+        <p class="vybe-kicker mb-4 text-[10px] text-white/80 sm:mb-6 sm:text-[12px]">
+          Welcome to the House
+        </p>
+        <h1 class="vybe-display max-w-4xl text-[clamp(2.8rem,8vw,6.5rem)] leading-[0.95] text-white">
+          Objects with presence.<br>
+          <span class="text-white/70">Lives with purpose.</span>
+        </h1>
+        
+        <p class="mt-6 max-w-xl text-sm leading-7 text-white/80 sm:mt-8 sm:text-base">
+          A curated storefront for those who demand more from their essentials. 
+          Discover apparel, tech, and lifestyle pieces designed to command attention.
+        </p>
 
-          <div class="border-t border-[color:var(--line)] pt-4 text-xs uppercase tracking-[0.24em] text-[color:var(--muted)] sm:text-sm lg:border-l lg:border-t-0 lg:pl-5 lg:pt-0">
-            <p>Edition 04</p>
-            <p class="mt-2 sm:mt-3">Crafted for daily rituals</p>
-          </div>
-        </div>
-
-        <div class="vybe-reveal flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-4" style="--delay: 280ms;">
-          <RouterLink :to="ROUTES.products" class="vybe-button rounded-full px-6 py-3 text-center text-xs uppercase tracking-[0.28em] sm:px-8 sm:py-4 sm:text-sm md:px-10 md:py-4">
-            Enter The Collection
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:gap-6">
+          <RouterLink :to="ROUTES.products" class="inline-flex h-12 md:h-14 items-center justify-center rounded-full bg-white px-8 text-xs font-semibold uppercase tracking-[0.24em] !text-black transition-transform duration-300 hover:scale-105 hover:bg-gray-100 sm:text-sm">
+            Enter The Catalog
           </RouterLink>
-          <RouterLink :to="ROUTES.wishlist" class="vybe-outline-link vybe-pill rounded-full px-6 py-3 text-center text-xs uppercase tracking-[0.28em] sm:px-8 sm:py-4 sm:text-sm md:px-10 md:py-4">
-            View Private Selection
+          <RouterLink :to="getCategoryRoute('lifestyle')" class="inline-flex h-12 md:h-14 items-center justify-center rounded-full border border-white/30 bg-black/20 px-8 text-xs font-semibold uppercase tracking-[0.24em] !text-white backdrop-blur-md transition-colors duration-300 hover:bg-white/20 sm:text-sm">
+            Discover Lifestyle
           </RouterLink>
         </div>
       </div>
+    </div>
 
-      <div class="vybe-reveal lg:pt-10" style="--delay: 220ms;">
-        <div class="vybe-hero relative overflow-hidden rounded-[2.5rem] p-3 sm:p-4 md:p-5">
-          <div class="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.18),transparent_32%),linear-gradient(180deg,transparent_0%,rgba(0,0,0,0.04)_100%)] dark:bg-[radial-gradient(circle_at_top,rgba(216,190,146,0.12),transparent_32%),linear-gradient(180deg,transparent_0%,rgba(0,0,0,0.22)_100%)]" />
+    <div class="space-y-6 sm:space-y-8">
+      <div class="flex items-end justify-between px-2">
+        <h2 class="vybe-display text-3xl sm:text-4xl md:text-5xl">Explore by Discipline.</h2>
+        <RouterLink :to="ROUTES.products" class="vybe-outline-link hidden text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:block">
+          View All &rarr;
+        </RouterLink>
+      </div>
 
-          <div class="relative grid gap-3 sm:gap-4 md:gap-5">
-            <img
-              src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=1200&q=80"
-              alt="Luxury fashion editorial mood"
-            class="h-[clamp(18rem,58vw,32rem)] w-full rounded-[2rem] object-cover"
-          />
-
-            <div class="grid gap-3 sm:gap-4 md:grid-cols-[minmax(0,1fr)_11rem] md:gap-5">
-              <div class="rounded-[1.8rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_88%,transparent)] p-4 sm:p-5 md:p-6">
-                <p class="vybe-kicker text-[10px] sm:text-[11px]">
-                  Signature note
-                </p>
-                <p class="vybe-display mt-2 sm:mt-3 text-2xl leading-tight sm:text-3xl md:text-4xl md:leading-[0.96]">
-                  Precision, tactility, and a little after-hours drama.
-                </p>
-              </div>
-
-              <div class="rounded-[1.8rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_86%,transparent)] p-4 sm:p-5 md:p-6">
-                <p class="vybe-kicker text-[10px] sm:text-[11px]">Mood</p>
-                <p class="mt-2.5 sm:mt-4 text-xl sm:text-2xl text-[color:var(--text)]">Nocturne</p>
-                <p class="mt-4 sm:mt-6 text-[9px] uppercase tracking-[0.24em] text-[color:var(--muted)] sm:text-xs">Light shifts to ivory editorial</p>
-              </div>
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5 md:gap-6">
+        
+        <RouterLink :to="getCategoryRoute('men')" class="group relative h-[22rem] w-full overflow-hidden rounded-[2rem] border border-[color:var(--line)] sm:h-[26rem]">
+          <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80" alt="Apparel" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8">
+            <p class="vybe-kicker text-[10px] text-white/70">Wardrobe</p>
+            <p class="vybe-display mt-2 text-3xl text-white">Apparel</p>
+            <div class="mt-4 flex items-center justify-between">
+              <p class="text-xs text-white/80">Menswear & Womenswear</p>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition-transform duration-300 group-hover:translate-x-2">
+                <ArrowRight class="h-4 w-4" />
+              </span>
             </div>
           </div>
+        </RouterLink>
+
+        <RouterLink :to="getCategoryRoute('tech')" class="group relative h-[22rem] w-full overflow-hidden rounded-[2rem] border border-[color:var(--line)] sm:h-[26rem]">
+          <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80" alt="Tech" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8">
+            <p class="vybe-kicker text-[10px] text-white/70">Innovation</p>
+            <p class="vybe-display mt-2 text-3xl text-white">Elevated Tech</p>
+            <div class="mt-4 flex items-center justify-between">
+              <p class="text-xs text-white/80">Sleek accessories for digital life</p>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition-transform duration-300 group-hover:translate-x-2">
+                <ArrowRight class="h-4 w-4" />
+              </span>
+            </div>
+          </div>
+        </RouterLink>
+
+        <RouterLink :to="getCategoryRoute('lifestyle')" class="group relative h-[22rem] w-full overflow-hidden rounded-[2rem] border border-[color:var(--line)] sm:col-span-2 sm:h-[26rem] lg:col-span-1">
+          <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80" alt="Lifestyle" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
+          <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8">
+            <p class="vybe-kicker text-[10px] text-white/70">Environment</p>
+            <p class="vybe-display mt-2 text-3xl text-white">Home & Object</p>
+            <div class="mt-4 flex items-center justify-between">
+              <p class="text-xs text-white/80">Curate your physical space</p>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition-transform duration-300 group-hover:translate-x-2">
+                <ArrowRight class="h-4 w-4" />
+              </span>
+            </div>
+          </div>
+        </RouterLink>
+
+      </div>
+    </div>
+
+    <div class="rounded-[2.5rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_60%,transparent)] p-6 sm:p-10 md:p-12 lg:p-16 backdrop-blur-xl">
+      <div class="text-center">
+        <p class="vybe-kicker text-[10px] sm:text-[11px]">The Standard</p>
+        <h2 class="vybe-display mt-4 text-3xl sm:text-4xl md:text-5xl">Why source from us?</h2>
+      </div>
+
+      <div class="mt-10 grid gap-6 sm:grid-cols-3 sm:mt-12 lg:gap-10">
+        <div class="group flex flex-col items-center text-center">
+          <div class="mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--bg)] transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-[var(--shadow)]">
+            <Sparkles class="h-6 w-6 text-[color:var(--text)]" />
+          </div>
+          <h3 class="vybe-display text-xl sm:text-2xl">Bespoke Curation</h3>
+          <p class="mt-3 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+            We review thousands of products, keeping only those that pass our rigorous aesthetic and structural tests.
+          </p>
+        </div>
+
+        <div class="group flex flex-col items-center text-center">
+          <div class="mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--bg)] transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-[var(--shadow)]">
+            <Layers class="h-6 w-6 text-[color:var(--text)]" />
+          </div>
+          <h3 class="vybe-display text-xl sm:text-2xl">Tactile Quality</h3>
+          <p class="mt-3 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+            From heavy-weight cotton to precision-machined aluminum, the physical feel of our products is never compromised.
+          </p>
+        </div>
+
+        <div class="group flex flex-col items-center text-center">
+          <div class="mb-5 flex h-16 w-16 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:var(--bg)] transition-transform duration-300 group-hover:-translate-y-2 group-hover:shadow-[var(--shadow)]">
+            <Hexagon class="h-6 w-6 text-[color:var(--text)]" />
+          </div>
+          <h3 class="vybe-display text-xl sm:text-2xl">Gallery Atmosphere</h3>
+          <p class="mt-3 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+            No endless scrolling or aggressive popups. We treat our storefront like a physical gallery—clean, calm, and deliberate.
+          </p>
         </div>
       </div>
     </div>
 
-    <div class="grid gap-5 sm:gap-6 md:gap-6 lg:grid-cols-[minmax(16rem,0.34fr)_minmax(0,1fr)]">
-      <div class="vybe-reveal flex items-end" style="--delay: 340ms;">
-        <div class="w-full rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_78%,transparent)] p-5 sm:p-6 lg:py-6">
-          <p class="vybe-kicker text-[10px] sm:text-[11px]">House values</p>
-          <p class="vybe-display mt-3 sm:mt-4 text-3xl leading-tight sm:text-4xl lg:text-5xl lg:leading-none">Curate less.</p>
-          <p class="mt-3 sm:mt-4 text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7">
-            Every touchpoint should feel chosen, not filled.
-          </p>
-        </div>
-      </div>
-
-      <div class="vybe-reveal grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5 lg:gap-6" style="--delay: 420ms;">
-        <article class="vybe-stat rounded-[2rem] p-5 sm:p-6 md:p-7 min-h-[13rem]">
-          <p class="vybe-kicker text-[10px] sm:text-[11px]">Atmosphere</p>
-          <p class="vybe-display mt-4 sm:mt-6 text-3xl leading-tight sm:text-4xl lg:text-4xl lg:leading-none">Gallery calm</p>
-          <p class="mt-3 sm:mt-5 max-w-xs text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7">
-            Space, shadow, and restraint replace the noise of a typical storefront.
-          </p>
-        </article>
-
-        <article class="vybe-stat rounded-[2rem] p-5 sm:p-6 md:p-7 min-h-[13rem] md:-translate-y-6">
-          <p class="vybe-kicker text-[10px] sm:text-[11px]">Materials</p>
-          <p class="vybe-display mt-4 sm:mt-6 text-3xl leading-tight sm:text-4xl lg:text-4xl lg:leading-none">Ivory. Onyx. Gold.</p>
-          <p class="mt-3 sm:mt-5 max-w-xs text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7">
-            A warm palette with metallic nuance keeps both themes expensive and connected.
-          </p>
-        </article>
-
-        <article class="vybe-stat rounded-[2rem] p-5 sm:p-6 md:p-7 min-h-[13rem]">
-          <p class="vybe-kicker text-[10px] sm:text-[11px]">Pacing</p>
-          <p class="vybe-display mt-4 sm:mt-6 text-3xl leading-tight sm:text-4xl lg:text-4xl lg:leading-none">Slow reveal</p>
-          <p class="mt-3 sm:mt-5 max-w-xs text-xs leading-6 text-[color:var(--muted)] sm:text-sm sm:leading-7">
-            Motion stays soft and deliberate so the experience feels composed from first load onward.
-          </p>
-        </article>
-      </div>
-    </div>
   </section>
 </template>
+
+<style scoped>
+/* Optional: ensures video doesn't break overflow if you have extreme border radius */
+video {
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+}
+</style>

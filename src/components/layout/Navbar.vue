@@ -84,12 +84,6 @@ function handleProfileClick() {
   router.push(auth.isLoggedIn ? ROUTES.profile : buildLoginLocation(route.fullPath))
 }
 
-function handleLogout() {
-  auth.logout()
-  isMobileMenuOpen.value = false
-  router.push(ROUTES.home)
-}
-
 async function ensureSearchProducts() {
   if (hasLoadedSearchProducts.value || isSearchLoading.value) return
   isSearchLoading.value = true
@@ -122,7 +116,7 @@ function openSearchProduct(productId: number) {
 
 <template>
   <header class="sticky top-0 z-40 w-full">
-    <nav class="grid w-full grid-cols-[auto_1fr_auto] items-center gap-0 border-b border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] px-4 py-0 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-6 md:px-8 lg:px-10 xl:px-14">
+    <nav class="grid w-full grid-cols-[auto_1fr_auto] items-center gap-0 border-b border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] px-4 py-0 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-6 md:px-8 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:px-10 xl:px-14">
 
       <div class="flex items-center py-3 pr-4 sm:py-4 sm:pr-6 lg:pr-8">
         <RouterLink
@@ -210,15 +204,6 @@ function openSearchProduct(productId: number) {
         </button>
 
         <button
-          v-if="auth.isLoggedIn"
-          class="vybe-surface-link ml-1 hidden h-11 items-center rounded-full border border-[color:var(--line)] px-5 text-[0.625rem] uppercase tracking-[0.24em] transition-colors duration-200 lg:inline-flex"
-          type="button"
-          @click="handleLogout"
-        >
-          Log Out
-        </button>
-
-        <button
           class="vybe-icon-button ml-1 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 lg:hidden"
           :aria-expanded="isMobileMenuOpen"
           aria-controls="mobile-nav-panel"
@@ -284,14 +269,6 @@ function openSearchProduct(productId: number) {
             {{ profileLabel }}
           </button>
 
-          <button
-            v-if="auth.isLoggedIn"
-            class="vybe-surface-link inline-flex h-12 w-full items-center justify-center rounded-2xl text-[0.6875rem] uppercase tracking-[0.22em] transition-colors duration-200"
-            type="button"
-            @click="handleLogout"
-          >
-            Log Out
-          </button>
         </div>
       </div>
     </transition>

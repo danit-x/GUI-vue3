@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue"
-import { useRoute } from "vue-router"
+import { useRoute, useRouter } from "vue-router"
 import { useAuthStore } from "../stores/authStore"
 import { useCountryPreference } from "../composables/useCountryPreference"
 import { ROUTES } from "../router/routes"
@@ -10,6 +10,7 @@ import { getOrdersForUser } from "../utils/orderHistory"
 
 const auth = useAuthStore()
 const route = useRoute()
+const router = useRouter()
 const { selectedCountry } = useCountryPreference()
 const loginLocation = computed(() => buildLoginLocation(route.fullPath))
 
@@ -22,6 +23,11 @@ const initials = computed(() => {
 })
 
 const orderHistory = computed(() => getOrdersForUser(auth.user?.id))
+
+function handleLogout() {
+  auth.logout()
+  router.push(ROUTES.home)
+}
 </script>
 
 <template>
@@ -61,6 +67,13 @@ const orderHistory = computed(() => getOrdersForUser(auth.user?.id))
             {{ auth.user.firstName }} {{ auth.user.lastName }}
           </h2>
           <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">@{{ auth.user.username }}</p>
+          <button
+            class="vybe-surface-link vybe-touch-target mt-5 inline-flex rounded-full px-5 py-2.5 text-xs uppercase tracking-[0.22em] sm:mt-6 sm:px-6 sm:py-3"
+            type="button"
+            @click="handleLogout"
+          >
+            Log Out
+          </button>
         </div>
       </aside>
 
