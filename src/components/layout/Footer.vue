@@ -56,47 +56,51 @@ const currentYear = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="px-4 pb-4 pt-6 sm:px-5 sm:pb-5 md:px-6 lg:px-8">
-    <div class="mx-auto max-w-[84rem] rounded-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_86%,transparent)] px-4 py-6 shadow-[var(--shadow)] backdrop-blur-xl sm:px-5 sm:py-7 md:px-6 md:py-8">
-      <div class="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)] lg:gap-6">
-        <div class="max-w-xs">
-          <p class="vybe-kicker text-[10px] sm:text-[11px]">VYBE House</p>
-          <p class="vybe-display mt-2 text-[clamp(1.8rem,5vw,3rem)] leading-[0.95] text-[color:var(--text)] sm:mt-3">
-            Objects with presence.
-          </p>
-          <p class="mt-3 text-xs leading-6 text-[color:var(--muted)] sm:mt-4 sm:text-sm sm:leading-7">
-            A refined storefront for modern essentials, styled with the calm of an editorial spread.
-          </p>
+  <footer class="w-full border-t border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_86%,transparent)] backdrop-blur-xl">
+    <div class="mx-auto w-full px-4 py-10 sm:px-6 md:px-8 md:py-12 lg:px-10 xl:px-14">
+      
+      <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+        
+        <div class="flex flex-col items-start justify-start">
+          <RouterLink
+            :to="ROUTES.home"
+            class="group inline-flex items-center transition-transform duration-300 hover:scale-105"
+            aria-label="VYBE Home"
+          >
+            <span class="vybe-display text-[2.5rem] tracking-[0.14em] text-[color:var(--text)] transition-colors duration-200 group-hover:opacity-70 sm:text-[3rem]">
+              VYBE
+            </span>
+          </RouterLink>
         </div>
 
         <div>
           <p class="vybe-kicker text-[10px] sm:text-[11px]">Shop</p>
-          <ul class="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
-            <li><RouterLink :to="ROUTES.products" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">All Products</RouterLink></li>
-            <li><RouterLink :to="getCategoryRoute('men')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Men</RouterLink></li>
-            <li><RouterLink :to="getCategoryRoute('women')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Women</RouterLink></li>
-            <li><RouterLink :to="getCategoryRoute('tech')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Tech</RouterLink></li>
-            <li><RouterLink :to="getCategoryRoute('lifestyle')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Lifestyle</RouterLink></li>
+          <ul class="mt-4 space-y-3 sm:mt-5">
+            <li><RouterLink :to="ROUTES.products" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">All Products</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('men')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">Men</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('women')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">Women</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('tech')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">Tech</RouterLink></li>
+            <li><RouterLink :to="getCategoryRoute('lifestyle')" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">Lifestyle</RouterLink></li>
           </ul>
         </div>
 
         <div>
           <p class="vybe-kicker text-[10px] sm:text-[11px]">Account</p>
-          <ul class="mt-3 space-y-2.5 sm:mt-4 sm:space-y-3">
-            <li><RouterLink :to="ROUTES.profile" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Profile</RouterLink></li>
-            <li><RouterLink :to="ROUTES.wishlist" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Wishlist</RouterLink></li>
-            <li><RouterLink :to="ROUTES.cart" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Cart</RouterLink></li>
-            <li><RouterLink :to="loginLocation" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">Sign In</RouterLink></li>
+          <ul class="mt-4 space-y-3 sm:mt-5">
+            <li><RouterLink :to="ROUTES.profile" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">Profile</RouterLink></li>
+            <li><RouterLink :to="ROUTES.wishlist" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">Wishlist</RouterLink></li>
+            <li><RouterLink :to="ROUTES.cart" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">Cart</RouterLink></li>
+            <li><RouterLink :to="loginLocation" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:text-sm">Sign In</RouterLink></li>
           </ul>
         </div>
 
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-4">
           <p class="vybe-kicker text-[10px] sm:text-[11px]">Region</p>
 
-          <div ref="dropdownRef" class="relative">
+          <div ref="dropdownRef" class="relative max-w-[16rem]">
             <button
               type="button"
-              class="vybe-surface-link flex w-full min-w-0 items-center gap-2 rounded-[1.5rem] px-3 py-2.5 text-left sm:px-4 sm:py-3"
+              class="vybe-surface-link flex w-full min-w-0 items-center gap-2 rounded-[1.5rem] px-4 py-3 text-left transition-colors duration-200 hover:bg-[color:var(--line)]"
               :aria-expanded="isOpen"
               aria-haspopup="listbox"
               @click="toggleDropdown"
@@ -106,7 +110,7 @@ const currentYear = new Date().getFullYear()
                 {{ selectedCountryOption.name }}
               </span>
               <ChevronDown
-                class="h-4 w-4 shrink-0 text-[color:var(--muted)] transition"
+                class="h-4 w-4 shrink-0 text-[color:var(--muted)] transition-transform duration-200"
                 :class="isOpen ? 'rotate-180' : ''"
               />
             </button>
@@ -120,7 +124,7 @@ const currentYear = new Date().getFullYear()
                   v-for="country in countryOptions"
                   :key="country.name"
                   type="button"
-                  class="vybe-outline-link flex w-full items-center gap-3 rounded-[1rem] px-3 py-2.5 text-left text-xs sm:text-sm hover:bg-[color:color-mix(in_srgb,var(--bg-strong)_80%,transparent)]"
+                  class="vybe-outline-link flex w-full items-center gap-3 rounded-[1rem] px-3 py-2.5 text-left text-xs transition-colors duration-200 sm:text-sm hover:bg-[color:color-mix(in_srgb,var(--bg-strong)_80%,transparent)]"
                   :class="country.name === selectedCountry ? 'text-[color:var(--accent)]' : 'text-[color:var(--text)]'"
                   @click="selectCountry(country.name)"
                 >
@@ -130,25 +134,22 @@ const currentYear = new Date().getFullYear()
               </div>
             </div>
           </div>
-
-          <p class="text-[10px] leading-5 text-[color:var(--muted)] sm:text-xs sm:leading-6">
-            Prices and availability may vary based on your selected region.
-          </p>
         </div>
       </div>
 
-      <div class="vybe-divider mt-6 sm:mt-8" />
+      <div class="vybe-divider mt-10 sm:mt-12" />
 
-      <div class="mt-4 flex flex-col gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-between">
+      <div class="mt-6 flex flex-col gap-4 sm:mt-8 sm:flex-row sm:items-center sm:justify-between">
         <p class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">
           &copy; {{ currentYear }} VYBE House. All rights reserved.
         </p>
-        <div class="flex flex-wrap gap-x-5 gap-y-2">
-          <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Privacy Policy</span>
-          <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Terms of Use</span>
-          <span class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">Cookie Settings</span>
+        <div class="flex flex-wrap gap-x-6 gap-y-2">
+          <RouterLink to="#" class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] transition-colors hover:text-[color:var(--text)] sm:text-xs">Privacy Policy</RouterLink>
+          <RouterLink to="#" class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] transition-colors hover:text-[color:var(--text)] sm:text-xs">Terms of Use</RouterLink>
+          <RouterLink to="#" class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] transition-colors hover:text-[color:var(--text)] sm:text-xs">Cookie Settings</RouterLink>
         </div>
       </div>
+      
     </div>
   </footer>
 </template>
