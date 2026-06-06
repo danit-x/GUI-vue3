@@ -25,18 +25,20 @@
 }
 
 .dark {
-  --bg: #080709;
-  --bg-elevated: rgba(18, 14, 16, 0.84);
-  --bg-strong: #151114;
-  --bg-muted: #211a1f;
-  --text: #f6ede3;
-  --muted: #b69d8a;
-  --line: rgba(246, 237, 227, 0.1);
-  --line-strong: rgba(246, 237, 227, 0.2);
-  --accent: #d86a3d;
-  --accent-soft: rgba(216, 106, 61, 0.16);
-  --accent-strong: #f0b06c;
-  --glow: rgba(240, 176, 108, 0.12);
+  --bg: #1a1a1a;
+  --bg-elevated: rgba(31, 34, 34, 0.88);
+  --bg-strong: #242828;
+  --bg-muted: #2d3434;
+  --text: #f0f0f0;
+  --muted: #b7c0bc;
+  --line: rgba(240, 240, 240, 0.11);
+  --line-strong: rgba(240, 240, 240, 0.22);
+  --accent: #004d61;
+  --accent-soft: rgba(0, 77, 97, 0.26);
+  --accent-strong: #822659;
+  --cta: #3e5641;
+  --cta-soft: rgba(62, 86, 65, 0.32);
+  --glow: rgba(130, 38, 89, 0.16);
   --shadow: 0 36px 110px rgba(0, 0, 0, 0.52);
   --shadow-soft: 0 22px 52px rgba(0, 0, 0, 0.34);
 }
@@ -53,10 +55,10 @@ html {
 
 html.dark {
   background:
-    radial-gradient(circle at 14% 12%, rgba(216, 106, 61, 0.14), transparent 24%),
-    radial-gradient(circle at 84% 10%, rgba(255, 218, 174, 0.08), transparent 20%),
-    conic-gradient(from 240deg at 50% 50%, rgba(216, 106, 61, 0.07), transparent 24%, rgba(255, 255, 255, 0.03) 40%, transparent 64%, rgba(240, 176, 108, 0.08) 82%, transparent 100%),
-    linear-gradient(180deg, #070608 0%, #0d0a0d 48%, #130f12 100%);
+    radial-gradient(circle at 14% 12%, rgba(0, 77, 97, 0.18), transparent 24%),
+    radial-gradient(circle at 84% 10%, rgba(130, 38, 89, 0.14), transparent 20%),
+    conic-gradient(from 240deg at 50% 50%, rgba(0, 77, 97, 0.1), transparent 24%, rgba(240, 240, 240, 0.03) 40%, transparent 64%, rgba(62, 86, 65, 0.14) 82%, transparent 100%),
+    linear-gradient(180deg, #1a1a1a 0%, #1f2222 48%, #171819 100%);
 }
 
 body {
@@ -153,6 +155,13 @@ body,
   content: "";
   opacity: 1;
   pointer-events: none;
+}
+
+.dark .vybe-shell::before {
+  background:
+    radial-gradient(circle at 12% 10%, rgba(0, 77, 97, 0.18), transparent 22%),
+    radial-gradient(circle at 84% 4%, rgba(130, 38, 89, 0.14), transparent 18%),
+    linear-gradient(120deg, transparent 0%, rgba(62, 86, 65, 0.08) 32%, transparent 52%);
 }
 
 .vybe-shell::after {
@@ -323,9 +332,13 @@ body,
 
 .dark .vybe-button {
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--accent-strong) 18%, var(--bg-strong)), color-mix(in srgb, var(--accent) 30%, var(--bg-strong)));
-  color: #f8f1e5;
-  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.32);
+    linear-gradient(135deg, color-mix(in srgb, var(--cta) 88%, var(--accent) 12%), color-mix(in srgb, var(--cta) 74%, var(--accent-strong) 26%));
+  border-color: color-mix(in srgb, var(--cta) 72%, var(--line-strong));
+  color: var(--text);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.34),
+    0 0 0 1px color-mix(in srgb, var(--cta) 18%, transparent),
+    inset 0 1px 0 rgba(240, 240, 240, 0.12);
 }
 
 .vybe-button:hover {
