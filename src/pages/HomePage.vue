@@ -6,7 +6,7 @@ import { ROUTES, getCategoryRoute } from "../router/routes"
 <template>
   <section class="vybe-page space-y-8 sm:space-y-12 md:space-y-16">
     
-    <div class="vybe-reveal relative flex h-[75vh] min-h-[35rem] w-full flex-col items-center justify-center overflow-hidden rounded-[2.5rem]" style="--delay: 100ms;">
+    <div class="vybe-reveal relative flex min-h-[min(75vh,28rem)] w-full flex-col items-center justify-center overflow-hidden rounded-[1.75rem] sm:min-h-[min(75vh,32rem)] sm:rounded-[2.5rem] md:min-h-[35rem]" style="--delay: 100ms;">
       
       <video 
         autoplay 
@@ -48,16 +48,16 @@ import { ROUTES, getCategoryRoute } from "../router/routes"
     </div>
 
     <div class="space-y-6 sm:space-y-8">
-      <div class="flex items-end justify-between px-2">
-        <h2 class="vybe-display text-3xl sm:text-4xl md:text-5xl">Explore by Discipline.</h2>
-        <RouterLink :to="ROUTES.products" class="vybe-outline-link hidden text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:block">
+      <div class="flex flex-col gap-3 px-1 sm:flex-row sm:items-end sm:justify-between sm:px-2">
+        <h2 class="vybe-display text-2xl sm:text-4xl md:text-5xl">Explore by Discipline.</h2>
+        <RouterLink :to="ROUTES.products" class="vybe-outline-link text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] hover:text-[color:var(--text)] sm:shrink-0">
           View All &rarr;
         </RouterLink>
       </div>
 
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 sm:gap-5 md:gap-6">
         
-        <RouterLink :to="getCategoryRoute('men')" class="group relative h-[22rem] w-full overflow-hidden rounded-[2rem] border border-[color:var(--line)] sm:h-[26rem]">
+        <RouterLink :to="getCategoryRoute('men')" class="group relative h-[18rem] w-full overflow-hidden rounded-[1.5rem] border border-[color:var(--line)] sm:h-[22rem] sm:rounded-[2rem] md:h-[26rem]">
           <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=1200&q=80" alt="Apparel" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
           <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8">
@@ -72,7 +72,7 @@ import { ROUTES, getCategoryRoute } from "../router/routes"
           </div>
         </RouterLink>
 
-        <RouterLink :to="getCategoryRoute('tech')" class="group relative h-[22rem] w-full overflow-hidden rounded-[2rem] border border-[color:var(--line)] sm:h-[26rem]">
+        <RouterLink :to="getCategoryRoute('tech')" class="group relative h-[18rem] w-full overflow-hidden rounded-[1.5rem] border border-[color:var(--line)] sm:h-[22rem] sm:rounded-[2rem] md:h-[26rem]">
           <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80" alt="Tech" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
           <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8">
@@ -87,7 +87,7 @@ import { ROUTES, getCategoryRoute } from "../router/routes"
           </div>
         </RouterLink>
 
-        <RouterLink :to="getCategoryRoute('lifestyle')" class="group relative h-[22rem] w-full overflow-hidden rounded-[2rem] border border-[color:var(--line)] sm:col-span-2 sm:h-[26rem] lg:col-span-1">
+        <RouterLink :to="getCategoryRoute('lifestyle')" class="group relative h-[18rem] w-full overflow-hidden rounded-[1.5rem] border border-[color:var(--line)] sm:col-span-2 sm:h-[22rem] sm:rounded-[2rem] md:h-[26rem] lg:col-span-1">
           <img src="https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=1200&q=80" alt="Lifestyle" class="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-110" />
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent transition-opacity duration-300 group-hover:opacity-90"></div>
           <div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8">

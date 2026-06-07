@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue"
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue"
 import { useRoute, useRouter } from "vue-router"
 import { Heart, Menu, MoonStar, Search, ShoppingBag, SunMedium, UserRound, X } from "lucide-vue-next"
 
@@ -83,7 +83,22 @@ watch(isSearchOpen, async (isOpen) => {
 })
 
 // --- Lifecycle ---
+const DESKTOP_NAV_MIN_WIDTH = 768
+
+function closeMobileMenuOnDesktop() {
+  if (typeof window !== "undefined" && window.innerWidth >= DESKTOP_NAV_MIN_WIDTH) {
+    isMobileMenuOpen.value = false
+  }
+}
+
+onMounted(() => {
+  closeMobileMenuOnDesktop()
+  window.addEventListener("resize", closeMobileMenuOnDesktop)
+})
+
 onBeforeUnmount(() => {
+  window.removeEventListener("resize", closeMobileMenuOnDesktop)
+
   if (typeof document !== "undefined") {
     document.body.style.overflow = ""
   }
@@ -137,31 +152,34 @@ function handleSearchSubmit() {
 </script>
 
 <template>
-  <header class="sticky top-0 z-40 w-full">
+  <header class="sticky top-0 z-40 w-full overflow-x-clip">
     <nav 
       aria-label="Main Navigation"
-      class="grid w-full grid-cols-[auto_1fr_auto] items-center gap-0 border-b border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] px-4 py-0 text-[color:var(--text)] shadow-[var(--shadow)] backdrop-blur-2xl sm:px-6 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:px-8 lg:px-10 xl:px-14"
+      class="vybe-chrome relative flex w-full min-w-0 items-center justify-between gap-2 border-b px-3 py-0 sm:gap-3 sm:px-5 md:px-6 lg:px-8 xl:px-12"
     >
       <!-- Logo -->
-      <div class="flex items-center py-3 pr-4 sm:py-4 sm:pr-6 lg:pr-8">
+      <div class="relative z-10 flex shrink-0 items-center py-3 sm:py-3.5">
         <RouterLink
           :to="ROUTES.home"
           class="inline-flex leading-none transition-opacity duration-200 hover:opacity-70"
           aria-label="Go to homepage"
         >
-          <span class="vybe-display text-[1.6rem] tracking-[0.14em] text-[color:var(--text)] sm:text-[1.75rem]">VYBE</span>
+          <span class="vybe-display text-[1.45rem] tracking-[0.12em] text-[color:var(--chrome-text)] sm:text-[1.6rem] md:text-[1.75rem]">VYBE</span>
         </RouterLink>
       </div>
 
       <!-- Desktop Navigation -->
-      <ul class="hidden items-center justify-center gap-1 md:flex" role="list">
-        <li v-for="item in navItems" :key="item.label">
+      <ul
+        class="absolute left-1/2 top-1/2 hidden max-w-[min(100%,34rem)] -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-0.5 md:flex lg:max-w-none lg:gap-1"
+        role="list"
+      >
+        <li v-for="item in navItems" :key="item.label" class="min-w-0">
           <RouterLink
             :to="item.to"
-            class="vybe-surface-link inline-flex h-11 shrink-0 items-center justify-center rounded-full px-3 text-[0.625rem] uppercase tracking-[0.2em] transition-colors duration-200 lg:px-5 lg:text-[0.6875rem] lg:tracking-[0.24em]"
+            class="vybe-surface-link inline-flex h-10 shrink-0 items-center justify-center rounded-full px-2.5 text-[0.5625rem] uppercase tracking-[0.18em] transition-colors duration-200 md:h-11 md:px-3 md:text-[0.625rem] md:tracking-[0.2em] lg:px-5 lg:text-[0.6875rem] lg:tracking-[0.24em]"
             :class="isNavItemActive(item.label)
-              ? 'bg-[color:var(--text)] text-[color:var(--bg)] border-transparent'
-              : 'text-[color:var(--muted)] hover:text-[color:var(--text)] hover:bg-[color:var(--accent-soft)]'"
+              ? 'border-transparent bg-[color:var(--chrome-text)] text-[color:var(--chrome)]'
+              : 'text-[color:var(--chrome-muted)] hover:bg-[color:color-mix(in_srgb,var(--chrome-text)_8%,var(--chrome))] hover:text-[color:var(--chrome-text)]'"
             :aria-current="isNavItemActive(item.label) ? 'page' : undefined"
           >
             {{ item.label }}
@@ -170,9 +188,9 @@ function handleSearchSubmit() {
       </ul>
 
       <!-- Actions (Icons) -->
-      <div class="flex items-center justify-end gap-1 py-2 pl-2 sm:py-2.5 sm:pl-4">
+      <div class="relative z-10 flex shrink-0 items-center justify-end gap-0.5 py-2 sm:gap-1 sm:py-2.5">
         <button
-          class="vybe-icon-button inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200"
+          class="navbar-icon-btn vybe-icon-button inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 sm:h-11 sm:w-11"
           aria-label="Open quick search"
           type="button"
           @click="openSearch"
@@ -181,7 +199,7 @@ function handleSearchSubmit() {
         </button>
 
         <button
-          class="vybe-icon-button hidden h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 md:inline-flex"
+          class="navbar-icon-btn vybe-icon-button hidden h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 sm:h-11 sm:w-11 md:inline-flex"
           :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
           type="button"
           @click="toggleDark"
@@ -193,13 +211,13 @@ function handleSearchSubmit() {
         <!-- Wishlist -->
         <RouterLink
           :to="ROUTES.wishlist"
-          class="wishlist-icon-btn relative hidden h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 md:inline-flex"
+          class="navbar-icon-btn wishlist-icon-btn relative hidden h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 sm:h-11 sm:w-11 md:inline-flex"
           aria-label="Wishlist"
         >
           <Heart class="heart-icon h-[1.125rem] w-[1.125rem] transition-all duration-200" />
           <span
             v-if="bookmarks.count"
-            class="absolute -right-0.5 -top-0.5 inline-flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-[color:var(--bg-elevated)] bg-[color:var(--bg)] px-1 text-[0.5625rem] font-bold text-[color:var(--text)]"
+            class="absolute -right-0.5 -top-0.5 inline-flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-[color:var(--chrome)] bg-[color:var(--chrome-text)] px-1 text-[0.5625rem] font-bold text-[color:var(--chrome)]"
             aria-hidden="true"
           >
             {{ bookmarks.count }}
@@ -209,35 +227,35 @@ function handleSearchSubmit() {
         <!-- Cart -->
         <RouterLink
           :to="ROUTES.cart"
-          class="cart-icon-btn relative inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200"
+          class="navbar-icon-btn cart-icon-btn relative inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 sm:h-11 sm:w-11"
           aria-label="Cart"
         >
           <ShoppingBag class="bag-icon h-[1.125rem] w-[1.125rem] transition-all duration-200" />
           <span
             v-if="cart.itemCount"
-            class="absolute -right-0.5 -top-0.5 inline-flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-[color:var(--bg-elevated)] bg-[color:var(--accent)] px-1 text-[0.5625rem] font-bold text-[color:var(--text)]"
+            class="absolute -right-0.5 -top-0.5 inline-flex min-h-[18px] min-w-[18px] items-center justify-center rounded-full border-2 border-[color:var(--chrome)] bg-[color:var(--accent)] px-1 text-[0.5625rem] font-bold text-[color:var(--chrome)]"
             aria-hidden="true"
           >
             {{ cart.itemCount }}
           </span>
         </RouterLink>
 
-        <div class="mx-2 hidden h-6 w-px bg-[color:var(--line)] lg:block" aria-hidden="true" />
+        <div class="mx-1 hidden h-6 w-px bg-[color:var(--chrome-line)] lg:mx-2 lg:block" aria-hidden="true" />
 
         <!-- Desktop Profile -->
         <button
-          class="vybe-surface-link hidden h-11 items-center gap-2.5 rounded-full border border-[color:var(--line)] px-4 text-[0.6875rem] uppercase tracking-[0.2em] transition-colors duration-200 lg:inline-flex"
+          class="navbar-profile-btn vybe-surface-link hidden h-10 items-center gap-2 rounded-full px-3 text-[0.625rem] uppercase tracking-[0.18em] transition-colors duration-200 lg:inline-flex lg:h-11 lg:gap-2.5 lg:px-4 lg:text-[0.6875rem] lg:tracking-[0.2em]"
           type="button"
           @click="handleProfileClick"
         >
-          <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[color:var(--bg-elevated)] text-[color:var(--text)]">
+          <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[color:color-mix(in_srgb,var(--chrome-text)_10%,var(--chrome))] text-[color:var(--chrome-text)]">
             <UserRound class="h-3.5 w-3.5" />
           </span>
           {{ profileLabel }}
         </button>
 
         <button
-          class="vybe-icon-button hidden h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 md:inline-flex lg:hidden"
+          class="navbar-icon-btn vybe-icon-button hidden h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 sm:h-11 sm:w-11 md:inline-flex lg:hidden"
           :aria-label="profileLabel"
           type="button"
           @click="handleProfileClick"
@@ -247,7 +265,7 @@ function handleSearchSubmit() {
 
         <!-- Mobile Hamburger Menu -->
         <button
-          class="vybe-icon-button ml-1 inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-200 md:hidden"
+          class="navbar-icon-btn vybe-icon-button ml-0.5 inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-200 sm:ml-1 sm:h-11 sm:w-11 md:hidden"
           :aria-expanded="isMobileMenuOpen"
           aria-controls="mobile-nav-panel"
           :aria-label="isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'"
@@ -265,14 +283,14 @@ function handleSearchSubmit() {
       <div
         v-if="isMobileMenuOpen"
         id="mobile-nav-panel"
-        class="w-full border-b border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_98%,transparent)] px-4 pb-5 pt-3 backdrop-blur-2xl sm:px-6 md:hidden"
+        class="vybe-chrome w-full border-b px-3 pb-5 pt-3 sm:px-5 md:hidden"
       >
         <ul class="flex flex-col gap-2" role="list">
           <li v-for="item in navItems" :key="item.to">
             <RouterLink
               :to="item.to"
               class="vybe-surface-link inline-flex h-12 w-full items-center justify-center rounded-2xl text-center text-[0.6875rem] uppercase tracking-[0.24em] transition-colors duration-200"
-              :class="isNavItemActive(item.label) ? 'bg-[color:var(--text)] text-[color:var(--bg)] border-transparent' : ''"
+              :class="isNavItemActive(item.label) ? 'border-transparent bg-[color:var(--chrome-text)] text-[color:var(--chrome)]' : ''"
               :aria-current="isNavItemActive(item.label) ? 'page' : undefined"
             >
               {{ item.label }}
@@ -293,7 +311,18 @@ function handleSearchSubmit() {
           </RouterLink>
 
           <button
-            class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[color:var(--text)] text-[color:var(--bg)] text-[0.6875rem] font-semibold uppercase tracking-[0.22em] transition-opacity duration-200 hover:opacity-80"
+            class="vybe-surface-link inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl text-[0.6875rem] uppercase tracking-[0.22em] transition-colors duration-200"
+            :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            type="button"
+            @click="toggleDark"
+          >
+            <SunMedium v-if="isDark" class="h-4 w-4" />
+            <MoonStar v-else class="h-4 w-4" />
+            {{ isDark ? "Light Mode" : "Dark Mode" }}
+          </button>
+
+          <button
+            class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-[color:var(--chrome-text)] text-[color:var(--chrome)] text-[0.6875rem] font-semibold uppercase tracking-[0.22em] transition-opacity duration-200 hover:opacity-80"
             type="button"
             @click="handleProfileClick"
           >
@@ -310,7 +339,7 @@ function handleSearchSubmit() {
     <transition name="quick-search">
       <div
         v-if="isSearchOpen"
-        class="fixed inset-0 z-[100] px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] sm:px-5 sm:py-5 md:px-6 md:py-6"
+        class="fixed inset-0 z-[100] flex flex-col px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[max(1rem,env(safe-area-inset-bottom))] sm:items-center sm:justify-start sm:px-5 sm:pt-[12vh] sm:pb-5 md:px-6"
         aria-modal="true"
         role="dialog"
         aria-labelledby="search-dialog-title"
@@ -322,7 +351,7 @@ function handleSearchSubmit() {
           @click="closeSearch"
         />
 
-        <div class="fixed inset-x-0 bottom-0 flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl sm:relative sm:inset-auto sm:top-1/4 sm:mx-auto sm:max-w-lg sm:rounded-[2rem] md:max-w-3xl">
+        <div class="relative z-10 mt-auto flex max-h-[92dvh] w-full flex-col overflow-hidden rounded-t-[2rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-elevated)_96%,transparent)] shadow-[var(--shadow)] backdrop-blur-2xl sm:mt-0 sm:max-h-[80dvh] sm:max-w-lg sm:rounded-[2rem] md:max-w-3xl">
           <form class="flex items-center gap-3 border-b border-[color:var(--line)] px-4 py-4 sm:px-5 sm:py-5" @submit.prevent="handleSearchSubmit">
             <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_86%,transparent)] text-[color:var(--muted)]">
               <Search class="h-5 w-5" aria-hidden="true" />
@@ -358,7 +387,7 @@ function handleSearchSubmit() {
               Loading the catalog for search...
             </div>
             
-            <div v-else-if="searchError" class="vybe-empty px-4 py-10 text-xs text-[color:var(--red-500, red)] sm:px-6 sm:py-12 sm:text-sm text-center">
+            <div v-else-if="searchError" class="vybe-empty px-4 py-10 text-xs text-[color:var(--danger)] sm:px-6 sm:py-12 sm:text-sm text-center">
               {{ searchError }}
             </div>
             
@@ -384,7 +413,7 @@ function handleSearchSubmit() {
                   :alt="product.title"
                   loading="lazy"
                   decoding="async"
-                  class="h-18 w-18 shrink-0 rounded-[1.2rem] object-cover sm:h-20 sm:w-20"
+                  class="h-16 w-16 shrink-0 rounded-[1.2rem] object-cover sm:h-20 sm:w-20"
                 />
                 <div class="min-w-0 flex-1">
                   <p class="vybe-kicker text-[9px] sm:text-[10px]">{{ product.category }}</p>
@@ -405,6 +434,22 @@ function handleSearchSubmit() {
 </template>
 
 <style scoped>
+.navbar-icon-btn,
+.navbar-profile-btn {
+  min-height: 0;
+  padding: 0;
+}
+
+.navbar-profile-btn {
+  padding-inline: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+  .navbar-profile-btn {
+    padding-inline: 1rem;
+  }
+}
+
 /* Wishlist heart hover */
 .wishlist-icon-btn .heart-icon {
   fill: transparent;

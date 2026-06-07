@@ -16,9 +16,9 @@
 
         <!-- Single stat: current mode only -->
         <div class="flex lg:justify-end">
-          <div class="vybe-stat min-w-[9rem]">
+          <div class="vybe-stat min-w-0 sm:min-w-[9rem]">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Browsing</p>
-            <p class="mt-2 sm:mt-3 text-xl sm:text-2xl text-[color:var(--text)]">{{ activeCategoryLabel }}</p>
+            <p class="mt-2 truncate sm:mt-3 text-xl sm:text-2xl text-[color:var(--text)]">{{ activeCategoryLabel }}</p>
           </div>
         </div>
       </div>
@@ -36,13 +36,13 @@
         />
       </div>
 
-      <!-- Categories + Sort in one row -->
-      <div class="flex items-start gap-3 sm:gap-4">
+      <!-- Categories + Sort -->
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-4">
 
         <!-- Category pills: horizontally scrollable strip -->
         <div class="relative min-w-0 flex-1">
           <p class="vybe-label mb-2 text-[9px] sm:text-[10px]">Category</p>
-          <div class="no-scrollbar flex gap-2 overflow-x-auto pb-1 sm:gap-2.5">
+          <div class="vybe-scroll-strip gap-2 sm:gap-2.5">
             <RouterLink
               :to="ROUTES.products"
               class="vybe-pill vybe-touch-target shrink-0 rounded-full px-3 py-1.5 text-[9px] uppercase tracking-[0.18em] transition hover:border-[color:var(--accent)] hover:text-[color:var(--text)] sm:px-4 sm:py-2 sm:text-[10px]"
@@ -98,7 +98,7 @@
     <!-- Loading skeletons -->
     <div
       v-if="loading"
-      class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-5 lg:grid-cols-4 lg:gap-6"
+      class="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 lg:gap-6 xl:grid-cols-3"
     >
       <article
         v-for="skeleton in skeletonCards"

@@ -55,18 +55,18 @@ function handleClearCart() {
           </p>
         </div>
 
-        <div class="grid grid-cols-3 gap-2.5 sm:gap-3 md:gap-3">
+        <div class="vybe-stat-grid">
           <div class="vybe-stat">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Items</p>
-            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.itemCount }}</p>
+            <p class="mt-2 truncate sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.itemCount }}</p>
           </div>
           <div class="vybe-stat">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Lines</p>
-            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.items.length }}</p>
+            <p class="mt-2 truncate sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.items.length }}</p>
           </div>
-          <div class="vybe-stat">
+          <div class="vybe-stat col-span-2 sm:col-span-1">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Total</p>
-            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ formatPrice(cart.totalPrice) }}</p>
+            <p class="mt-2 truncate sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ formatPrice(cart.totalPrice) }}</p>
           </div>
         </div>
       </div>
@@ -99,7 +99,7 @@ function handleClearCart() {
                 <p class="mt-1.5 sm:mt-2 text-xs text-[color:var(--muted)] sm:text-sm">{{ formatPrice(item.price) }} each</p>
               </div>
 
-              <div class="grid gap-2 sm:gap-3 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-end">
+              <div class="grid gap-2 sm:gap-3 md:grid-cols-[minmax(0,1fr)_auto_auto] md:items-end">
                 <div class="vybe-field">
                   <span class="vybe-label text-[9px] sm:text-[10px]">Qty</span>
                   <div class="flex items-center rounded-[1rem] border border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_76%,transparent)]">

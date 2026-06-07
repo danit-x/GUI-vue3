@@ -97,18 +97,18 @@ async function handlePlaceOrder() {
           </p>
         </div>
 
-        <div class="grid grid-cols-3 gap-2.5 sm:gap-3 md:gap-3">
+        <div class="vybe-stat-grid">
           <div class="vybe-stat">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Lines</p>
-            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.items.length }}</p>
+            <p class="mt-2 truncate sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.items.length }}</p>
           </div>
           <div class="vybe-stat">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Items</p>
-            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.itemCount }}</p>
+            <p class="mt-2 truncate sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ cart.itemCount }}</p>
           </div>
-          <div class="vybe-stat">
+          <div class="vybe-stat col-span-2 sm:col-span-1">
             <p class="vybe-kicker text-[9px] sm:text-[10px]">Total</p>
-            <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ formattedTotalPrice }}</p>
+            <p class="mt-2 truncate sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ formattedTotalPrice }}</p>
           </div>
         </div>
       </div>
@@ -132,12 +132,12 @@ async function handlePlaceOrder() {
 
     <div v-else class="grid gap-5 sm:gap-6 md:gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
       <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6">
-        <div class="flex items-center justify-between gap-3">
-          <div>
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+          <div class="min-w-0">
             <p class="vybe-kicker text-[10px] sm:text-[11px]">Cart summary</p>
             <h2 class="vybe-display mt-2 text-2xl text-[color:var(--text)] sm:text-3xl">Everything looks set.</h2>
           </div>
-          <p class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">{{ summaryLabel }}</p>
+          <p class="shrink-0 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">{{ summaryLabel }}</p>
         </div>
 
         <div class="mt-4 grid gap-3 sm:mt-5 sm:gap-4 md:mt-6 md:gap-5">

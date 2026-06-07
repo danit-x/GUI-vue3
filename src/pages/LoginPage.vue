@@ -98,11 +98,11 @@ async function handleLogin() {
         Log In
       </h2>
 
-      <div v-if="signupSuccess" class="mt-4 sm:mt-6 rounded-[1.5rem] border border-emerald-600/30 bg-emerald-500/10 p-3 sm:p-4 text-xs sm:text-sm text-emerald-700 dark:text-emerald-300">
+      <div v-if="signupSuccess" class="vybe-alert-success mt-4 rounded-[1.5rem] p-3 sm:mt-6 sm:p-4 text-xs sm:text-sm">
         Signup completed. Use your credentials to log in.
       </div>
 
-      <div v-if="error" class="mt-4 sm:mt-6 rounded-[1.5rem] border border-red-600/30 bg-red-500/10 p-3 sm:p-4 text-xs sm:text-sm text-red-700 dark:text-red-300">
+      <div v-if="error" class="vybe-alert-error mt-4 rounded-[1.5rem] p-3 sm:mt-6 sm:p-4 text-xs sm:text-sm">
         {{ error }}
       </div>
 
@@ -116,7 +116,7 @@ async function handleLogin() {
             :disabled="loading"
             @blur="handleBlur('username')"
           />
-          <p v-if="touched.username && usernameError" class="mt-2 text-xs text-red-600 dark:text-red-300">
+          <p v-if="touched.username && usernameError" class="mt-2 text-xs text-[color:var(--danger)]">
             {{ usernameError }}
           </p>
         </label>
@@ -131,7 +131,7 @@ async function handleLogin() {
             :disabled="loading"
             @blur="handleBlur('password')"
           />
-          <p v-if="touched.password && passwordError" class="mt-2 text-xs text-red-600 dark:text-red-300">
+          <p v-if="touched.password && passwordError" class="mt-2 text-xs text-[color:var(--danger)]">
             {{ passwordError }}
           </p>
         </label>

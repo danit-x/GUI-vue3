@@ -153,12 +153,12 @@ watch(
             />
           </div>
 
-          <div class="grid grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+          <div class="no-scrollbar flex gap-2 overflow-x-auto pb-1 sm:grid sm:grid-cols-4 sm:gap-3 sm:overflow-visible sm:pb-0 md:gap-4">
             <button
               v-for="image in productGallery"
               :key="image"
               type="button"
-              class="overflow-hidden rounded-[1.25rem] border transition"
+              class="vybe-touch-target min-h-11 w-[4.5rem] shrink-0 overflow-hidden rounded-[1.25rem] border transition sm:w-auto"
               :class="image === (activeImage || product.thumbnail)
                 ? 'border-[color:var(--accent)]'
                 : 'border-[color:var(--line)] hover:border-[color:var(--accent)]/50'"
@@ -217,9 +217,7 @@ watch(
             <span
               v-if="isOutOfStock || isLowStock"
               class="rounded-full px-3 py-2 uppercase tracking-[0.2em] sm:px-4"
-              :class="isOutOfStock
-                ? 'border border-red-500/30 bg-red-500/12 text-red-700 dark:text-red-300'
-                : 'border border-amber-500/30 bg-amber-500/12 text-amber-700 dark:text-amber-300'"
+              :class="isOutOfStock ? 'vybe-badge-danger' : 'vybe-badge-warning'"
             >
               {{ isOutOfStock ? "Out of stock" : "Low stock" }}
             </span>
@@ -250,14 +248,14 @@ watch(
       </div>
 
       <section v-if="recentlyViewedProducts.length > 0" class="space-y-3 sm:space-y-4 md:space-y-5">
-        <div class="flex items-end justify-between gap-3">
-          <div>
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between sm:gap-3">
+          <div class="min-w-0">
             <p class="vybe-kicker text-[10px] sm:text-[11px]">Recently viewed</p>
             <h2 class="vybe-display mt-2 text-2xl text-[color:var(--text)] sm:text-3xl">
               Pick up where you left off.
             </h2>
           </div>
-          <p class="text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">
+          <p class="shrink-0 text-[10px] uppercase tracking-[0.22em] text-[color:var(--muted)] sm:text-xs">
             Last {{ recentlyViewedProducts.length }}
           </p>
         </div>

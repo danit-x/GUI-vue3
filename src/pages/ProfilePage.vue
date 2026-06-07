@@ -125,7 +125,7 @@ function handleLogout() {
                   <p class="mt-2 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
                     {{ new Date(order.placedAt).toLocaleString() }}
                   </p>
-                  <p class="mt-2 text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
+                  <p class="mt-2 break-words text-xs leading-6 text-[color:var(--muted)] sm:text-sm">
                     {{ order.paymentMethod.label }} | {{ order.paymentMethod.detail }}
                   </p>
                 </div>
@@ -148,10 +148,10 @@ function handleLogout() {
                   :key="`${order.id}-${step.label}`"
                   class="rounded-[1.35rem] border p-3 sm:p-4"
                   :class="step.state === 'complete'
-                    ? 'border-emerald-500/30 bg-emerald-500/10'
+                    ? 'vybe-status-complete'
                     : step.state === 'current'
-                      ? 'border-[color:var(--accent)] bg-[color:var(--accent-soft)]'
-                      : 'border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)]'"
+                      ? 'vybe-status-current'
+                      : 'vybe-status-upcoming'"
                 >
                   <div class="flex items-start justify-between gap-3">
                     <div>
@@ -164,9 +164,9 @@ function handleLogout() {
                     <span
                       class="mt-1 inline-flex h-3.5 w-3.5 shrink-0 rounded-full"
                       :class="step.state === 'complete'
-                        ? 'bg-emerald-500'
+                        ? 'vybe-status-dot-complete'
                         : step.state === 'current'
-                          ? 'bg-[color:var(--accent)]'
+                          ? 'vybe-status-dot-current'
                           : 'bg-[color:var(--line)]'"
                     />
                   </div>

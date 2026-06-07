@@ -10,7 +10,7 @@ const { toasts, dismissToast } = useToast()
       <div
         v-for="toast in toasts"
         :key="toast.id"
-        class="pointer-events-auto flex w-full max-w-xs items-center justify-between gap-3 rounded-[1.5rem] border border-[color:var(--line)] bg-[color:var(--bg-elevated)] px-4 py-3 text-xs text-[color:var(--text)] shadow-[0_18px_48px_rgba(26,17,12,0.18)] backdrop-blur-xl sm:px-5 sm:py-4 sm:text-sm md:max-w-sm"
+        class="pointer-events-auto flex w-full max-w-xs items-center justify-between gap-3 rounded-[1.5rem] border border-[color:var(--line)] bg-[color:var(--bg-elevated)] px-4 py-3 text-xs text-[color:var(--text)] shadow-[var(--shadow-soft)] backdrop-blur-xl sm:px-5 sm:py-4 sm:text-sm md:max-w-sm"
       >
         <span class="font-medium">{{ toast.message }}</span>
         <button

@@ -38,7 +38,7 @@ function handleRemoveBookmark(id: number) {
   <section class="vybe-page space-y-6 sm:space-y-8 md:space-y-8 lg:space-y-8">
     <div
       v-if="showLocalWishlistBanner"
-      class="vybe-panel flex flex-col gap-3 rounded-[1.75rem] border border-amber-500/30 bg-amber-500/10 p-4 text-xs text-amber-800 dark:text-amber-200 sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:p-5 sm:text-sm"
+      class="vybe-alert-warning vybe-panel flex flex-col gap-3 rounded-[1.75rem] p-4 text-xs sm:flex-row sm:items-start sm:justify-between sm:gap-4 sm:p-5 sm:text-sm"
     >
       <p class="max-w-3xl leading-6 sm:leading-7">
         Your wishlist is saved locally and will not sync across devices until you
@@ -49,7 +49,7 @@ function handleRemoveBookmark(id: number) {
 
       <button
         type="button"
-        class="vybe-surface-link self-start rounded-full border-amber-600/30 bg-amber-500/8 px-3 py-1.5 text-[10px] uppercase tracking-[0.2em] text-amber-800 hover:bg-amber-500/12 dark:text-amber-200 sm:text-xs"
+        class="vybe-surface-link vybe-touch-target self-start rounded-full px-4 py-2.5 text-xs uppercase tracking-[0.2em] text-[color:var(--warning)]"
         @click="isBannerDismissed = true"
       >
         Dismiss

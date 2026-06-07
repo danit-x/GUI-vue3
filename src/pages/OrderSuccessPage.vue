@@ -50,18 +50,18 @@ const paymentMethodDetail = computed(() => orderSummary.value?.paymentMethod?.de
             </p>
           </div>
 
-          <div class="grid grid-cols-3 gap-2.5 sm:gap-3 md:gap-3">
-            <div class="vybe-stat">
+          <div class="vybe-stat-grid">
+            <div class="vybe-stat col-span-2 sm:col-span-1">
               <p class="vybe-kicker text-[9px] sm:text-[10px]">Order</p>
-              <p class="mt-2 sm:mt-3 text-sm sm:text-lg text-[color:var(--text)]">{{ orderSummary.id }}</p>
+              <p class="mt-2 break-all text-xs sm:mt-3 sm:text-sm md:text-lg text-[color:var(--text)]">{{ orderSummary.id }}</p>
             </div>
             <div class="vybe-stat">
               <p class="vybe-kicker text-[9px] sm:text-[10px]">Items</p>
-              <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ orderSummary.itemCount }}</p>
+              <p class="mt-2 truncate sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ orderSummary.itemCount }}</p>
             </div>
             <div class="vybe-stat">
               <p class="vybe-kicker text-[9px] sm:text-[10px]">Total</p>
-              <p class="mt-2 sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ formatPrice(orderSummary.totalPrice) }}</p>
+              <p class="mt-2 truncate sm:mt-3 text-lg sm:text-2xl text-[color:var(--text)]">{{ formatPrice(orderSummary.totalPrice) }}</p>
             </div>
           </div>
         </div>
@@ -69,12 +69,12 @@ const paymentMethodDetail = computed(() => orderSummary.value?.paymentMethod?.de
 
       <div class="grid gap-5 sm:gap-6 md:gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
         <div class="vybe-panel rounded-[2rem] p-4 sm:p-5 md:p-6">
-          <div class="flex items-center justify-between gap-3">
-            <div>
+          <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+            <div class="min-w-0">
               <p class="vybe-kicker text-[10px] sm:text-[11px]">Order summary</p>
               <h2 class="vybe-display mt-2 text-2xl text-[color:var(--text)] sm:text-3xl">Everything you just checked out.</h2>
             </div>
-            <p class="text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">{{ formattedPlacedAt }}</p>
+            <p class="shrink-0 text-xs uppercase tracking-[0.2em] text-[color:var(--muted)] sm:text-sm">{{ formattedPlacedAt }}</p>
           </div>
 
           <div class="mt-4 grid gap-3 sm:mt-5 sm:gap-4 md:mt-6 md:gap-5">
@@ -135,10 +135,10 @@ const paymentMethodDetail = computed(() => orderSummary.value?.paymentMethod?.de
               :key="step.label"
               class="rounded-[1.4rem] border p-3 sm:p-4"
               :class="step.state === 'complete'
-                ? 'border-emerald-500/30 bg-emerald-500/10'
+                ? 'vybe-status-complete'
                 : step.state === 'current'
-                  ? 'border-[color:var(--accent)] bg-[color:var(--accent-soft)]'
-                  : 'border-[color:var(--line)] bg-[color:color-mix(in_srgb,var(--bg-strong)_72%,transparent)]'"
+                  ? 'vybe-status-current'
+                  : 'vybe-status-upcoming'"
             >
               <div class="flex items-start justify-between gap-3">
                 <div>
@@ -156,9 +156,9 @@ const paymentMethodDetail = computed(() => orderSummary.value?.paymentMethod?.de
                 <span
                   class="mt-1 inline-flex h-3.5 w-3.5 shrink-0 rounded-full"
                   :class="step.state === 'complete'
-                    ? 'bg-emerald-500'
+                    ? 'vybe-status-dot-complete'
                     : step.state === 'current'
-                      ? 'bg-[color:var(--accent)]'
+                      ? 'vybe-status-dot-current'
                       : 'bg-[color:var(--line)]'"
                 />
               </div>

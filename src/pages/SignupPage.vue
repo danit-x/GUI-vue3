@@ -97,7 +97,7 @@ async function handleSignup() {
         Sign Up
       </h2>
 
-      <div v-if="error" class="mt-4 sm:mt-6 rounded-[1.5rem] border border-red-600/30 bg-red-500/10 p-3 sm:p-4 text-xs sm:text-sm text-red-700 dark:text-red-300">
+      <div v-if="error" class="vybe-alert-error mt-4 rounded-[1.5rem] p-3 sm:mt-6 sm:p-4 text-xs sm:text-sm">
         {{ error }}
       </div>
 
@@ -107,11 +107,11 @@ async function handleSignup() {
           <input
             v-model="form.firstName"
             placeholder="First name"
-            class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
             @blur="handleBlur('firstName')"
           />
-          <p v-if="touched.firstName && fieldErrors.firstName" class="mt-2 text-xs text-red-600 dark:text-red-300">
+          <p v-if="touched.firstName && fieldErrors.firstName" class="mt-2 text-xs text-[color:var(--danger)]">
             {{ fieldErrors.firstName }}
           </p>
         </label>
@@ -121,11 +121,11 @@ async function handleSignup() {
           <input
             v-model="form.lastName"
             placeholder="Last name"
-            class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
             @blur="handleBlur('lastName')"
           />
-          <p v-if="touched.lastName && fieldErrors.lastName" class="mt-2 text-xs text-red-600 dark:text-red-300">
+          <p v-if="touched.lastName && fieldErrors.lastName" class="mt-2 text-xs text-[color:var(--danger)]">
             {{ fieldErrors.lastName }}
           </p>
         </label>
@@ -136,11 +136,11 @@ async function handleSignup() {
             v-model="form.email"
             type="email"
             placeholder="Email"
-            class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
             @blur="handleBlur('email')"
           />
-          <p v-if="touched.email && fieldErrors.email" class="mt-2 text-xs text-red-600 dark:text-red-300">
+          <p v-if="touched.email && fieldErrors.email" class="mt-2 text-xs text-[color:var(--danger)]">
             {{ fieldErrors.email }}
           </p>
         </label>
@@ -150,11 +150,11 @@ async function handleSignup() {
           <input
             v-model="form.username"
             placeholder="Username"
-            class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
             @blur="handleBlur('username')"
           />
-          <p v-if="touched.username && fieldErrors.username" class="mt-2 text-xs text-red-600 dark:text-red-300">
+          <p v-if="touched.username && fieldErrors.username" class="mt-2 text-xs text-[color:var(--danger)]">
             {{ fieldErrors.username }}
           </p>
         </label>
@@ -165,11 +165,11 @@ async function handleSignup() {
             v-model="form.password"
             type="password"
             placeholder="Password"
-            class="vybe-input rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
+            class="vybe-input w-full rounded-[1.25rem] px-4 py-3 text-xs sm:px-5 sm:py-4 sm:text-sm"
             :disabled="loading"
             @blur="handleBlur('password')"
           />
-          <p v-if="touched.password && fieldErrors.password" class="mt-2 text-xs text-red-600 dark:text-red-300">
+          <p v-if="touched.password && fieldErrors.password" class="mt-2 text-xs text-[color:var(--danger)]">
             {{ fieldErrors.password }}
           </p>
         </label>
