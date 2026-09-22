@@ -1,0 +1,41 @@
+The aim 01: Create the main project idea for a lifestyle and tech store single page application
+Actual prompt: Build a modern Vue 3, TypeScript, and Tailwind CSS single page application called VYBE for a lifestyle and tech store, with a polished responsive interface and ecommerce-focused user experience.
+
+The aim 02: Set up the core application structure
+Actual prompt: Create the project structure for the VYBE store with reusable folders for components, pages, router, stores, services, composables, types, utilities, and assets.
+
+The aim 03: Build product browsing features
+Actual prompt: Add product browsing pages where users can view lifestyle and tech products in a clean grid layout with product cards, prices, images, ratings, and category information.
+
+The aim 04: Build product detail pages
+Actual prompt: Create a product detail page that displays the selected product image, title, price, rating, description, category, availability, and actions for adding the product to the cart or wishlist.
+
+The aim 05: Add search and filtering
+Actual prompt: Implement search and filtering so users can quickly find products by name, category, price range, and other useful ecommerce filters.
+
+The aim 06: Add shopping cart functionality
+Actual prompt: Build a shopping cart experience using Pinia where users can add products, update quantities, remove items, and view the cart subtotal and total.
+
+The aim 07: Add wishlist functionality
+Actual prompt: Create a wishlist feature using Pinia so users can save favorite products, remove saved products, and access the wishlist from the store interface.
+
+The aim 08: Add authentication simulation
+Actual prompt: Add a simple authentication simulation for the store with login, logout, and user state handling so the app feels like a complete shopping experience.
+
+The aim 09: Connect product data
+Actual prompt: Use the DummyJSON API as the product data source and create service functions to fetch products, product details, categories, and search results.
+
+The aim 10: Add routing and navigation
+Actual prompt: Configure Vue Router for the main store pages, including home, product listing, product details, cart, wishlist, and authentication-related views.
+
+The aim 11: Add dark mode
+Actual prompt: Implement dark mode support with a theme toggle and make sure the store interface looks polished in both light and dark themes.
+
+The aim 12: Improve responsive design
+Actual prompt: Make the VYBE store fully responsive across desktop, tablet, and mobile screens, ensuring navigation, product grids, forms, and cart layouts remain easy to use.
+
+The aim 13: Refine visual design
+Actual prompt: Improve the UI styling with consistent spacing, typography, colors, hover states, icons, buttons, and ecommerce interaction patterns suitable for a modern lifestyle and tech brand.
+
+The aim 14: Verify the application build
+Actual prompt: Check that the Vue and TypeScript application builds successfully with the configured Vite build script and fix any type or build errors found during verification.

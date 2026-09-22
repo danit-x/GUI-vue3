@@ -25,5 +25,33 @@ DummyJSON API
 
 ## Setup
 
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
+
+```bash
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Preview the production build:
+
+```bash
+npm run preview
+```
+
+Alternatively, if you use Bun:
+
+```bash
 bun install
 bun run dev
+```
